@@ -34,6 +34,7 @@
                 {% csrf_token %}
                 <button type="submit" name="aye" class="vote-button">Aye</button>
                 <button type="submit" name="nay" class="vote-button">Nay</button>
+                <button type="submit" name="reset" class="vote-button">Reset</button>
             </form>
         </div>
 
@@ -41,6 +42,7 @@
             <p>Current Results:</p>
             <p>Aye Votes: {{ aye_votes }}</p>
             <p>Nay Votes: {{ nay_votes }}</p>
+            
         </div>
     </div>
 </body>

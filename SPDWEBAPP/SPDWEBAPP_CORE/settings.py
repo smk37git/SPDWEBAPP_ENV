@@ -26,6 +26,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+LOGIN_URL = '/login/'  # Adjust this to match your authenticate app's URL pattern
+LOGIN_REDIRECT_URL = ''
+
 # Application definition
 
 INSTALLED_APPS = [
