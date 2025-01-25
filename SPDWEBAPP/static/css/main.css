@@ -1,14 +1,28 @@
 .navbar {
-    background-color: red !important; /* Overrides the default bg-dark class */
+    background-color: rgb(196, 0, 0) !important; /* Overrides the default bg-dark class */
 }
 .navbar-brand {
     font-family: "Times New Roman", serif; /* Use a serif font for a classical Greek look */
-    font-size: 1.5rem; /* Adjust size */
     display: flex; /* Ensures the brand content is treated as a flex container */
     align-items: center; /* Vertically centers the content */
-    font-size: 1.5rem; /* Adjust the size of the Greek letters if needed */
+    font-size: 1.7rem; /* Adjust the size of the Greek letters if needed */
     line-height: 1; /* Prevents extra spacing */
+    font-weight: bold;
 }
 .navbar-brand img {
     margin-right: 10px; /* Adds space between the image and text */
 }
+
+.centered-table {
+    display: flex;
+    justify-content: center;
+}
+
+.centered-table .card {
+    width: 100%;  /* This will make the card take up the full width of its parent */
+  }
+  
+.centered-table .card-body {
+    padding: 20px;
+}
+  
