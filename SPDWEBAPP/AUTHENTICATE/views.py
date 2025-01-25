@@ -1,6 +1,6 @@
 from django.shortcuts import render
-
-from django.contrib.auth.forms import UserCreationForm  # User Registration Import
+from django.contrib.auth.forms import UserCreationForm  # User Registration
+from .forms import CreateUserForm  # User Registration
 
 
 # SPD AUTHENTICATE
@@ -9,10 +9,10 @@ def home_page(request):
 
 
 def registerPage(request):
-  form = UserCreationForm()
+  form = CreateUserForm()
 
   if request.method == 'POST':
-    form = UserCreationForm(request.POST)
+    form = CreateUserForm(request.POST)
     if form.is_valid():
       form.save()
 
