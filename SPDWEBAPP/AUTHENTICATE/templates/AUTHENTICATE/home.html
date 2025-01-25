@@ -1,1 +1,49 @@
-<h1> fart </h1>
+{%  extends 'AUTHENTICATE/main.html' %}
+
+
+
+{% block content %}
+
+<br>
+
+<div class="row">
+
+  <div class="col-md-5">
+
+    <h5>Brothers:</h5>
+
+    <hr>
+
+    <div class="card card-body">
+
+      <table class="table table-sm">
+
+        <tr>
+
+          <th></th>
+
+          <th>First Name</th>
+
+          <th>Last Name</th>
+        </tr>
+        <ul>
+            {% for member in members %}
+            <li>
+                <div class="member-firstName">{{ member.firstName }}</div>
+                <div class="member-lastName">{{ member.lastName }}</div>
+            </li>
+            {% endfor %}
+        </ul>
+
+
+      </table>
+
+    </div>
+
+  </div>
+  
+</div>
+
+
+
+{% endblock %}

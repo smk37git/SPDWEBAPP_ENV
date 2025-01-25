@@ -2,10 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm  # User Registration
 from .forms import CreateUserForm  # User Registration
 
+from .models import Member # Import Member from database
+
 
 # SPD AUTHENTICATE
-def home_page(request):
-  return render(request, 'AUTHENTICATE/home.html')
+def home(request):
+  members = Member.objects.all()
+  return render(request, 'AUTHENTICATE/home.html', {'members': members})
 
 
 def registerPage(request):
