@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brother Votes</title>
+    <style>
+        .vote-container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+            padding: 20px;
+        }
+        .vote-buttons {
+            margin: 20px 0;
+        }
+        .vote-button {
+            padding: 10px 30px;
+            margin: 0 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .vote-counts {
+            font-size: 20px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="vote-container">
+        <h1>Cast Your Vote</h1>
+        
+        <div class="vote-buttons">
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="aye" class="vote-button">Aye</button>
+                <button type="submit" name="nay" class="vote-button">Nay</button>
+            </form>
+        </div>
+
+        <div class="vote-counts">
+            <p>Current Results:</p>
+            <p>Aye Votes: {{ aye_votes }}</p>
+            <p>Nay Votes: {{ nay_votes }}</p>
+        </div>
+    </div>
+</body>
+</html>
