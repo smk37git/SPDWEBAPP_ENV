@@ -312,3 +312,25 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #8b0000;
 }
+
+/* Code of Ethics Styles */
+.code-of-ethics-container {
+    max-width: 800px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 0 auto;
+    line-height: 1.8;
+    color: #333;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+}
+
+.code-of-ethics-container p {
+    margin-bottom: 1.5rem;
+}
+
+.code-of-ethics-container img {
+    margin-top: 1rem;
+}
