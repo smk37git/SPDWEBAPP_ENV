@@ -13,14 +13,18 @@
                 <th></th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Roles</th>
               </tr>
             </thead>
             <tbody>
-              {% for member in members %}
+              {% for Brother_Profile in Brother_Profiles %}
               <tr>
                 <td></td>
-                <td class="member-firstName">{{ member.firstName }}</td>
-                <td class="member-lastName">{{ member.lastName }}</td>
+                <td class="member-firstName">{{ Brother_Profile.firstName }}</td>
+                <td class="member-lastName">{{ Brother_Profile.lastName }}</td>
+                <td class="member-role">
+                  {{ Brother_Profile.roles.all|join:", " }}
+              </td>
               </tr>
               {% endfor %}
             </tbody>
