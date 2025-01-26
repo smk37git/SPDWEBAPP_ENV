@@ -2,26 +2,34 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="{% url 'home' %}">
-    <img src="{% static 'images/navbarImage.png' %}" alt="SPD Coat of Arms" width="50" height="50" class="d-inline-block align-top">
-    ΣΦΔ
+        <img src="{% static 'images/coatOfArms.png' %}" alt="SPD Coat of Arms" width="50" height="50" class="d-inline-block align-top">
+        ΣΦΔ
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-          </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'codeOfEthics' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'codeOfEthics' %}">Code of Ethics</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'poll' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'poll' %}">Parley Pro</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'roster' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'roster' %}">Roster</a>
-        </li>
-      </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item {% if request.resolver_match.url_name == 'codeOfEthics' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'codeOfEthics' %}">Code of Ethics</a>
+            </li>
+            <!-- Mobile separator -->
+            <li class="nav-item separator d-lg-none">
+                <span class="mobile-nav-separator"></span> <!-- Divider for mobile view -->
+            </li>
+            <!-- Desktop separator -->
+            <li class="nav-item separator d-none d-lg-block">
+                <span class="desktop-nav-separator"></span> <!-- Divider for desktop view -->
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'poll' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'poll' %}">Parley Pro</a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'roster' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'roster' %}">Roster</a>
+            </li>
+        </ul>
     </div>
-  </nav>
+</nav>
