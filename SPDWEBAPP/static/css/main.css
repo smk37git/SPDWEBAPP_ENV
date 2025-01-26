@@ -1,3 +1,13 @@
+.dashboard-buttons {
+    margin-top: 150px;
+}
+.dashboard-buttons .btn {
+    display: block;
+    width: 150%;
+    height: 100px;
+    margin-bottom: 75px;
+    font-size: 2.5rem;
+}
 .navbar {
     background-color: rgb(196, 0, 0) !important; /* Overrides the default bg-dark class */
 }
