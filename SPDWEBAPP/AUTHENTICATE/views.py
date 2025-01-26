@@ -13,6 +13,7 @@ def home(request):
   Brother_Profiles = Brother_Profile.objects.all()
   return render(request, 'AUTHENTICATE/home.html', {'Brother_Profiles': Brother_Profiles})
 
+@login_required
 def dashboard(request):
   return render(request, 'AUTHENTICATE/dashboard.html')
 
