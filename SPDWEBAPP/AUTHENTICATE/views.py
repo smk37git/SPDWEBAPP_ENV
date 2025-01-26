@@ -58,5 +58,7 @@ def loginPage(request):
   print(request.user)
   return render(request, 'AUTHENTICATE/login.html', context)
 
-
+def logoutUser(request):
+    logout(request)
+    return render(request, 'AUTHENTICATE/home.html')
 # Home goes below here
