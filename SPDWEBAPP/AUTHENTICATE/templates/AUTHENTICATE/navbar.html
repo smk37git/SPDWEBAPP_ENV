@@ -13,6 +13,7 @@
             <li class="nav-item {% if request.resolver_match.url_name == 'codeOfEthics' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'codeOfEthics' %}">Code of Ethics</a>
             </li>
+            {% if request.user.is_authenticated %}
             <!-- Mobile separator -->
             <li class="nav-item separator d-lg-none">
                 <span class="mobile-nav-separator"></span> <!-- Divider for mobile view -->
@@ -30,6 +31,7 @@
             <li class="nav-item {% if request.resolver_match.url_name == 'roster' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'roster' %}">Roster</a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
