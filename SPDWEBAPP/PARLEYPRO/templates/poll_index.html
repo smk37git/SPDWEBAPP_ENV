@@ -1,0 +1,73 @@
+{% extends 'AUTHENTICATE/main.html' %}
+
+{% block content %}
+{% load tz %}
+<div class="current-poll-container">
+    <header class="poll-header">
+        <h1>Current Poll</h1>
+        <div class="header-actions">
+            <a href="{% url 'past_polls' %}" class="btn btn-secondary">View Past Polls</a>
+            {% if perms.polls.add_vote_poll %}
+                <a href="{% url 'start_vote' %}" class="btn btn-primary">Start New Vote</a>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if current_poll %}
+        <div class="active-poll">
+            <div class="poll-info">
+                <h2>{{ current_poll.Vote_Poll_Name }}</h2>
+                <span class="poll-start-time">
+                    Started: {{ current_poll.Vote_Poll_Start|timezone:"America/Chicago"|date:"M d, Y g:i A" }}
+                </span>
+            </div>
+            
+            <div class="vote-section">
+                <form method="POST" class="vote-form">
+                    {% csrf_token %}
+                    <div class="vote-buttons">
+                        <button type="submit" name="aye" class="btn btn-success">Aye</button>
+                        <button type="submit" name="nay" class="btn btn-danger">Nay</button>
+                        {% if perms.polls.change_vote_poll %}
+                            <button type="submit" href="{% url 'past_polls' %}" name="end_vote" class="btn btn-warning">End Vote</button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+
+            <div class="results-section">
+                <h3>Current Results</h3>
+                <div class="vote-counts">
+                    <div class="vote-bar">
+                        {% with total=aye_votes|add:nay_votes %}
+                            {% if total > 0 %}
+                                <div class="vote-display">
+                                    {% if aye_votes > 0 %}
+                                        <div class="aye-bar" style="flex-basis: {% widthratio aye_votes total 100 %}%">
+                                            {{ aye_votes }} Aye
+                                        </div>
+                                    {% endif %}
+                                    {% if nay_votes > 0 %}
+                                        <div class="nay-bar" style="flex-basis: {% widthratio nay_votes total 100 %}%">
+                                            {{ nay_votes }} Nay
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="no-votes">No votes yet</div>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="no-active-poll">
+            <p>No active poll at the moment</p>
+            {% if perms.polls.add_vote_poll %}
+                <a href="{% url 'start_vote' %}" class="btn btn-primary">Start New Vote</a>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% endblock %}
+</div>
