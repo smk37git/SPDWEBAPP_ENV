@@ -248,6 +248,34 @@ body {
     width: 80%;
 }
 
+/* Divider Styling */
+.nav-item.separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Desktop Divider: taller for desktop */
+.desktop-nav-separator {
+    display: block;
+    height: 100%; /* Adjust height for desktop */
+    width: 1px;
+    margin-right: 10px;
+    margin-left: 10px;
+    background-color: #ccc;  /* Set a color for the divider */
+}
+
+/* Mobile Divider: shorter for mobile */
+.mobile-nav-separator {
+    display: block;
+    height: 1px; /* Adjust height for mobile */
+    width: 95%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #ccc;  /* Set a color for the divider */
+}
+
+
 /* Banner Styles */
 .banner {
     position: relative;
