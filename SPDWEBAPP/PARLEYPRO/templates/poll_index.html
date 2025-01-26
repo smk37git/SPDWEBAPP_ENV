@@ -30,6 +30,7 @@
                         <button type="submit" name="nay" class="btn btn-danger">Nay</button>
                         {% if perms.polls.change_vote_poll %}
                             <button type="submit" href="{% url 'past_polls' %}" name="end_vote" class="btn btn-warning">End Vote</button>
+                            <button type="submit" name="end_vote" class="btn btn-warning">End Vote</button>
                         {% endif %}
                     </div>
                 </form>
