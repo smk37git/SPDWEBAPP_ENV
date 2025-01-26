@@ -135,20 +135,6 @@
     }
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .dashboard-buttons .btn {
-        width: 90vw;
-        font-size: clamp(1rem, 4vw, 1.25rem);
-        padding: 1rem 1.5rem;
-    }
-    
-    .dashboard-buttons {
-        gap: 1rem;
-        margin-top: 3vh;
-    }
-}
-
 /* Group Button Layout */
 .dashboard-buttons.group {
     flex-direction: row;
@@ -478,6 +464,19 @@ body {
 
     .table th, .table td {
         padding: 0.75rem;
+    }
+
+    .dashboard-buttons .btn {
+        width: 90vw;
+        font-size: clamp(1rem, 4vw, 1.25rem);
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+    }
+    
+    .dashboard-buttons {
+        gap: 1.5rem;
+        margin-top: 3vh;
+        padding: 1rem
     }
 }
 
