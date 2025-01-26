@@ -342,6 +342,15 @@ body {
     background: var(--primary-red);
 }
 
+.homepage-subheading {
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+    font-size: 1.5rem;
+    color: var(--primary-red);
+    margin-bottom: 2rem;
+    position: relative;
+}
+
 /* Table Styles */
 .centered-table {
     display: flex;
