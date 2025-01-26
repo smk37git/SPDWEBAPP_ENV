@@ -9,11 +9,11 @@
     font-size: 1.7rem; /* Adjust the size of the Greek letters if needed */
     line-height: 1; /* Prevents extra spacing */
     font-weight: bold;
+    color: white !important;
 }
 .navbar-brand img {
     margin-right: 10px; /* Adds space between the image and text */
 }
-
 
 
 
@@ -52,7 +52,7 @@
     transform: translate(-50%, -250%);
     text-align: center;
     color: white;
-    text-shadow: 2px 2px 1px rgb(0, 0, 0);
+    text-shadow: 2px 2px 3px rgb(0, 0, 0);
 }
 
 .banner-text h1 {
