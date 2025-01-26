@@ -47,9 +47,12 @@ def loginPage(request):
         if user is not None:
             login(request, user)
             print('it worked')
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)  # Redirect to the URL they were trying to access
             return redirect('home')
         else:
-            return redirect('home')
+            return redirect('login')
   
   context = {}
   print(request.user)
