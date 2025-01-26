@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm  # User Registration
 from .forms import CreateUserForm  # User Registration
 
-from .models import Member # Import Member from database
+from .models import * # Import Member from database
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 # SPD AUTHENTICATE
 def home(request):
-  members = Member.objects.all()
+  members = Brother_Profile.objects.all()
   return render(request, 'AUTHENTICATE/home.html', {'members': members})
 
 def dashboard(request):
@@ -18,7 +18,7 @@ def dashboard(request):
 
 @login_required
 def roster(request):
-  members = Member.objects.all()
+  members = Brother_Profile.objects.all()
   return render(request, 'AUTHENTICATE/roster.html', {'members': members})
 
 def codeOfEthics(request):
