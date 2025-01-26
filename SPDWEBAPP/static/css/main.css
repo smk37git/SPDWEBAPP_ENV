@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .dashboard-buttons {
     margin-top: 150px;
 }
@@ -9,22 +8,7 @@
     margin-bottom: 75px;
     font-size: 2.5rem;
 }
-.navbar {
-    background-color: rgb(196, 0, 0) !important; /* Overrides the default bg-dark class */
-}
-.navbar-brand {
-    font-family: "Times New Roman", serif; /* Use a serif font for a classical Greek look */
-    display: flex; /* Ensures the brand content is treated as a flex container */
-    align-items: center; /* Vertically centers the content */
-    font-size: 1.7rem; /* Adjust the size of the Greek letters if needed */
-    line-height: 1; /* Prevents extra spacing */
-    font-weight: bold;
-    color: white !important;
-}
-.navbar-brand img {
-    margin-right: 10px; /* Adds space between the image and text */
-=======
-/* Global Variables */
+
 :root {
     --primary-red: rgb(196, 0, 0);
     --primary-dark: #2e2e2e;
@@ -32,7 +16,6 @@
     --shadow-color: rgba(0, 0, 0, 0.2);
     --transition-speed: 0.3s;
     --border-radius: 10px;
->>>>>>> feature/parleypro
 }
 
 /* Global Styles */
