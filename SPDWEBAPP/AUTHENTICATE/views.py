@@ -10,16 +10,16 @@ from django.contrib.auth.decorators import login_required
 
 # SPD AUTHENTICATE
 def home(request):
-  members = Brother_Profile.objects.all()
-  return render(request, 'AUTHENTICATE/home.html', {'members': members})
+  Brother_Profiles = Brother_Profile.objects.all()
+  return render(request, 'AUTHENTICATE/home.html', {'Brother_Profiles': Brother_Profiles})
 
 def dashboard(request):
   return render(request, 'AUTHENTICATE/dashboard.html')
 
 @login_required
 def roster(request):
-  members = Brother_Profile.objects.all()
-  return render(request, 'AUTHENTICATE/roster.html', {'members': members})
+  Brother_Profiles = Brother_Profile.objects.all()
+  return render(request, 'AUTHENTICATE/roster.html', {'Brother_Profiles': Brother_Profiles})
 
 def codeOfEthics(request):
   return render(request, 'AUTHENTICATE/codeOfEthics.html')
