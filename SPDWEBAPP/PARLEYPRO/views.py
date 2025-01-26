@@ -3,35 +3,55 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Brother_votes
+from .models import *
+from .forms import *
+from .pp_functions import *
+from .pp_decorators import requires_role
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from .forms import VotePollForm
 
 
 @login_required
-def change_vote(request):
+def poll_index(request):
+    #print(request.POST)
    
     all_votes = Brother_votes.objects
+    # Get the most recent active poll (where Vote_Poll_End is null)
+    current_poll = Vote_Poll.objects.filter(Vote_Poll_End__isnull=True).order_by('-Vote_Poll_Start').first()
     
     if request.method == 'POST':
-       if 'reset' in request.POST:
-            # Reset ALL votes to 'No Vote'
-            all_votes.all().update(user_vote_choice='No Vote')
-       else:
-            vote, created = Brother_votes.objects.get_or_create(
-            user=request.user,
-            defaults={'user_vote_choice': 'No Vote'}  # Default value for new records
-        )
-            vote = Brother_votes.objects.get(user=request.user)
-            if 'nay' in request.POST:
-                vote.user_vote_choice = 'Nay'
-                vote.save()
-            if 'aye' in request.POST:
-                vote.user_vote_choice = 'Aye'
-                vote.save()
-            
+        Vote_Yes_No_or_StartANDEndVote(request, all_votes)
 
-    #these variables pull together all the votes to inject into the scoreboard
-    nay_votes = all_votes.filter(user_vote_choice='Nay').count()
-    aye_votes = all_votes.filter(user_vote_choice='Aye').count()
-    context = {'nay_votes':nay_votes,'aye_votes':aye_votes}
-    # Redirect back to the page showing votes
-    return render(request, 'parleypro_homepage.html',context)  # Replace with your actual URL name
+    (aye_votes, nay_votes) = count_all_current_votes(all_votes)
+
+    context = {
+        'nay_votes': nay_votes,
+        'aye_votes': aye_votes,
+        'current_poll': current_poll,
+    }
+    return render(request, 'poll_index.html', context)
+
+@requires_role('EXEC')
+def start_vote(request):
+    if request.method == 'POST':
+        form = VotePollForm(request.POST)
+        if form.is_valid():
+            poll = form.save(commit=False)
+            poll.created_by = request.user
+            poll.Vote_Poll_Start = timezone.now()  # Set the start time
+            poll.save()
+            return redirect('poll')  # Make sure this matches your URL name
+    else:
+        form = VotePollForm()
+    
+    context = {'form': form}
+    return render(request, 'create_poll.html', context)
+
+@login_required
+def past_polls(request):
+    past_polls = Vote_Poll.objects.filter(
+        Vote_Poll_End__isnull=False
+    ).order_by('-Vote_Poll_End')
+    
+    return render(request, 'past_polls.html', {'past_polls': past_polls})
