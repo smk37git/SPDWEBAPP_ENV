@@ -1,0 +1,85 @@
+/* Table Styles */
+.centered-table {
+    display: flex;
+    justify-content: center;
+    margin: 2rem auto;
+    max-width: 1200px;
+    padding: 0 1rem;
+}
+
+.centered-table .card {
+    width: 100%;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transform: translateY(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.centered-table .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.centered-table .card-body {
+    padding: 2rem;
+    background-color: var(--primary-light);
+}
+
+.table {
+    margin: 0;
+    border-collapse: collapse;
+    width: 100%;
+    background: white;
+}
+
+/* Clean, Modern Header Style */
+.table thead {
+    border-bottom: 3px solid var(--primary-red);
+}
+
+.table th {
+    background-color: #1a1a1a;
+    color: var(--primary-light);
+    font-size: 1rem;
+    padding: 1.2rem 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: left;
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Add subtle rounded corners to the first and last headers */
+.table th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.table th:last-child {
+    border-top-right-radius: 8px;
+}
+
+/* Alternate row colors for better readability */
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+    background-color: #f5f5f5;
+    cursor: default;
+}
