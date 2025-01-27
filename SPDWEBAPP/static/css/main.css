@@ -248,6 +248,11 @@ body {
     width: 80%;
 }
 
+.navbar-nav.align-right {
+    margin-left: auto;
+}
+
+
 /* Divider Styling */
 .nav-item.separator {
     display: flex;
