@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-9@j5+7m8qn+&6=*oexfi7m8vkt!3hio_n9f)o=0zfa2h0b#aak
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['sigmaphideltamizzou.online', 'www.sigmaphideltamizzou.online', '54.226.39.191','localhost:8000','127.0.0.1']
+ALLOWED_HOSTS = ['sigmaphideltamizzou.online', 'www.sigmaphideltamizzou.online', '54.226.39.191','localhost','127.0.0.1']
 
 LOGIN_URL = '/login/'  # Adjust this to match your authenticate app's URL pattern
 LOGIN_REDIRECT_URL = ''
