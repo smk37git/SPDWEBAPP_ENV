@@ -52,6 +52,6 @@ docs/_build/
 docs/_build/
 
 #Database and Environment
-
+db.sqlite3
 .venv
 .env
