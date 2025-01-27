@@ -31,10 +31,15 @@
             <li class="nav-item {% if request.resolver_match.url_name == 'roster' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'roster' %}">Roster</a>
             </li>
+
+            {% endif %}
+        </ul>
+        {% if request.user.is_authenticated %}
+        <ul class="navbar-nav align-right">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
-            {% endif %}
         </ul>
+        {% endif %}
     </div>
 </nav>
