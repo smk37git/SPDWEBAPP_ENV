@@ -1,0 +1,20 @@
+{% extends 'AUTHENTICATE/main.html' %}
+{% load static %}
+{% block content %}
+<div class="homepage-content">
+    <div class="text-center mb-4">
+        <h2 class="homepage-heading">Rush Information</h2>
+    </div>
+    
+    <div class="code-of-ethics-container mx-auto">
+        <p>
+            Rush Information Goes Here.
+        </p>
+        <a href="{% url 'dashboard' %}">
+            <div class="text-center mt-4">
+                <button class="btn btn-primary" type="button">Contact our Recruitment Chair</button>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}
