@@ -1,6 +1,11 @@
 {% extends 'AUTHENTICATE/main.html' %}
 
+<!-- Day Light Savings Notifier -->
+{% load dls_tags %}
+
 {% block content %}
+
+    {% dls_alert %}
 
 <div class="d-grid gap-2 col-3 mx-auto dashboard-buttons">
     <a href="https://sigmaphidelta.org/" target="_blank">
