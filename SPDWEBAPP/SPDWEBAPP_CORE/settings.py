@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # SPD APPS
     'AUTHENTICATE',
     'PARLEYPRO',
+    'MISC',
 ]
 
 MIDDLEWARE = [
