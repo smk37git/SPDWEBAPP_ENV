@@ -1,0 +1,41 @@
+from django import template
+from datetime import datetime, timedelta
+from ..utils import get_next_DLS_change
+from ..models import DayLightSavingsAlert
+
+register = template.Library()
+
+@register.inclusion_tag('misc/dls_alert.html')
+def dls_alert():
+    next_change = get_next_DLS_change()
+    show_alert = False
+    message = ""
+
+    if next_change:
+
+        # Show the alert if the DLS change is two weeks away
+        time_until = next_change - datetime.now(next_change.tzinfo)
+        if time_until <= timedelta(days=14):
+            show_alert = True
+
+            # Validate if it is Spring forward OR Fall backwards
+            is_spring = next_change.month == 3
+            direction = "forward" if is_spring else "back"
+
+            message = f"Daylight savings Time changes on {next_change.strftime('%B %d, %Y')}. Clocks will move {direction} one hour at 2:00 AM."
+
+    # Validate to see if alert is enabled in admin
+    try:
+        alert_settings =DayLightSavingsAlert.objects.first()
+        if alert_settings:
+                show_alert = show_alert and alert_settings.is_active
+                if alert_settings.custom_message:
+                    message = alert_settings.custom_message
+    except DayLightSavingsAlert.DoesNotExist:
+        pass
+    
+    return {
+        'show_alert': show_alert,
+        'message': message,
+        'next_change': next_change
+    }
