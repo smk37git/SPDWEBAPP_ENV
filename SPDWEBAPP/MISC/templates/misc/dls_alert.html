@@ -1,17 +1,17 @@
 {% if show_alert %}
-<div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-4">
-    <div class="flex">
-        <div class="flex-shrink-0">
-            <!-- Clock icon -->
-            <svg class="h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+<div class="flex items-center justify-center min-h-screen bg-gray-50">
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg shadow-md text-center w-80">
+        <div class="flex justify-center mb-2">
+            <svg class="text-yellow-500" width="50" height="50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
             </svg>
         </div>
-        <div class="ml-3">
-            <p class="text-sm text-yellow-700">
-                {{ message }}
-            </p>
-        </div>
+        <p class="text-sm font-semibold text-yellow-800">
+            Daylight Savings Time changes on <span class="font-bold">March 09, 2025</span>.
+        </p>
+        <p class="text-xs text-yellow-700 mt-1">
+            Clocks will move forward one hour at <span class="font-semibold">2:00 AM</span>.
+        </p>
     </div>
 </div>
 {% endif %}
