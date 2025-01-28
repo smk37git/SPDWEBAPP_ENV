@@ -52,9 +52,9 @@ docs/_build/
 docs/_build/
 
 #Database and Environment
-db.sqlite3
+#db.sqlite3
 .venv
 .env
 
 # Ignore settings.py
-settings.py
+#settings.py
