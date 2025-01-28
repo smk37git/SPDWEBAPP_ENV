@@ -22,15 +22,15 @@ def dls_alert():
             is_spring = next_change.month == 3
             direction = "forward" if is_spring else "back"
 
-            message = f"Daylight savings Time is on {next_change.strftime('%B %d, %Y')}. Clocks will move {direction} one hour."
+            message = f"Daylight savings Time is on {next_change.strftime('%B %d, %Y')}.\ncClocks will move {direction} one hour."
 
     # Validate to see if alert is enabled in admin
     try:
         alert_settings = DayLightSavingsAlert.objects.first()
         if alert_settings:
                 show_alert = show_alert and alert_settings.is_active
-                if alert_settings.custom_message:
-                    message = alert_settings.custom_message
+                if alert_settings.name:
+                    message = alert_settings.name
     except DayLightSavingsAlert.DoesNotExist:
         pass
     
