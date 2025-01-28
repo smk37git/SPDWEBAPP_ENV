@@ -15,14 +15,14 @@ def dls_alert():
 
         # Show the alert if the DLS change is two weeks away
         time_until = next_change - datetime.now(next_change.tzinfo)
-        if time_until <= timedelta(days=14):
+        if time_until <= timedelta(days=350):
             show_alert = True
 
             # Validate if it is Spring forward OR Fall backwards
             is_spring = next_change.month == 3
             direction = "forward" if is_spring else "back"
 
-            message = f"Daylight savings Time changes on {next_change.strftime('%B %d, %Y')}. Clocks will move {direction} one hour at 2:00 AM."
+            message = f"Daylight savings Time is on {next_change.strftime('%B %d, %Y')}. Clocks will move {direction} one hour."
 
     # Validate to see if alert is enabled in admin
     try:
