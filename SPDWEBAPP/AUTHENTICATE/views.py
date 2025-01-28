@@ -31,6 +31,8 @@ def roster(request):
 def codeOfEthics(request):
   return render(request, 'AUTHENTICATE/codeOfEthics.html')
 
+def rush(request):
+  return render(request, 'AUTHENTICATE/rush.html')
 
 def registerPage(request):
   form = CreateUserForm()
