@@ -9,7 +9,7 @@ def get_next_DLS_change():
 
     # Get current year and next year DLS time period
     current_year = now.year
-    next_year = this_year + 1
+    next_year = current_year + 1
 
     transitions = []
 
@@ -18,8 +18,8 @@ def get_next_DLS_change():
         
         # Spring forward DLS
         march = datetime(year, 3, 1, 2, 0, tzinfo=tz)
-        while march.weekday() != 6
-            march += timedetla(days=1)
+        while march.weekday() != 6:
+            march += timedelta(days=1)
         march += timedelta(days=7)
 
         # Fall backward DLS

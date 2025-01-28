@@ -26,7 +26,7 @@ def dls_alert():
 
     # Validate to see if alert is enabled in admin
     try:
-        alert_settings =DayLightSavingsAlert.objects.first()
+        alert_settings = DayLightSavingsAlert.objects.first()
         if alert_settings:
                 show_alert = show_alert and alert_settings.is_active
                 if alert_settings.custom_message:
