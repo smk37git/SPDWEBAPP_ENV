@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9@j5+7m8qn+&6=*oexfi7m8vkt!3hio_n9f)o=0zfa2h0b#aak'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['sigmaphideltamizzou.online', 'www.sigmaphideltamizzou.online', '54.226.39.191','localhost','127.0.0.1']
 
@@ -90,22 +90,29 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME':
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME':
-        'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME':
-        'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+  {
+    # Checks the similarity between the password and a set of attributes of the user.
+    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    'OPTIONS': {
+      'user_attributes': ('username', 'email', 'first_name', 'last_name'),
+      'max_similarity': 0.7,
+    }
+  },
+  {
+    # Checks whether the password meets a minimum length.
+    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    'OPTIONS': {
+      'min_length': 8,
+    }
+  },
+  {
+    # Checks whether the password occurs in a list of common passwords
+    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+  },
+  {
+    # Checks whether the password isn’t entirely numeric
+    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+  }
 ]
 
 # Internationalization
@@ -133,3 +140,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+
+
+################### Security Settings
+SECURE_SSL_REDIRECT = True
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
+
+SECURE_BROWSER_XSS_FILTER = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+
+# This setting will FORCE the browser to use HTTPS, should the ssl certificate fail, this must be disabled
+SECURE_HSTS_SECONDS = 8640  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!*
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
