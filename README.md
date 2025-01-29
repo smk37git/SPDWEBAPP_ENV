@@ -13,6 +13,6 @@ In that folder, you need two things:
         Copy the output of the command and put it into the file like so:
         ```python
         SECRET_KEY = 'paste here'
-        ADMIN_PATH = 'admin'
+        ADMIN_URL = 'admin'
         ```
         You may change the admin path to whatever you wish.
