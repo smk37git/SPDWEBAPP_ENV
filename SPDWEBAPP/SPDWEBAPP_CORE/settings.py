@@ -191,7 +191,7 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 
 # This setting will FORCE the browser to use HTTPS, should the ssl certificate fail, this must be disabled
-SECURE_HSTS_SECONDS = 8640  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!*
+SECURE_HSTS_SECONDS = 30  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!*, recommended is 259200
 SECURE_HSTS_PRELOAD = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
