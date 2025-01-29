@@ -52,11 +52,18 @@ except ImportError:
 ADMIN_URL = ADMIN_URL  # or set a default value in case it's not found
 
 
+try:
+    from secret_config import ENVIRONMENT
+except ImportError:
+    raise ValueError(f"No ENVIRONMENT found! Make sure the secret_config.py exists in {KEY_DIR}")
 
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+if ENVIRONMENT == 'production': # only have DEBUG=TRUE if the environment is local
+    DEBUG = False
+else:
+    Debug = True
 
 ALLOWED_HOSTS = ['sigmaphideltamizzou.online', 'www.sigmaphideltamizzou.online', '54.226.39.191','localhost','127.0.0.1']
 
@@ -126,10 +133,6 @@ AUTH_PASSWORD_VALIDATORS = [
   {
     # Checks the similarity between the password and a set of attributes of the user.
     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    'OPTIONS': {
-      'user_attributes': ('username', 'email', 'first_name', 'last_name'),
-      'max_similarity': 0.7,
-    }
   },
   {
     # Checks whether the password meets a minimum length.
@@ -177,21 +180,15 @@ STATICFILES_DIRS = [
 
 
 ################### Security Settings
-SECURE_SSL_REDIRECT = True
-
-SESSION_COOKIE_SECURE = True
-
-CSRF_COOKIE_SECURE = True
-
-SECURE_BROWSER_XSS_FILTER = True
-
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
-
-
-# This setting will FORCE the browser to use HTTPS, should the ssl certificate fail, this must be disabled
-SECURE_HSTS_SECONDS = 30  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!*, recommended is 259200
-SECURE_HSTS_PRELOAD = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+if ENVIRONMENT == 'production':
+  SECURE_SSL_REDIRECT = True
+  SESSION_COOKIE_SECURE = True
+  CSRF_COOKIE_SECURE = True
+  SECURE_BROWSER_XSS_FILTER = True
+  SECURE_CONTENT_TYPE_NOSNIFF = True
+  SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+  # This setting will FORCE the browser to use HTTPS, should the ssl certificate fail, this must be disabled
+  SECURE_HSTS_SECONDS = 30  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!*, recommended is 259200
+  SECURE_HSTS_PRELOAD = True
+  SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+  SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
