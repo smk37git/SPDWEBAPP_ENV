@@ -1,6 +1,6 @@
 # Sigma Phi Delta Mizzou New Website
 ## Setup Instructions
-For security purposes, the website stores the database, secret key, and the path to the admin panel in a seperate file that is *two directories above the website files*, aka, *the same directory that the git repo is stored in*.
+For security purposes, the website stores the database, secret key, development environment, and the path to the admin panel in a seperate file that is *two directories above the website files*, aka, *the same directory that the git repo is stored in*.
 
 In that folder, you need two things:
 
@@ -14,5 +14,6 @@ In that folder, you need two things:
         ```python
         SECRET_KEY = 'paste here'
         ADMIN_URL = 'admin'
+        ENVIRONMENT = 'local'
         ```
         You may change the admin path to whatever you wish.
