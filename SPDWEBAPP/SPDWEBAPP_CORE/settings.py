@@ -63,7 +63,7 @@ except ImportError:
 if ENVIRONMENT == 'production': # only have DEBUG=TRUE if the environment is local
     DEBUG = False
 else:
-    Debug = True
+    DEBUG = True
 
 ALLOWED_HOSTS = ['sigmaphideltamizzou.online', 'www.sigmaphideltamizzou.online', '54.226.39.191','localhost','127.0.0.1']
 
