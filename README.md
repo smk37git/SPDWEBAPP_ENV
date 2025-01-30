@@ -6,14 +6,15 @@ In that folder, you need two things:
 
 1. The `db.sqlite3` file (which will be automatically generated unless you have a previous database you want to use)
 2. A file called `secret_config.py`
-    - This file can be setup with the following commands
-        ```bash
-        python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-        ```
-        Copy the output of the command and put it into the file like so:
-        ```python
-        SECRET_KEY = 'paste here'
-        ADMIN_URL = 'admin'
-        ENVIRONMENT = 'local'
-        ```
-        You may change the admin path to whatever you wish.
+
+Create the secret_config.py file to match this template
+```python
+SECRET_KEY = 'paste here'
+ADMIN_URL = 'admin'
+ENVIRONMENT = 'local'
+```
+Then paste the output of this command into the file
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+You may change the admin path to whatever you wish. The environment should be set to either 'local' or 'development'
