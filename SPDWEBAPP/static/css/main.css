@@ -177,3 +177,17 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #8b0000;
 }
+
+/* Common Button Stylings */
+.btn-primary {
+    background: linear-gradient(135deg, #c40000 0%, #8b0000 100%);
+    color:white;
+    box-shadow: 0 4px 15px rgba(196, 0, 0, 0.2);
+    border: none;
+    border-radius: 12px;
+
+}
+
+.btn-secondary {
+    background: #2e2e2e;
+}
