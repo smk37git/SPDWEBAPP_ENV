@@ -15,6 +15,6 @@ ENVIRONMENT = 'local'
 ```
 Then paste the output of this command into the file
 ```bash
-python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+python3 -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 You may change the admin path to whatever you wish. The environment should be set to either 'local' or 'development'
