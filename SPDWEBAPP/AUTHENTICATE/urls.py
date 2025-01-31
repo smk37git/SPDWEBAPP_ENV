@@ -11,4 +11,8 @@ urlpatterns = [
     path('codeofethics/', views.codeOfEthics, name="codeOfEthics"),
     path('roster/', views.roster, name="roster"),
     path('logout/', views.logoutUser, name="logout"),
+    path('change-password/', views.change_password, name='change-password'),
+    path('profile/', views.profile, name='profile'),
+    path('update_profile/', views.update_profile, name='update_profile'),
+    path('update_photo/', views.update_photo, name='update_photo'),
 ]
