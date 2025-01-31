@@ -11,6 +11,7 @@ import os
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from .utils import contains_profanity
 
 
 # SPD AUTHENTICATE
@@ -127,17 +128,13 @@ def update_profile(request):
 
 @login_required
 def profile(request):
-    try:
-        brother_profile = Brother_Profile.objects.get(user=request.user)
-    except Brother_Profile.DoesNotExist:
-        # Create new profile if doesn't exist
-        brother_profile = Brother_Profile.objects.create(
-            user=request.user,
-            firstName=request.user.first_name,
-            lastName=request.user.last_name
-        )
-    
-    context = {'brother_profile': brother_profile}
+    brother_profile = Brother_Profile.objects.get(user=request.user)
+    available_majors = Major.objects.all().order_by('name')
+    context = {
+        'brother_profile': brother_profile,
+        'available_majors': available_majors,
+        'page': 'profile'
+    }
     return render(request, 'AUTHENTICATE/profile.html', context)
 
 @login_required
@@ -161,4 +158,91 @@ def update_photo(request):
             messages.error(request, f'Error updating profile photo: {str(e)}')
             
     return HttpResponseRedirect(reverse('profile'))
+
+@login_required
+def reset_photo(request):
+    if request.method == 'POST':
+        try:
+            brother_profile = Brother_Profile.objects.get(user=request.user)
+            if brother_profile.profileImage:
+                # Delete the old photo file
+                brother_profile.profileImage.delete()
+            brother_profile.profileImage = None
+            brother_profile.save()
+            return JsonResponse({
+                'success': True,
+                'message': 'Profile photo reset successfully'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            })
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request'
+    })
+
+@login_required
+def update_majors(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        selected_majors = data.get('majors', [])
+        
+        try:
+            brother_profile = Brother_Profile.objects.get(user=request.user)
+            brother_profile.majors.clear()
+            
+            for major_name in selected_majors:
+                major, _ = Major.objects.get_or_create(name=major_name)
+                brother_profile.majors.add(major)
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Majors updated successfully'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            })
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request method'
+    })
+
+@login_required
+def add_custom_major(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        major_name = data.get('major_name', '').strip()
+        
+        # Check for profanity
+        if contains_profanity(major_name):
+            return JsonResponse({
+                'success': False,
+                'message': 'Major name contains inappropriate language'
+            })
+
+        # Capitalize each word
+        major_name = ' '.join(word.capitalize() for word in major_name.split())
+        
+        try:
+            major, created = Major.objects.get_or_create(name=major_name)
+            return JsonResponse({
+                'success': True,
+                'major_id': major.id,
+                'major_name': major.name
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            })
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request method'
+    })
 # Home goes below here

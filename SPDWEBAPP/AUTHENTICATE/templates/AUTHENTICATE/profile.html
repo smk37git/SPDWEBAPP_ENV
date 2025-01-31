@@ -10,10 +10,15 @@
             <img src="{% if brother_profile.profileImage %}{{ brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
                  alt="Profile Photo" 
                  class="profile-img">
+            <div class="profile-photo-overlay">
+                <div class="reset-photo" title="Reset to default photo">×</div>
+                <div class="photo-actions" onclick="document.getElementById('profile_photo').click()">
+                    Change Photo
+                </div>
+            </div>
             <form id="photoForm" action="{% url 'update_photo' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="profile_photo" id="profile_photo" class="hidden-input" accept="image/*">
-                <label for="profile_photo" class="edit-btn">Change Photo</label>
             </form>
         </div>
 
@@ -43,8 +48,12 @@
                         <tr>
                             <th>Major</th>
                             <td>
-                                <div class="major-display-container">
-                                    <div class="majors-display"></div>
+                                <div class="major-display-container {% if not brother_profile.majors.all %}no-majors{% endif %}">
+                                    <p class="majors-display">
+                                        {% for major in brother_profile.majors.all %}
+                                            <span>{{ major.name }}</span>
+                                        {% endfor %}
+                                    </p>
                                     <button type="button" class="add-major-btn" data-toggle="modal" data-target="#majorModal">
                                         <i class="fas fa-plus"></i> Major
                                     </button>
@@ -116,27 +125,48 @@
             <div class="modal-body">
                 <p class="major-limit-text">Select up to 3 majors</p>
                 <div class="major-options">
+                    {% for major in available_majors %}
                     <div class="major-option">
-                        <input type="checkbox" id="chemical" class="major-checkbox" value="Chemical Engineering">
-                        <label for="chemical">Chemical Engineering</label>
+                        <input type="checkbox" 
+                               id="{{ major.id }}" 
+                               class="major-checkbox" 
+                               value="{{ major.name }}"
+                               {% if major in brother_profile.majors.all %}checked{% endif %}>
+                        <label for="{{ major.id }}">{{ major.name }}</label>
                     </div>
-                    <div class="major-option">
-                        <input type="checkbox" id="computer" class="major-checkbox" value="Computer Science">
-                        <label for="computer">Computer Science</label>
-                    </div>
-                    <div class="major-option">
-                        <input type="checkbox" id="industrial" class="major-checkbox" value="Industrial Engineering">
-                        <label for="industrial">Industrial Engineering</label>
-                    </div>
-                    <div class="major-option">
-                        <input type="checkbox" id="mechanical" class="major-checkbox" value="Mechanical Engineering">
-                        <label for="mechanical">Mechanical Engineering</label>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary save-majors">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add new modal after existing major modal -->
+<div class="modal fade" id="otherMajorModal" tabindex="-1" role="dialog" aria-labelledby="otherMajorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="otherMajorModalLabel">Enter Major Name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="customMajorInput" placeholder="Enter major name">
+                    <small class="form-text text-muted">Please enter the full name of your major</small>
+                    <div id="majorValidationError" class="text-danger mt-2" style="display: none;">
+                        Major name contains inappropriate language.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveCustomMajor">Save</button>
             </div>
         </div>
     </div>
@@ -161,19 +191,111 @@
             const selectedMajors = Array.from(document.querySelectorAll('.major-checkbox:checked'))
                 .map(checkbox => checkbox.value);
             
-            // Update display
-            const majorsDisplay = document.querySelector('.majors-display');
-            const majorContainer = document.querySelector('.major-display-container');
+            fetch('{% url "update_majors" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    majors: selectedMajors
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const majorsDisplay = document.querySelector('.majors-display');
+                    majorsDisplay.textContent = selectedMajors.join(', ');
+                    $('#majorModal').modal('hide');
+                }
+            });
+        });
+
+        const profilePhoto = document.querySelector('.profile-photo');
+        
+        // Handle mobile touch
+        profilePhoto.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            this.classList.toggle('touch-active');
+        });
+
+        // Reset photo functionality
+        document.querySelector('.reset-photo').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            if (selectedMajors.length > 0) {
-                majorsDisplay.textContent = selectedMajors.join(', ');
-                majorContainer.classList.remove('no-majors');
-            } else {
-                majorsDisplay.textContent = '';
-                majorContainer.classList.add('no-majors');
+            fetch('{% url "reset_photo" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        });
+
+        const otherMajorCheckbox = document.querySelector('input[value="Other"]');
+    
+        otherMajorCheckbox?.addEventListener('change', function() {
+            if (this.checked) {
+                this.checked = false;
+                $('#otherMajorModal').modal('show');
             }
-            
-            $('#majorModal').modal('hide');
+        });
+
+        document.getElementById('saveCustomMajor')?.addEventListener('click', function() {
+            const customMajorInput = document.getElementById('customMajorInput');
+            const validationError = document.getElementById('majorValidationError');
+            const majorName = customMajorInput.value.trim();
+
+            if (!majorName) {
+                validationError.textContent = 'Please enter a major name';
+                validationError.style.display = 'block';
+                return;
+            }
+
+            fetch('{% url "add_custom_major" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    major_name: majorName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const majorOptions = document.querySelector('.major-options');
+                    const newOption = document.createElement('div');
+                    newOption.className = 'major-option';
+                    newOption.innerHTML = `
+                        <input type="checkbox" 
+                               id="${data.major_id}" 
+                               class="major-checkbox" 
+                               value="${data.major_name}"
+                               checked>
+                        <label for="${data.major_id}">${data.major_name}</label>
+                    `;
+                    majorOptions.insertBefore(newOption, majorOptions.lastElementChild);
+                    $('#otherMajorModal').modal('hide');
+                    validationError.style.display = 'none';
+                } else {
+                    validationError.textContent = data.message;
+                    validationError.style.display = 'block';
+                }
+            });
+        });
+
+        // Clear validation on modal close
+        $('#otherMajorModal').on('hidden.bs.modal', function () {
+            document.getElementById('customMajorInput').value = '';
+            document.getElementById('majorValidationError').style.display = 'none';
         });
     });
     
@@ -331,5 +453,61 @@
     document.getElementById('profile_photo').addEventListener('change', function() {
         document.getElementById('photoForm').submit();
     });
-    </script>
-    {% endblock %}
+
+    document.querySelector('.save-majors').addEventListener('click', function() {
+        const selectedMajors = Array.from(document.querySelectorAll('.major-checkbox:checked'))
+            .map(checkbox => checkbox.value);
+        
+        fetch('{% url "update_majors" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                majors: selectedMajors
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close modal and refresh page
+                $('#majorModal').modal('hide');
+                window.location.reload();
+            }
+        });
+    });
+
+    document.getElementById('saveCustomMajor')?.addEventListener('click', function() {
+        const customMajorInput = document.getElementById('customMajorInput');
+        const validationError = document.getElementById('majorValidationError');
+        const majorName = customMajorInput.value.trim();
+
+        if (!majorName) {
+            validationError.textContent = 'Please enter a major name';
+            validationError.style.display = 'block';
+            return;
+        }
+
+        fetch('{% url "add_custom_major" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                major_name: majorName
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.reload();
+            } else {
+                validationError.textContent = data.message;
+                validationError.style.display = 'block';
+            }
+        });
+    });
+</script>
+{% endblock %}
