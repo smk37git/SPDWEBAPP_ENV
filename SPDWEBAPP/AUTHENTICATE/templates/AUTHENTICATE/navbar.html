@@ -36,8 +36,23 @@
         </ul>
         {% if request.user.is_authenticated %}
         <ul class="navbar-nav align-right">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle profile-dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="{% if request.user.brother_profile.profileImage %}{{ request.user.brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+                         alt="Profile Photo" 
+                         class="navbar-profile-img"
+                         onerror="this.src='{% static 'images/default_profile.png' %}'">
+                    <span class="username-text">{{ request.user.username }}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'profile' %}">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
             </li>
         </ul>
         {% endif %}
