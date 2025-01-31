@@ -104,23 +104,47 @@ def change_password(request):
 @login_required
 def update_profile(request):
     if request.method == 'POST':
+        # Get form data
+        username = request.POST.get('username')
+        firstname = request.POST.get('firstName') 
+        lastname = request.POST.get('lastName')
+        
+        # Check all fields for profanity
+        if contains_profanity(username):
+            return JsonResponse({
+                'success': False,
+                'message': 'Username contains inappropriate language.'
+            })
+            
+        if contains_profanity(firstname):
+            return JsonResponse({
+                'success': False, 
+                'message': 'First name contains inappropriate language.'
+            })
+            
+        if contains_profanity(lastname):
+            return JsonResponse({
+                'success': False,
+                'message': 'Last name contains inappropriate language.'
+            })
+            
+        # Update if clean
         user = request.user
         brother_profile = Brother_Profile.objects.get(user=user)
         
-        # Update user info
-        user.username = request.POST.get('username')
+        user.username = username
         user.email = request.POST.get('email')
         user.save()
         
-        # Update profile info
-        brother_profile.firstName = request.POST.get('firstName')
-        brother_profile.lastName = request.POST.get('lastName')
+        brother_profile.firstName = firstname
+        brother_profile.lastName = lastname
         brother_profile.save()
         
         return JsonResponse({
             'success': True,
             'message': 'Profile updated successfully!'
         })
+        
     return JsonResponse({
         'success': False,
         'message': 'Invalid request method.'
@@ -129,6 +153,15 @@ def update_profile(request):
 @login_required
 def profile(request):
     brother_profile = Brother_Profile.objects.get(user=request.user)
+    
+    # Check if profile image exists and is accessible
+    if brother_profile.profileImage:
+        try:
+            brother_profile.profileImage.url
+        except:
+            brother_profile.profileImage = None
+            brother_profile.save()
+    
     available_majors = Major.objects.all().order_by('name')
     context = {
         'brother_profile': brother_profile,
