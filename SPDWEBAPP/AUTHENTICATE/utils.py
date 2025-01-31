@@ -40,6 +40,31 @@ def contains_profanity(text):
     
     return False
 
+def clean_profanity_from_user_fields(text):
+    """Check user fields for inappropriate content"""
+    # Convert to lowercase for comparison
+    text = text.lower()
+    
+    # Check whitelist first
+    whitelist = {
+        'biological',
+        'biomedical',
+        'biology',
+        'medical'
+    }
+    
+    # Split text into words
+    words = text.split()
+    
+    # Return False if any inappropriate words found
+    for word in inappropriate_words:
+        if word.lower() in text:
+            # Double check it's not a whitelisted term
+            if not any(allowed in text for allowed in whitelist):
+                return False
+    
+    return True
+
 def clean_existing_majors():
     """Remove any existing majors that contain profanity"""
     cleaned_count = 0
