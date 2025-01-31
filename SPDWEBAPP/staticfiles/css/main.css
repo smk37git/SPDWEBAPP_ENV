@@ -115,8 +115,8 @@ body {
     position: relative;
 }
 
-/* Code of Ethics Styles */
-.code-of-ethics-container {
+/* Text Container Styles for Code of Ethics and Rush page*/
+.text-container {
     max-width: 800px;
     background-color: #ffffff;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -129,11 +129,11 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.code-of-ethics-container p {
+.text-container p {
     margin-bottom: 1.5rem;
 }
 
-.code-of-ethics-container img {
+.text-container img {
     margin-top: 1rem;
 }
 
@@ -176,4 +176,18 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #8b0000;
+}
+
+/* Common Button Stylings */
+.btn-primary {
+    background: linear-gradient(135deg, #c40000 0%, #8b0000 100%);
+    color:white;
+    box-shadow: 0 4px 15px rgba(196, 0, 0, 0.2);
+    border: none;
+    border-radius: 12px;
+
+}
+
+.btn-secondary {
+    background: #2e2e2e;
 }
