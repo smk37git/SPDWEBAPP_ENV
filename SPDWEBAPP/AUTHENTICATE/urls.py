@@ -17,4 +17,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('update_profile/', views.update_profile, name='update_profile'),
     path('update_photo/', views.update_photo, name='update_photo'),
+    path('reset-photo/', views.reset_photo, name='reset_photo'),
+    path('update_majors/', views.update_majors, name='update_majors'),
+    path('add-custom-major/', views.add_custom_major, name='add_custom_major'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
