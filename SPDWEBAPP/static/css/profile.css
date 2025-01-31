@@ -374,14 +374,18 @@
     padding: 0.5rem;
     border-radius: 4px;
     transition: background-color 0.2s;
+    cursor: pointer;
 }
 
-.major-option:hover {
-    background-color: rgba(0,0,0,0.05);
+.major-option label {
+    cursor: pointer;
+    flex: 1;
+    margin: 0;
+    padding: 0.25rem 0;
 }
 
 .major-checkbox {
-    margin-right: 0.5rem;
+    cursor: pointer;
 }
 
 .major-limit-text {
