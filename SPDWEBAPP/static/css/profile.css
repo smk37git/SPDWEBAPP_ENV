@@ -1,0 +1,256 @@
+.profile-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.profile-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    text-align: center;
+}
+
+.profile-photo {
+    margin-bottom: 2rem;
+}
+
+.profile-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--primary-red);
+}
+
+.profile-info h2 {
+    color: var(--primary-dark);
+    margin-bottom: 1.5rem;
+    font-family: 'Times New Roman', serif;
+}
+
+.profile-table {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.profile-table th,
+.profile-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-table th {
+    font-weight: 600;
+    color: var(--primary-red);
+    width: 40%;
+}
+
+.profile-table td {
+    color: var(--primary-dark);
+}
+
+.profile-table tr:last-child th,
+.profile-table tr:last-child td {
+    border-bottom: none;
+}
+
+.profile-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background-color: #f8f9fa;
+}
+
+.profile-input:focus {
+    outline: none;
+    border-color: var(--primary-red);
+}
+
+.profile-input:read-only {
+    cursor: default;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.profile-input:not(:read-only) {
+    background-color: white;
+    border-color: #ddd;
+}
+
+.form-actions {
+    margin-top: 2rem;
+    text-align: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.save-btn, .cancel-btn {
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    border: none;
+}
+
+.save-btn {
+    background: var(--primary-red);
+    color: white;
+}
+
+.save-btn:hover {
+    background: var(--primary-dark);
+}
+
+.cancel-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: #5a6268;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.edit-btn {
+    display: inline-block;
+    background: var(--primary-red);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.edit-btn:hover {
+    background: var(--primary-dark);
+}
+
+.edit-toggle-btn {
+    background: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.edit-toggle-btn:hover {
+    background: var(--primary-dark);
+}
+
+.edit-toggle-btn.editing {
+    background: #6c757d;
+}
+
+.edit-toggle-btn.editing:hover {
+    background: #5a6268;
+}
+
+.photo-form {
+    margin-top: 1rem;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.password-btn {
+    background: #17a2b8;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    border: none;
+}
+
+.password-btn:hover {
+    background: #138496;
+}
+
+.modal-content {
+    border-radius: 8px;
+}
+
+.modal-header {
+    background: var(--primary-red);
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-header .close {
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.text-danger {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.major-display-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.major-display-container.no-majors {
+    justify-content: center;
+}
+
+.major-display-container.no-majors .add-major-btn {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+.majors-display {
+    flex: 1;
+    text-align: left;
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+.add-major-btn {
+    background: transparent;
+    border: 2px dashed var(--primary-red);
+    color: var(--primary-red);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    min-width: fit-content;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.add-major-btn:hover {
+    background: var(--primary-red);
+    color: white;
+}
