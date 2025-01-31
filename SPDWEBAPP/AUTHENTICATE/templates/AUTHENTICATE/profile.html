@@ -3,13 +3,16 @@
 
 {% block content %}
 <div class="profile-container">
+    <div id="alert-container" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;"></div>
     <div class="profile-card">
         <!-- Profile Photo Section -->
         <div class="profile-photo">
-            <img src="{% static 'images/default_profile.png' %}" alt="Profile Photo" class="profile-img">
-            <form action="{% url 'update_photo' %}" method="POST" enctype="multipart/form-data" class="photo-form">
+            <img src="{% if brother_profile.profileImage %}{{ brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+                 alt="Profile Photo" 
+                 class="profile-img">
+            <form id="photoForm" action="{% url 'update_photo' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <input type="file" name="profile_photo" id="profile_photo" class="hidden-input">
+                <input type="file" name="profile_photo" id="profile_photo" class="hidden-input" accept="image/*">
                 <label for="profile_photo" class="edit-btn">Change Photo</label>
             </form>
         </div>
@@ -258,6 +261,8 @@
                 inputs.forEach(input => input.readOnly = true);
                 formActions.style.display = 'none';
                 editButton.style.display = 'block';
+                showTemporaryAlert('Password changed successfully!');
+                window.scrollTo({top: 0, behavior: 'smooth'}); // Add this line
             } else {
                 document.getElementById('currentPasswordError').textContent = data.error;
             }
@@ -291,8 +296,40 @@
                 inputs.forEach(input => input.readOnly = true);
                 formActions.style.display = 'none';
                 editButton.style.display = 'block';
+                showTemporaryAlert('Profile updated successfully!');
+                window.scrollTo({top: 0, behavior: 'smooth'}); // Add this line
             }
         });
+    });
+
+    function showTemporaryAlert(message, type = 'success') {
+        // Create alert element
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show`;
+        alert.style.cssText = `
+            min-width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        `;
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        `;
+
+        // Add alert to container
+        document.getElementById('alert-container').appendChild(alert);
+
+        // Remove alert after 5 seconds
+        setTimeout(() => {
+            alert.classList.remove('show');
+            setTimeout(() => alert.remove(), 150);
+        }, 5000);
+    }
+
+    document.getElementById('profile_photo').addEventListener('change', function() {
+        document.getElementById('photoForm').submit();
     });
     </script>
     {% endblock %}

@@ -7,6 +7,10 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
+import os
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
 
 
 # SPD AUTHENTICATE
@@ -138,26 +142,23 @@ def profile(request):
 
 @login_required
 def update_photo(request):
-    if request.method == 'POST':
-        user = request.user
-        brother_profile = Brother_Profile.objects.get(user=user)
-        
-        if 'profile_photo' in request.FILES:
+    if request.method == 'POST' and request.FILES.get('profile_photo'):
+        try:
+            brother_profile = Brother_Profile.objects.get(user=request.user)
+            
+            # Delete old photo if exists and it's not the default
+            if brother_profile.profileImage:
+                old_path = brother_profile.profileImage.path
+                if os.path.exists(old_path) and 'default_profile.png' not in old_path:
+                    brother_profile.profileImage.delete()
+            
             brother_profile.profileImage = request.FILES['profile_photo']
             brother_profile.save()
             
-            return JsonResponse({
-                'success': True,
-                'message': 'Profile photo updated successfully!'
-            })
-        
-        return JsonResponse({
-            'success': False,
-            'message': 'No photo uploaded.'
-        })
-        
-    return JsonResponse({
-        'success': False,
-        'message': 'Invalid request method.'
-    })
+            return HttpResponseRedirect(reverse('profile'))
+            
+        except Exception as e:
+            messages.error(request, f'Error updating profile photo: {str(e)}')
+            
+    return HttpResponseRedirect(reverse('profile'))
 # Home goes below here
