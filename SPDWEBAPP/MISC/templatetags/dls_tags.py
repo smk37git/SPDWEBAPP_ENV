@@ -8,7 +8,7 @@ from ..models import DayLightSavingsAlert
 
 register = template.Library()
 
-@register.inclusion_tag('misc/dls_alert.html')
+@register.inclusion_tag('MISC/dls_alert.html')
 def dls_alert():
     next_change = get_next_DLS_change()
     show_alert = False
