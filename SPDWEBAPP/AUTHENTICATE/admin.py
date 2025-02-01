@@ -44,13 +44,17 @@ class Brother_ProfileForm(forms.ModelForm):
         return instance
 
 class Brother_ProfileAdmin(admin.ModelAdmin):
-    form = Brother_ProfileForm
     list_display = ('user', 'profileImage', 'get_majors')
 
     def get_majors(self, obj):
         return ', '.join([major.name for major in obj.majors.all()])
 
     get_majors.short_description = 'Majors'
+
+    def save_model(self, request, obj, form, change):
+        if 'profileImage' in request.FILES:
+            obj.profileImage = request.FILES['profileImage']
+        obj.save()
 
 class MajorAdmin(admin.ModelAdmin):
     list_display = ('name',)
