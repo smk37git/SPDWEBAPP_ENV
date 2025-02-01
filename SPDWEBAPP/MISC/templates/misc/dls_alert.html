@@ -1,17 +1,46 @@
+{% load static %}
+
 {% if show_alert %}
-<div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-4">
-    <div class="flex items-center">
-        <div class="flex-shrink-0">
-            <!-- Clock icon -->
-            <svg class="h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-            </svg>
-        </div>
-        <div class="ml-3 flex-grow">
-            <p class="text-sm text-yellow-700 text-center">
-                {{ message }}
-            </p>
-        </div>
-    </div>
+<!-- Clock button -->
+<button id="clockButton" onclick="toggleAlert()" 
+    style="border-radius: 100%; background: none; padding: 0; display: inline-block;">
+    <img src="{% static 'images/clock.png' %}" alt="Clock" style="width: 90px; height: 90px; display: block; aspect-ratio: 1/1; margin: 0;">
+</button>
+
+<!-- Background overlay -->
+<div id="overlay"></div>
+
+<!-- Animated Popup -->
+<div id="alert" class="alert-popup">
+    <p class="text-sm text-yellow-700">
+        {{ message }}
+    </p>
+    <button onclick="toggleAlert()" class="mt-2 p-2 bg-yellow-500 text-black rounded-lg">Close</button>
 </div>
+
+<!-- Link the CSS file -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/dls_button.css' %}">
+
+<script>
+function toggleAlert() {
+    var alert = document.getElementById('alert');
+    var overlay = document.getElementById('overlay');
+
+    if (alert.classList.contains('show')) {
+        alert.classList.remove('show');
+        overlay.classList.remove('show');
+        setTimeout(() => {
+            alert.style.display = 'none';
+            overlay.style.display = 'none';
+        }, 300);
+    } else {
+        alert.style.display = 'block';
+        overlay.style.display = 'block';
+        setTimeout(() => {
+            alert.classList.add('show');
+            overlay.classList.add('show');
+        }, 10);
+    }
+}
+</script>
 {% endif %}
