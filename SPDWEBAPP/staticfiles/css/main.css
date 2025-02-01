@@ -101,7 +101,7 @@ body {
     bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
+    width: 300px;
     height: 3px;
     background: var(--primary-red);
 }
@@ -153,7 +153,58 @@ body {
 }
 
 
+/* Dropdown Section Container */
+.dropdown-section {
+    margin: 2rem auto;
+    text-align: center;
+  }
+  
+/* Initially hide the content by setting max-height to 0 and removing vertical padding */
+.dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 2rem;  /* keep horizontal padding if desired */
+    transition: max-height 0.25s ease-out, padding 0.25s ease-out;
+    transition: max-height 0.25s ease-in, padding 0.25s ease-in;
 
+  }
+  
+  /* When activated, allow the container to expand and restore vertical padding */
+  .dropdown-content.show {
+    max-height: 1000px; /* ensure this is higher than your content's height */
+    padding: 2rem;      /* adjust according to your design */
+  }
+
+/* Extra wide button style */
+.wide-dropdown-toggle {
+    width: 100%;         /* makes the button span the full width of its container */
+    max-width: 800px;    /* adjust this value as needed */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 1rem 2rem;  /* adjust the padding to your design */
+  }
+  
+/* Initial arrow pointing right */
+.dropdown-arrow {
+    display: inline-block;
+    margin-left: 10px;
+    transform: rotate(0deg); /* Right-facing arrow */
+    transition: transform 0.5s ease-out;
+}
+
+/* When dropdown is open, rotate the arrow downward */
+.wide-dropdown-toggle.open .dropdown-arrow {
+    transform: rotate(90deg); /* Down-facing arrow */
+}
+
+  
+  .dropdown-toggle::after {
+    display: none; /* Hides any auto-generated arrow from Bootstrap */
+}
+
+  
 
 /* Animations */
 @keyframes fadeInUp {
@@ -198,3 +249,21 @@ body {
 .btn-secondary {
     background: #2e2e2e;
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-around;  /* You can adjust this as needed */
+    gap: 10px;  /* Adds space between the buttons */
+    margin-top: 20px;
+    vertical-align: middle;
+}
+
+.button-container a {
+    text-decoration: none;  /* Ensures the links don't have underlines */
+}
+
+.instagram {
+    color: #fff;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    box-shadow: 0px 3px 10px rgba(0,0,0,.25);
+  }
