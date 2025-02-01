@@ -49,6 +49,9 @@ def codeOfEthics(request):
 def rush(request):
   return render(request, 'AUTHENTICATE/rush.html')
 
+def brothers(request):
+  return render(request, 'AUTHENTICATE/brothers.html')
+
 def registerPage(request):
   form = CreateUserForm()
 
