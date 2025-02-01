@@ -76,7 +76,7 @@
 /* Fading animation */
 .mySlides {
     opacity: 0;
-    transition: opacity 1.5s ease-in-out;
+    transition: opacity 0.75s ease-in-out;
     position: absolute;
     width: 100%;
 }
