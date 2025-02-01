@@ -249,6 +249,11 @@ body {
 
 .btn-secondary {
     background: #2e2e2e;
+    box-shadow: 0 4px 15px rgba(196, 0, 0, 0.2);
+    border: none;
+    border-radius: 12px;
+    display: inline-flex; /* Makes the button a flex container */
+    align-items: center;  /* Centers items vertically */
 }
 
 .button-container {
