@@ -9,14 +9,8 @@
         <div class="profile-photo">
             <img src="{% if brother_profile.profileImage and brother_profile.profileImage.url %}{{ brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
                  alt="Profile Photo" 
-                 class="profile-img"
-                 onerror="this.src='{% static 'images/default_profile.png' %}'">
-            <div class="profile-photo-overlay">
-                <div class="reset-photo" title="Reset to default photo">×</div>
-                <div class="photo-actions" onclick="document.getElementById('profile_photo').click()">
-                    Change Photo
-                </div>
-            </div>
+                class="profile-img"
+                onerror="this.src='{% static 'images/default_profile.png' %}'">
             <form id="photoForm" action="{% url 'update_photo' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="profile_photo" id="profile_photo" class="hidden-input" accept="image/*">
@@ -124,7 +118,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p class="major-limit-text">Select up to 3 majors</p>
+                <p class="major-limit-text">Select up to 2 majors</p>
                 <!-- Major options template -->
                 <div class="major-options">
                     {% for major in available_majors %}
@@ -179,10 +173,10 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const maxSelections = 3;
+        const maxSelections = 2;
         const checkboxes = document.querySelectorAll('.major-checkbox');
         const saveMajorsBtn = document.querySelector('.save-majors');
-        
+
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 const checkedBoxes = document.querySelectorAll('.major-checkbox:checked');
@@ -191,11 +185,11 @@
                 }
             });
         });
-        
+
         saveMajorsBtn.addEventListener('click', function() {
             const selectedMajors = Array.from(document.querySelectorAll('.major-checkbox:checked'))
                 .map(checkbox => checkbox.value);
-            
+
             fetch('{% url "update_majors" %}', {
                 method: 'POST',
                 headers: {
@@ -214,42 +208,6 @@
                     $('#majorModal').modal('hide');
                 }
             });
-        });
-
-        const profilePhoto = document.querySelector('.profile-photo');
-        
-        // Handle mobile touch
-        profilePhoto.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            this.classList.toggle('touch-active');
-        });
-
-        // Reset photo functionality
-        document.querySelector('.reset-photo').addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            fetch('{% url "reset_photo" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                }
-            });
-        });
-
-        const otherMajorCheckbox = document.querySelector('input[value="Other"]');
-    
-        otherMajorCheckbox?.addEventListener('change', function() {
-            if (this.checked) {
-                this.checked = false;
-                $('#otherMajorModal').modal('show');
-            }
         });
 
         document.getElementById('saveCustomMajor')?.addEventListener('click', function() {
@@ -318,13 +276,13 @@
             option.addEventListener('click', function(e) {
                 const checkbox = this.querySelector('input[type="checkbox"]');
                 const checkedBoxes = document.querySelectorAll('.major-checkbox:checked');
-                
+
                 if (!checkbox.checked && checkedBoxes.length >= maxSelections) {
                     return;
                 }
-                
+
                 checkbox.checked = !checkbox.checked;
-                
+
                 // Trigger change event
                 const event = new Event('change');
                 checkbox.dispatchEvent(event);
@@ -547,18 +505,14 @@
 <!-- Update major options script -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const maxSelections = 3;
+    const maxSelections = 2;
     
     function handleMajorClick(element, event) {
-        // Don't handle if clicking directly on checkbox (let default behavior work)
-        if (event.target.type === 'checkbox') {
-            return;
-        }
         
         const checkbox = element.querySelector('.major-checkbox');
         const checkedBoxes = document.querySelectorAll('.major-checkbox:checked');
         
-        if (!checkbox.checked && checkedBoxes.length >= maxSelections) {
+        if (!checkbox.checked && checkedBoxes.length > maxSelections) {
             return;
         }
         
