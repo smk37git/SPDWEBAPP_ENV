@@ -13,6 +13,9 @@ from django.urls import reverse
 from django.contrib import messages
 from .utils import contains_profanity
 
+# Announcement Model
+from MISC.models import AnnouncementAlert
+
 
 # SPD AUTHENTICATE
 def home(request):
@@ -21,7 +24,11 @@ def home(request):
 
 @login_required
 def dashboard(request):
-  return render(request, 'AUTHENTICATE/dashboard.html')
+    announcements = AnnouncementAlert.objects.filter(is_active=True)
+    context = {
+        'announcements': announcements
+    }
+    return render(request, 'AUTHENTICATE/dashboard.html', context)
 
 @login_required
 def roster(request):
