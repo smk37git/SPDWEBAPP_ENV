@@ -243,7 +243,8 @@ body {
     box-shadow: 0 4px 15px rgba(196, 0, 0, 0.2);
     border: none;
     border-radius: 12px;
-
+    display: inline-flex; /* Makes the button a flex container */
+    align-items: center;  /* Centers items vertically */
 }
 
 .btn-secondary {
@@ -262,8 +263,8 @@ body {
     text-decoration: none;  /* Ensures the links don't have underlines */
 }
 
-.instagram {
-    color: #fff;
-    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-    box-shadow: 0px 3px 10px rgba(0,0,0,.25);
-  }
+.instagram-logo {
+    width: 80px; /* Size of the Instagram logo */
+    height: 80px;
+    margin-right: 10px; /* Adds space between the logo and text */
+}
