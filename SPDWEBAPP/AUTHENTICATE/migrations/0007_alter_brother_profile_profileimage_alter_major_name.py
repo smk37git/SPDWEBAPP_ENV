@@ -7,14 +7,19 @@ class Migration(migrations.Migration):
 
     dependencies = [
 <<<<<<< HEAD
+<<<<<<< HEAD
         ("AUTHENTICATE", "0006_alter_major_name"),
 =======
         ('AUTHENTICATE', '0006_alter_major_name'),
 >>>>>>> c7cf667 (complete functionality of philanthropy)
+=======
+        ("AUTHENTICATE", "0006_alter_major_name"),
+>>>>>>> 6680c02 (profile database migration)
     ]
 
     operations = [
         migrations.AlterField(
+<<<<<<< HEAD
 <<<<<<< HEAD
             model_name="brother_profile",
             name="profileImage",
@@ -34,5 +39,15 @@ class Migration(migrations.Migration):
             name='name',
             field=models.CharField(default='Unknown', max_length=255),
 >>>>>>> c7cf667 (complete functionality of philanthropy)
+=======
+            model_name="brother_profile",
+            name="profileImage",
+            field=models.ImageField(blank=True, null=True, upload_to="profile_images"),
+        ),
+        migrations.AlterField(
+            model_name="major",
+            name="name",
+            field=models.CharField(default="Unknown", max_length=255),
+>>>>>>> 6680c02 (profile database migration)
         ),
     ]
