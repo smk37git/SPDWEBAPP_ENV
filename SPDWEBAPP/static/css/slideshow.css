@@ -4,6 +4,7 @@
   max-width: 1000px;
   position: relative;
   margin: auto;
+  overflow: hidden;
 }
 
 
@@ -36,14 +37,21 @@
 
 /* Caption text */
 .caption-text {
-  color: #f2f2f2;
-  font-size: 15px;
-  padding: 8px 12px;
   position: absolute;
-  bottom: 8px;
-  width: 100%;
+  bottom: 20px; /* Adjust this to move caption up or down */
+  left: 70px;
+  right: 70px;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  color: white;
+  padding: 10px;
+  border-radius: 10px; /* Rounded corners */
+  backdrop-filter: blur(10px); /* Apply blur to the background behind the caption */
+  font-size: 18px; /* Adjust font size */
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); /* Optional text shadow for readability */
+  z-index: 10; /* Ensure caption is on top of the image */
   text-align: center;
 }
+
 
 
 
