@@ -15,3 +15,4 @@ context = {
 }
 
 return render(request, 'dls_alert.html', context)
+
