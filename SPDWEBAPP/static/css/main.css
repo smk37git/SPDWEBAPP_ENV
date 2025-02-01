@@ -198,3 +198,14 @@ body {
 .btn-secondary {
     background: #2e2e2e;
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-around;  /* You can adjust this as needed */
+    gap: 10px;  /* Adds space between the buttons */
+    margin-top: 20px;
+}
+
+.button-container a {
+    text-decoration: none;  /* Ensures the links don't have underlines */
+}

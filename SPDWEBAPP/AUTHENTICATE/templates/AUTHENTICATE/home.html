@@ -14,31 +14,29 @@
 <div class="homepage-content">
     <h2 class="homepage-heading">ΣΦΔ Beta-Omicron Chapter</h2>
     <h5 class="homepage-subheading">University of Missouri, Columbia</h5>
-    <div class="centered-table">
-        <div class="row">
-            <h5>Brothers:</h5>
-            <div class="card card-body">
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for Brother_Profile in Brother_Profiles %}
-                        <tr>
-                            <td></td>
-                            <td class="member-firstName">{{ Brother_Profile.firstName }}</td>
-                            <td class="member-lastName">{{ Brother_Profile.lastName }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <p>
+        The Beta-Omicron Chapter of Sigma Phi Delta is the premiere social and
+        professional Engineering fraternity at the University of Missouri. Our
+        closely-knit brotherhood is committed to developing strong professional
+        skills and relationships for their future careers, encouraging positive
+        social skills to aid in their personal endeavors, fostering scholastic success
+        in their academic pursuits, and promoting the development of life-long friendships.
+    </p>
+    <div class="button-container">
+        <a href="{% url 'rush' %}">
+            <button class="btn btn-primary" type="button">Rush Information</button>
+        </a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQXSQ3DEu0RXphgasbFZLvmActWl01y6gVPS0OgLJzwz8beg/viewform">
+            <button class="btn btn-primary" type="button">Rush Interest Form</button>
+        </a>
     </div>
+    <div class="button-container">
+        <p>Keep up with our events!</p>
+        <a href="https://www.instagram.com/sigphimizzou/">
+            <button class="btn btn-primary" type="button">Instagram</button>
+        </a>
+    </div>
+    
 </div>
 
 {% endblock %}
