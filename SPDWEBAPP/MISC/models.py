@@ -6,8 +6,8 @@ class DayLightSavingsAlert(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        verbose_name = "Dashboard Annoucement Alert Settings"
-        verbose_name_plural = "Dashboard Annoucement Alert Settings"
+        verbose_name = "Day Light Savings Button Settings"
+        verbose_name_plural = "Day Light Savings Button Settings"
     
     def __str__(self):
         return f"DLS Alert - Active: {self.is_active}"
