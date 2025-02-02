@@ -12,7 +12,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from .utils import contains_profanity
-
+from NEWMEMBER.views_functions import check_user_role
+from NEWMEMBER.views import newmember_dashboard
 # Announcement Model
 from MISC.models import AnnouncementAlert
 
@@ -24,6 +25,10 @@ def home(request):
 
 @login_required
 def dashboard(request):
+    is_new_member = check_user_role(request.user, 'NEW_MEMBER')
+    if is_new_member:
+        return redirect('/newmember/')
+
     announcements = AnnouncementAlert.objects.filter(is_active=True)
     context = {
         'announcements': announcements
@@ -48,17 +53,6 @@ def codeOfEthics(request):
 
 def rush(request):
   return render(request, 'AUTHENTICATE/rush.html')
-
-def registerPage(request):
-  form = CreateUserForm()
-
-  if request.method == 'POST':
-    form = CreateUserForm(request.POST)
-    if form.is_valid():
-      form.save()
-
-  context = {'form': form}
-  return render(request, 'AUTHENTICATE/register.html', context)
 
 
 def loginPage(request):
