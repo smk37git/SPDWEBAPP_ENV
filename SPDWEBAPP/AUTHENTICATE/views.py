@@ -19,10 +19,7 @@ from PARLEYPRO.pp_decorators import requires_role
 from MISC.models import AnnouncementAlert
 
 
-# SPD AUTHENTICATE
-def home(request):
-  Brother_Profiles = Brother_Profile.objects.all()
-  return render(request, 'AUTHENTICATE/home.html', {'Brother_Profiles': Brother_Profiles})
+
 
 @login_required
 def dashboard(request):
@@ -40,21 +37,6 @@ def dashboard(request):
 def roster(request):
   Brother_Profiles = Brother_Profile.objects.all()
   return render(request, 'AUTHENTICATE/roster.html', {'Brother_Profiles': Brother_Profiles})
-
-def ourHistory(request):
-    # Count profiles that have the 'ACTIVE' role.
-    num_actives = Brother_Profile.objects.filter(roles__name='ACTIVE').distinct().count()
-    context = {
-        'num_actives': num_actives,
-    }
-    return render(request, 'AUTHENTICATE/ourHistory.html', context)
-
-def codeOfEthics(request):
-  return render(request, 'AUTHENTICATE/codeOfEthics.html')
-
-def rush(request):
-  return render(request, 'AUTHENTICATE/rush.html')
-
 
 def loginPage(request):
   if request.method == "POST":
@@ -78,7 +60,7 @@ def loginPage(request):
 
 def logoutUser(request):
     logout(request)
-    return render(request, 'AUTHENTICATE/home.html')
+    return render(request, 'HOME/home.html')
 
 @login_required
 def change_password(request):
