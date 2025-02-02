@@ -49,18 +49,14 @@
                         {% with total=aye_votes|add:nay_votes %}
                             {% if total > 0 %}
                                 <div class="vote-display">
-                                    {% if aye_votes > 0 %}
-                                        <div id="aye-bar" class="aye-bar" style="flex-basis: {% widthratio aye_votes total 100 %}%">
-                                        <div id="aye-bar" class="aye-bar" style="flex-basis: {% widthratio aye_votes total 100 %}%">
-                                            {{ aye_votes }} Aye
-                                        </div>
-                                    {% endif %}
-                                    {% if nay_votes > 0 %}
-                                        <div id="nay-bar" class="nay-bar" style="flex-basis: {% widthratio nay_votes total 100 %}%">
-                                        <div id="nay-bar" class="nay-bar" style="flex-basis: {% widthratio nay_votes total 100 %}%">
-                                            {{ nay_votes }} Nay
-                                        </div>
-                                    {% endif %}
+                                    <div id="aye-bar" class="aye-bar" 
+                                         style="flex-basis: {% widthratio aye_votes total 100 %}%; {% if aye_votes == 0 %}display: none;{% endif %}">
+                                         {{ aye_votes }} Aye
+                                    </div>
+                                    <div id="nay-bar" class="nay-bar" 
+                                         style="flex-basis: {% widthratio nay_votes total 100 %}%; {% if nay_votes == 0 %}display: none;{% endif %}">
+                                         {{ nay_votes }} Nay
+                                    </div>
                                 </div>
                             {% else %}
                                 <div class="no-votes">No votes yet</div>
@@ -69,6 +65,7 @@
                     </div>
                 </div>
             </div>
+            
         </div>
     {% else %}
         <div class="no-active-poll">
@@ -84,6 +81,22 @@
 
 <!--Live Update Script-->
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const liveUpdateCheckbox = document.getElementById("live-update-toggle");
+        // Retrieve the saved preference from localStorage, if available.
+        const liveUpdatePref = localStorage.getItem("liveUpdateEnabled");
+        if (liveUpdatePref !== null) {
+            liveUpdateCheckbox.checked = (liveUpdatePref === "true");
+        }
+
+        // Save preference on checkbox change.
+        liveUpdateCheckbox.addEventListener("change", function() {
+            localStorage.setItem("liveUpdateEnabled", liveUpdateCheckbox.checked);
+        });
+    });
+
+
     async function fetchVoteCounts() {
         // Check if Live Update is Enabled
         const liveUpdateCheckbox = document.getElementById("live-update-toggle");
@@ -103,6 +116,7 @@
         const ayeBar = document.getElementById('aye-bar');
         const nayBar = document.getElementById('nay-bar');
 
+        // If totalVotes is 0, reset both bars
         if (totalVotes > 0) {
             const ayePercentage = (ayeVotes / totalVotes) * 100;
             const nayPercentage = (nayVotes / totalVotes) * 100;
@@ -112,14 +126,28 @@
 
             nayBar.style.flexBasis = `${nayPercentage}%`;
             nayBar.textContent = `${nayVotes} Nay`;
+
+            // Ensure bars are displayed even when there are 0 votes
+            if (ayeVotes === 0) {
+                ayeBar.style.display = 'none';
+            } else {
+                ayeBar.style.display = 'flex';
+            }
+
+            if (nayVotes === 0) {
+                nayBar.style.display = 'none';
+            } else {
+                nayBar.style.display = 'flex';
+            }
         } else {
+            // If no votes yet
             ayeBar.style.flexBasis = '0%';
             ayeBar.textContent = '0 Aye';
-
             nayBar.style.flexBasis = '0%';
             nayBar.textContent = '0 Nay';
         }
     }
+
 
     // Fetch vote counts every 5 seconds
     setInterval(fetchVoteCounts, 1500);
