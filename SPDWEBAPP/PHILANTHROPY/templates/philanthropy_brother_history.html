@@ -1,0 +1,69 @@
+{% extends 'AUTHENTICATE/main.html' %}
+{% load static %}
+{% load philanthropy_extras %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="text-center mb-4">
+        <h2 class="homepage-heading">{{ brother.firstName }} {{ brother.lastName }}'s Philanthropy History</h2>
+        <p class="text-muted">Lifetime Total: {{ lifetime_total }} hours</p>
+    </div>
+    
+    <div class="dashboard-buttons mb-4">
+        <a href="{% url 'philanthropy_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+
+    {% for semester in semester_totals %}
+    <div class="profile-card mb-4">
+        <h3 class="homepage-subheading">{{ semester.semester }}</h3>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="text-muted mb-0">Total Hours: {{ semester.total_hours }}</h4>
+            <span class="badge {% if semester.total_hours >= 5 %}bg-success{% else %}bg-warning{% endif %}">
+                {% if semester.total_hours >= 5 %}
+                    Requirement Met
+                {% else %}
+                    {{ 5|hours_remaining:semester.total_hours }} hours needed
+                {% endif %}
+            </span>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table">
+                <thead style="background-color: #1a1a1a;">
+                    <tr>
+                        <th style="color: white; padding: 15px 20px;">EVENT NAME</th>
+                        <th style="color: white; padding: 15px 20px;">HOURS</th>
+                        <th style="color: white; padding: 15px 20px;">DATE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in semester.events %}
+                    <tr {% if forloop.counter|divisibleby:2 %}style="background-color: #f9f9f9;"{% endif %}>
+                        <td style="padding: 15px 20px;">{{ event.philanthropy_event_title }}</td>
+                        <td style="padding: 15px 20px;">{{ event.philanthropy_event_hours }}</td>
+                        <td style="padding: 15px 20px;">{{ event.philanthropy_event_date|date:"M d, Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% empty %}
+    <div class="profile-card">
+        <p class="text-center">No philanthropy hours recorded yet.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+.profile-card h3 {
+    color: var(--primary-red);
+    margin-bottom: 1.5rem;
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}
