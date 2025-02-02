@@ -35,6 +35,9 @@ def roster(request):
   Brother_Profiles = Brother_Profile.objects.all()
   return render(request, 'AUTHENTICATE/roster.html', {'Brother_Profiles': Brother_Profiles})
 
+def ourHistory(request):
+  return render(request, 'AUTHENTICATE/ourHistory.html')
+
 def codeOfEthics(request):
   return render(request, 'AUTHENTICATE/codeOfEthics.html')
 
