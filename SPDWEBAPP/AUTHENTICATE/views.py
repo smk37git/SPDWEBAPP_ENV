@@ -36,7 +36,12 @@ def roster(request):
   return render(request, 'AUTHENTICATE/roster.html', {'Brother_Profiles': Brother_Profiles})
 
 def ourHistory(request):
-  return render(request, 'AUTHENTICATE/ourHistory.html')
+    # Count profiles that have the 'ACTIVE' role.
+    num_actives = Brother_Profile.objects.filter(roles__name='ACTIVE').distinct().count()
+    context = {
+        'num_actives': num_actives,
+    }
+    return render(request, 'AUTHENTICATE/ourHistory.html', context)
 
 def codeOfEthics(request):
   return render(request, 'AUTHENTICATE/codeOfEthics.html')
