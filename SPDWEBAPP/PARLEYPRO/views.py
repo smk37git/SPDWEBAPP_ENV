@@ -10,6 +10,7 @@ from .pp_decorators import requires_role
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from .forms import VotePollForm
+from django.http import JsonResponse
 
 @requires_role('ACTIVE')
 @login_required
@@ -55,3 +56,13 @@ def past_polls(request):
     ).order_by('-Vote_Poll_End')
     
     return render(request, 'past_polls.html', {'past_polls': past_polls})
+
+
+@login_required # Used for Live Update
+def poll_results(request):
+    aye_votes = Brother_votes.objects.filter(user_vote_choice='Aye').count()
+    nay_votes = Brother_votes.objects.filter(user_vote_choice='Nay').count()
+    return JsonResponse({
+        'aye_votes': aye_votes,
+        'nay_votes': nay_votes
+    })
