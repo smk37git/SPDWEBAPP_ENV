@@ -7,4 +7,7 @@ urlpatterns = [
     path('past_polls/', views.past_polls, name='past_polls'),
     path('poll-results/', views.poll_results, name='poll_results'), #Used for Live Update
     #path('logout/', views.logoutUser, name="logout"),
+
+    path('poll-results/', views.poll_results, name='poll_results'), #Used for Live Update
+    #path('logout/', views.logoutUser, name="logout"),
 ]

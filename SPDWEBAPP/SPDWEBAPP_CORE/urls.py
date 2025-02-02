@@ -27,4 +27,5 @@ urlpatterns = [
     path('', include('AUTHENTICATE.urls')),
     path('poll/',include('PARLEYPRO.urls')),
     path('philanthropy/',include('PHILANTHROPY.urls')),
+    path('newmember/',include('NEWMEMBER.urls')),
 ]

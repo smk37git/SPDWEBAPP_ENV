@@ -23,8 +23,10 @@
     <a href="{% url 'roster' %}">
         <button class="btn btn-primary" type="button">Roster</button>
     </a>
-    <a href="https://sigmaphidelta.org/" target="_blank">
-        <button class="btn btn-primary" type="button">National Website</button>
+    
+    <a href= "{% url 'newmember_marks_dashboard'%}">
+
+        <button class="btn btn-primary" type="button">New Member Marks</button>
     </a>
 
     {% dls_alert %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm  # User Registration
 from .forms import CreateUserForm  # User Registration
-from .models import Brother_Profile, Role # Import Brother_Profile from database
+
 from .models import * # Import Member from database
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -12,8 +12,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from .utils import contains_profanity
-
+from NEWMEMBER.views_functions import check_user_role
+from NEWMEMBER.views import newmember_dashboard
 # Announcement Model
+from PARLEYPRO.pp_decorators import requires_role
 from MISC.models import AnnouncementAlert
 
 
@@ -22,9 +24,12 @@ def home(request):
   Brother_Profiles = Brother_Profile.objects.all()
   return render(request, 'AUTHENTICATE/home.html', {'Brother_Profiles': Brother_Profiles})
 
-
 @login_required
 def dashboard(request):
+    is_new_member = check_user_role(request.user, 'NEW_MEMBER')
+    if is_new_member:
+        return redirect('/newmember/')
+
     announcements = AnnouncementAlert.objects.filter(is_active=True)
     context = {
         'announcements': announcements
@@ -62,16 +67,6 @@ def brothers(request):
         brothers = Brother_Profile.objects.all()
 
     return render(request, 'AUTHENTICATE/brothers.html', {'Brother_Profiles': brothers})
-def registerPage(request):
-  form = CreateUserForm()
-
-  if request.method == 'POST':
-    form = CreateUserForm(request.POST)
-    if form.is_valid():
-      form.save()
-
-  context = {'form': form}
-  return render(request, 'AUTHENTICATE/register.html', context)
 
 
 def loginPage(request):
@@ -274,11 +269,6 @@ def update_majors(request):
         'success': False,
         'message': 'Invalid request method'
     })
-def executive_board(request):
-    executive_board_role = Role.objects.get(name='Executive Board')
-    executive_board_brothers = Brother_Profile.objects.filter(roles__in=[executive_board_role])
-    print("executive_board_brothers:", executive_board_brothers)
-    return render(request, 'AUTHENTICATE/brothers.html', {'Brother_Profiles': executive_board_brothers})
 
 @login_required
 def add_custom_major(request):
