@@ -67,7 +67,7 @@ else:
 
 ALLOWED_HOSTS = ['sigmaphideltamizzou.online', 'www.sigmaphideltamizzou.online', 'spdmizzou.com', 'www.spdmizzou.com', 'spdmizzou.org', 'www.spdmizzou.org', '54.226.39.191','localhost','127.0.0.1']
 
-LOGIN_URL = '/login/'  # Adjust this to match your authenticate app's URL pattern
+LOGIN_URL = '/auth/login'  # Adjust this to match your authenticate app's URL pattern
 LOGIN_REDIRECT_URL = ''
 
 # Application definition
@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'MISC',
     'PHILANTHROPY',
     'NEWMEMBER',
+    'HOME',
 ]
 
 MIDDLEWARE = [

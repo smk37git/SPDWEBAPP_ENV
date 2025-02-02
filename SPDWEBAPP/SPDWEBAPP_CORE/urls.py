@@ -24,7 +24,8 @@ urlpatterns = [
     # Other URLs go here...
 
     # AUTHENTICATE URLS
-    path('', include('AUTHENTICATE.urls')),
+    path('', include('HOME.urls')),
+    path('auth/', include('AUTHENTICATE.urls')),
     path('poll/',include('PARLEYPRO.urls')),
     path('philanthropy/',include('PHILANTHROPY.urls')),
     path('newmember/',include('NEWMEMBER.urls')),
