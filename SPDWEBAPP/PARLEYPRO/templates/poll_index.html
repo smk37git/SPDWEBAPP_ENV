@@ -45,12 +45,12 @@
                             {% if total > 0 %}
                                 <div class="vote-display">
                                     {% if aye_votes > 0 %}
-                                        <div class="aye-bar" style="flex-basis: {% widthratio aye_votes total 100 %}%">
+                                        <div id="aye-bar" class="aye-bar" style="flex-basis: {% widthratio aye_votes total 100 %}%">
                                             {{ aye_votes }} Aye
                                         </div>
                                     {% endif %}
                                     {% if nay_votes > 0 %}
-                                        <div class="nay-bar" style="flex-basis: {% widthratio nay_votes total 100 %}%">
+                                        <div id="nay-bar" class="nay-bar" style="flex-basis: {% widthratio nay_votes total 100 %}%">
                                             {{ nay_votes }} Nay
                                         </div>
                                     {% endif %}
@@ -71,5 +71,49 @@
             {% endif %} -->
         </div>
     {% endif %}
-    {% endblock %}
+
 </div>
+
+
+<!--Live Update Script-->
+<script>
+    async function fetchVoteCounts() {
+        try {
+            const response = await fetch("{% url 'poll_results' %}");
+            const data = await response.json();
+            updateVoteBars(data.aye_votes, data.nay_votes);
+        } catch (error) {
+            console.error('Error fetching vote counts:', error);
+        }
+    }
+
+    function updateVoteBars(ayeVotes, nayVotes) {
+        const totalVotes = ayeVotes + nayVotes;
+        const ayeBar = document.getElementById('aye-bar');
+        const nayBar = document.getElementById('nay-bar');
+
+        if (totalVotes > 0) {
+            const ayePercentage = (ayeVotes / totalVotes) * 100;
+            const nayPercentage = (nayVotes / totalVotes) * 100;
+
+            ayeBar.style.flexBasis = `${ayePercentage}%`;
+            ayeBar.textContent = `${ayeVotes} Aye`;
+
+            nayBar.style.flexBasis = `${nayPercentage}%`;
+            nayBar.textContent = `${nayVotes} Nay`;
+        } else {
+            ayeBar.style.flexBasis = '0%';
+            ayeBar.textContent = '0 Aye';
+
+            nayBar.style.flexBasis = '0%';
+            nayBar.textContent = '0 Nay';
+        }
+    }
+
+    // Fetch vote counts every 5 seconds
+    setInterval(fetchVoteCounts, 5000);
+    // Initial fetch
+    fetchVoteCounts();
+</script>
+
+{% endblock %}
