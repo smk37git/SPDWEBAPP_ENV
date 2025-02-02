@@ -6,11 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
+<<<<<<< HEAD
         ("AUTHENTICATE", "0006_alter_major_name"),
+=======
+        ('AUTHENTICATE', '0006_alter_major_name'),
+>>>>>>> c7cf667 (complete functionality of philanthropy)
     ]
 
     operations = [
         migrations.AlterField(
+<<<<<<< HEAD
             model_name="brother_profile",
             name="profileImage",
             field=models.ImageField(blank=True, null=True, upload_to="profile_images"),
@@ -19,5 +24,15 @@ class Migration(migrations.Migration):
             model_name="major",
             name="name",
             field=models.CharField(default="Unknown", max_length=255),
+=======
+            model_name='brother_profile',
+            name='profileImage',
+            field=models.ImageField(blank=True, null=True, upload_to='profile_images'),
+        ),
+        migrations.AlterField(
+            model_name='major',
+            name='name',
+            field=models.CharField(default='Unknown', max_length=255),
+>>>>>>> c7cf667 (complete functionality of philanthropy)
         ),
     ]
