@@ -61,7 +61,7 @@ def newmember_request(request):
 
 @login_required
 def newmember_approve(request):
-    if not check_user_role(request.user, 'PLEDGE_BOARD'):
+    if not check_user_role(request.user, 'NM_BOARD'):
         messages.error(request, 'Only Pledge Board members can approve marks.')
         return redirect('newmember_marks_dashboard')
         
