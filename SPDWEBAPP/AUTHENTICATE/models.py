@@ -10,6 +10,7 @@ class Role(models.Model):
         ('NEW_MEMBER', 'New Member'),
         ('SOCIAL_CHAIR', 'Social Chair'),
         ('RUSH_CHAIR', 'Rush Chair'),
+        ('PHIL_CHAIR', 'Philanthropy Chair'),
     ]
 
     name = models.CharField(max_length=50, choices=ROLE_CHOICES, unique=True)
