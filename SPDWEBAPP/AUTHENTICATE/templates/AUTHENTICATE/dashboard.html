@@ -10,17 +10,21 @@
 
 <div class="d-grid gap-2 col-3 mx-auto dashboard-buttons">
 
-    <a href="https://sigmaphidelta.org/" target="_blank">
-        <button class="btn btn-primary" type="button">National Website</button>
+    <a href="https://drive.google.com/drive/u/1/folders/0B_5wRiZJR84sdHJFOGotOTlwREk?resourcekey=0-WA0_BwFE0YiQKc9TYeXZHw" target="_blank">
+        <button class="btn btn-primary" type="button">Google Drive</button>
+    </a>
+    <a href="{% url 'philanthropy_dashboard' %}">
+        <button class="btn btn-primary" type="button">Philanthropy</button>
     </a>
     <a href="{% url 'poll' %}">
         <button class="btn btn-primary" type="button">Parley Pro</button>
     </a>
-    <a href="https://drive.google.com/drive/u/1/folders/0B_5wRiZJR84sdHJFOGotOTlwREk?resourcekey=0-WA0_BwFE0YiQKc9TYeXZHw" target="_blank">
-        <button class="btn btn-primary" type="button">Google Drive</button>
-    </a>
+    
     <a href="{% url 'roster' %}">
         <button class="btn btn-primary" type="button">Roster</button>
+    </a>
+    <a href="https://sigmaphidelta.org/" target="_blank">
+        <button class="btn btn-primary" type="button">National Website</button>
     </a>
 
     {% dls_alert %}
