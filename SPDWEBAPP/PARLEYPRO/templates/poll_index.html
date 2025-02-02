@@ -51,10 +51,12 @@
                                 <div class="vote-display">
                                     {% if aye_votes > 0 %}
                                         <div id="aye-bar" class="aye-bar" style="flex-basis: {% widthratio aye_votes total 100 %}%">
+                                        <div id="aye-bar" class="aye-bar" style="flex-basis: {% widthratio aye_votes total 100 %}%">
                                             {{ aye_votes }} Aye
                                         </div>
                                     {% endif %}
                                     {% if nay_votes > 0 %}
+                                        <div id="nay-bar" class="nay-bar" style="flex-basis: {% widthratio nay_votes total 100 %}%">
                                         <div id="nay-bar" class="nay-bar" style="flex-basis: {% widthratio nay_votes total 100 %}%">
                                             {{ nay_votes }} Nay
                                         </div>
