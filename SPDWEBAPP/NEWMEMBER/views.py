@@ -27,7 +27,7 @@ def newmember_marks_dashboard(request):
         'new_members_progress': new_members_progress,
         'user_submitted_marks': user_submitted_marks,
         'is_active': is_active,
-        'is_pledge_board': check_user_role(request.user, 'PLEDGE_BOARD'),
+        'is_pledge_board': check_user_role(request.user, 'NM_BOARD'),
         'analytics': analytics,
         'personal_stats': personal_stats
     }
