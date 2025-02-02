@@ -80,11 +80,7 @@ def collect_philanthropy_statistics(active_brothers, start_date, end_date):
 
 # views def philanthropy_approve(request):
 def philanthropy_approval_POST(request):
-<<<<<<< HEAD
         if request.method == 'POST':
-=======
-        
->>>>>>> 19d8394 (complete functionality of philanthropy)
             event_id = request.POST.get('event_id')
             action = request.POST.get('action')
             
