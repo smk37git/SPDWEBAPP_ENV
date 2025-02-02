@@ -11,6 +11,11 @@
            <!-- {% if perms.polls.add_vote_poll %} is how you would write it if you wanted to do it the safer django admin way
                 <a href="{% url 'start_vote' %}" class="btn btn-primary">Start New Vote</a>
              {% endif %} -->
+            <label>
+                <input type="checkbox" id="live-update-toggle" unchecked>
+                Enable Live Updates
+            </label>
+            
         </div>
     </header>
 
@@ -78,6 +83,10 @@
 <!--Live Update Script-->
 <script>
     async function fetchVoteCounts() {
+        // Check if Live Update is Enabled
+        const liveUpdateCheckbox = document.getElementById("live-update-toggle");
+        if (!liveUpdateCheckbox.checked) return;
+
         try {
             const response = await fetch("{% url 'poll_results' %}");
             const data = await response.json();
@@ -111,7 +120,7 @@
     }
 
     // Fetch vote counts every 5 seconds
-    setInterval(fetchVoteCounts, 5000);
+    setInterval(fetchVoteCounts, 1500);
     // Initial fetch
     fetchVoteCounts();
 </script>
