@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'PARLEYPRO',
     'MISC',
     'PHILANTHROPY',
+    'NEWMEMBER',
 ]
 
 MIDDLEWARE = [

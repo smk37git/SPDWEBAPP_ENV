@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from .forms import VotePollForm
 
-
+@requires_role('ACTIVE')
 @login_required
 def poll_index(request):
     #print(request.POST)
@@ -31,8 +31,8 @@ def poll_index(request):
         'current_poll': current_poll,
     }
     return render(request, 'poll_index.html', context)
-
-@requires_role('EXEC')
+@login_required
+@requires_role('EXEC','ACTIVE')
 def start_vote(request):
     if request.method == 'POST':
         form = VotePollForm(request.POST)
@@ -47,7 +47,7 @@ def start_vote(request):
     
     context = {'form': form}
     return render(request, 'create_poll.html', context)
-
+@requires_role('ACTIVE')
 @login_required
 def past_polls(request):
     past_polls = Vote_Poll.objects.filter(
