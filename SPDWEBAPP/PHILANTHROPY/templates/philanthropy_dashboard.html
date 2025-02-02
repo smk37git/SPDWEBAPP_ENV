@@ -1,0 +1,207 @@
+{% extends 'AUTHENTICATE/main.html' %}
+
+{% load static %}
+{% load philanthropy_extras %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="text-center mb-2">
+        <h2 class="homepage-heading">Philanthropy Dashboard</h2>
+        
+        <!-- Semester Selection -->
+        <div class="semester-selector mb-"> <!-- Reduced margin-bottom -->
+            <h3 class="homepage-subheading">{{ semester_label }}</h3>
+            <div class="semester-dropdown">
+                <select class="form-select semester-select" onchange="window.location.href=this.value">
+                    {% for semester in available_semesters %}
+                        <option 
+                            value="?year={{ semester.year }}&is_spring={{ semester.is_spring|lower }}"
+                            {% if semester.year == selected_year and semester.is_spring == is_spring %}selected{% endif %}
+                        >
+                            {{ semester.semester }} {{ semester.year }}
+                            {% if semester.current %}(Current){% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Submit Hours Button -->
+    <div class="dashboard-buttons mt-2"> <!-- Reduced margin-top -->
+        <a href="{% url 'philanthropy_request' %}" class="btn btn-primary">Philanthropy Request</a>
+        <a href="{% url 'philanthropy_approve' %}" class="btn btn-primary">Review Pending Hours</a>
+    </div>
+
+
+
+<!-- Your Progress Card -->
+<div class="profile-card mb-3"> 
+    <div class="text-center mb-3">
+        <h2 class="homepage-heading">Your Progress</h2>
+    </div>
+
+    <div class="progress-container d-flex align-items-center p-3" style="background: #f8f9fa; border-radius: 8px;">
+        <div class="progress-label text-white text-center p-3" style="background: #1a1a1a; border-radius: 8px; width: 150px;">
+            <strong>YOUR TOTAL HOURS</strong>
+        </div>
+        <div class="progress-value" style="font-size: 24px; color: #c40000; font-weight: bold; width: 60%;">
+            {{ user_total_hours|floatformat:1 }} / 5.0 hours
+        </div>
+    </div>
+
+    <div class="mt-4"> 
+        <h2 style="color: rgb(196, 0, 0);">Your Submitted Events</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead style="background-color: #1a1a1a;">
+                    <tr>
+                        <th style="color: white; padding: 15px 20px;">EVENT NAME</th>
+                        <th style="color: white; padding: 15px 20px;">HOURS</th>
+                        <th style="color: white; padding: 15px 20px;">DATE</th>
+                        <th style="color: white; padding: 15px 20px;">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in user_events %}
+                    <tr {% if forloop.counter|divisibleby:2 %}style="background-color: #f9f9f9;"{% endif %}>
+                        <td style="padding: 15px 20px;">{{ event.philanthropy_event_title }}</td>
+                        <td style="padding: 15px 20px;">{{ event.philanthropy_event_hours }}</td>
+                        <td style="padding: 15px 20px;">{{ event.philanthropy_event_date|date:"M d, Y" }}</td>
+                        <td style="padding: 15px 20px;">
+                            <span class="badge" style="{% if event.philanthropy_approval_status == 'approved' %}background-color: #28a745{% else %}background-color: #dc3545{% endif %}; color: white; text-transform: lowercase; padding: 5px 10px; border-radius: 4px;">
+                                {{ event.philanthropy_approval_status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No events submitted for this semester</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Chapter Progress Overview -->
+    <div class="profile-card mb-4">
+        <h2 class="homepage-subheading">Chapter Progress - {{ semester_label }}</h2>
+        <div class="centered-table">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Brothers Meeting 5 Hour Goal</th>
+                        <td>{{ members_meeting_goal }} / {{ total_active_members }}</td>
+                    </tr>
+                    <tr>
+                        <th>Average Hours per Brother</th>
+                        <td>{{ avg_hours_per_brother|floatformat:1 }} / 5.0 hours</td>
+                    </tr>
+                    <tr>
+                        <th>Total Chapter Hours</th>
+                        <td>{{ total_chapter_hours|default:"0" }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Brotherhood Progress -->
+    <div class="profile-card mb-4">
+        <h2 class="homepage-subheading">Brotherhood Progress</h2>
+        <div class="centered-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Brother</th>
+                        <th>Total Hours</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <!-- Replace the Brotherhood Progress table body with this: -->
+                    <tbody>
+                        {% for brother in brothers_progress %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'brother_philanthropy_history' brother.user.id %}" 
+                                class="brother-link"
+                                style="color: inherit; text-decoration: none; display: block;">
+                                    {{ brother.full_name }}
+                                </a>
+                            </td>
+                            <td>{{ brother.total_hours|floatformat:1 }}</td>
+                            <td>
+                                <span class="badge {% if brother.total_hours >= 5 %}bg-success{% else %}bg-warning{% endif %}">
+                                    {% if brother.total_hours >= 5 %}
+                                        Complete
+                                    {% else %}
+                                        {{ 5|hours_remaining:brother.total_hours|floatformat:1 }} hours remaining
+                                    {% endif %}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.semester-dropdown {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.semester-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--primary-dark);
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23c40000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px;
+    padding-right: 2.5rem;
+}
+
+.semester-select:hover {
+    border-color: var(--primary-dark);
+}
+
+.semester-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(196, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .semester-dropdown {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+    
+    .semester-select {
+        font-size: 0.9rem;
+        padding: 0.5rem 2rem 0.5rem 0.5rem;
+    }
+}
+
+.brother-link:hover {
+    color: var(--primary-red) !important;
+    text-decoration: underline !important;
+}
+</style>
+{% endblock %}

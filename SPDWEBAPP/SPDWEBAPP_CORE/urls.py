@@ -26,4 +26,5 @@ urlpatterns = [
     # AUTHENTICATE URLS
     path('', include('AUTHENTICATE.urls')),
     path('poll/',include('PARLEYPRO.urls')),
+    path('philanthropy/',include('PHILANTHROPY.urls')),
 ]
