@@ -37,6 +37,12 @@
             <li class="nav-item {% if request.resolver_match.url_name == 'roster' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'roster' %}">Roster</a>
             </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'philanthropy_dashboard' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'philanthropy_dashboard' %}">Philanthropy</a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'newmember_marks_dashboard' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'newmember_marks_dashboard' %}">New Member Marks</a>
+            </li>
 
             {% endif %}
         </ul>
