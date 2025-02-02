@@ -12,6 +12,7 @@ import calendar
 
 
 @login_required
+@requires_role('ACTIVE')
 def philanthropy_dashboard(request):
     #import functions to collect context
     from .views_functions import get_semester_dates, get_available_semesters
@@ -60,6 +61,7 @@ def philanthropy_dashboard(request):
     return render(request, 'philanthropy_dashboard.html', context)
 
 @login_required
+@requires_role('ACTIVE')
 def philanthropy_request(request):
     if request.method == 'POST':
         try:
@@ -78,7 +80,7 @@ def philanthropy_request(request):
     
     return render(request, 'philanthropy_request.html')
 
-#@requires_role('PHIL_CHAIR','ACTIVE')
+@requires_role('PHIL_CHAIR','ACTIVE')
 @login_required
 def philanthropy_approve(request):
     from .views_functions import philanthropy_approval_POST
@@ -94,6 +96,7 @@ def philanthropy_approve(request):
 
 
 @login_required
+@requires_role('ACTIVE')
 def brother_philanthropy_history(request, user_id):
     from .views_functions import retrieve_individual_brother_history
     try:
