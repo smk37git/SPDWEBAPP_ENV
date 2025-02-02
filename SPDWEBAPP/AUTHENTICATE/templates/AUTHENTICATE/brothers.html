@@ -1,34 +1,47 @@
 {% extends 'AUTHENTICATE/main.html' %}
+{% load static %}
+
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'AUTHENTICATE/css/brothers.css' %}">
+</head>
 
 {% block content %}
 
 <br>
-<div class="centered-table">
-    <div class="row">
-        <h5>Brothers:</h5>
-        <div class="card card-body">
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th></th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Roles</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for Brother_Profile in Brother_Profiles %}
-              <tr>
-                <td></td>
-                <td class="member-firstName">{{ Brother_Profile.firstName }}</td>
-                <td class="member-lastName">{{ Brother_Profile.lastName }}</td>
-                <td class="member-role">
-                  {{ Brother_Profile.roles.all|join:", " }}
-              </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h5 class="text-center">Brothers:</h5>
+            <div class="card card-body">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Roles</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for Brother_Profile in Brother_Profiles %}
+                  <tr>
+                    <td>
+                      {% if brother_profile.profileImage %}
+                        <img src="{{ brother_profile.profileImage.url }}" alt="Profile Picture" width="30" height="30">
+                      {% else %}
+                        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" width="30" height="30">
+                      {% endif %}
+                    </td>
+                    <td class="member-firstName">{{ Brother_Profile.firstName }}</td>
+                    <td class="member-lastName">{{ Brother_Profile.lastName }}</td>
+                    <td class="member-role">
+                      {{ Brother_Profile.roles.all|join:", " }}
+                  </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
         </div>
     </div>
 </div>

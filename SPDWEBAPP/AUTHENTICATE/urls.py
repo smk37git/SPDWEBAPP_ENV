@@ -23,4 +23,5 @@ urlpatterns = [
     path('reset-photo/', views.reset_photo, name='reset_photo'),
     path('update_majors/', views.update_majors, name='update_majors'),
     path('add-custom-major/', views.add_custom_major, name='add_custom_major'),
+    path('executive_board/', views.executive_board, name='executive_board'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
