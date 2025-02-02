@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class Role(models.Model):
     ROLE_CHOICES = [
         ('EXEC', 'Executive Board'),
-        ('PLEDGE_BOARD', 'Pledge Board'),
+        ('NM_BOARD', 'New Member Board'),
         ('ACTIVE', 'Active Member'),
         ('ALUMNI', 'Alumni'),
         ('NEW_MEMBER', 'New Member'),

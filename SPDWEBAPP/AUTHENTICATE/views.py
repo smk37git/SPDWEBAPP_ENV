@@ -15,6 +15,7 @@ from .utils import contains_profanity
 from NEWMEMBER.views_functions import check_user_role
 from NEWMEMBER.views import newmember_dashboard
 # Announcement Model
+from PARLEYPRO.pp_decorators import requires_role
 from MISC.models import AnnouncementAlert
 
 
