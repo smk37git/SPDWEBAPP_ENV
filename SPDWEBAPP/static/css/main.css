@@ -109,7 +109,7 @@ body {
 .homepage-subheading {
     text-align: center;
     font-family: 'Times New Roman', serif;
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: var(--primary-red);
     margin-bottom: 2rem;
     position: relative;
@@ -267,23 +267,53 @@ body {
 .button-container a {
     text-decoration: none;  /* Ensures the links don't have underlines */
 }
-/*
-.instagram-logo {
-    width: 80px;
-    height: 80px;
-    margin-right: 10px;
-}*/
+
 .instagram-posts {
-    max-width: 640px;
-    max-height: 240px;
+    max-width: 100%; /* Makes the image scale with the screen */
+    height: auto;
+    display: block;
     border-radius: 10px; /* Round all corners */
-    padding: 4px; /* Space for border */
+    padding: 8px; /* Space for border */
+    margin: 0 auto; /* Ensures it's centered */
     background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5); /* Instagram gradient */
 }
+.instagram-text-container {
+    max-width: 800px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 0 auto;
+    line-height: 1.8;
+    color: #dc2626; /* Change text color to red */
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    text-align: center; /* Center the text */
+}
 
-.instagram-posts img {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px; /* Ensure image follows the border */
-    display: block;
+.instagram-subheading {
+    margin-bottom: 5px; /* Reduce space between text and image */
+    font-family: 'Times New Roman';
+    font-size: 1.8rem; /* Large text for visibility */
+    font-weight: bold;
+    color: #dc2626; /* Change subheading color to red */
+    text-align: center; /* Center the subheading text */
+}
+
+
+.instagram-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0; /* Remove extra space above the image */
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    .instagram-subheading {
+        font-size: 1.5rem; /* Slightly smaller for mobile */
+    }
+
+    .instagram-posts {
+        width: 90%; /* Slightly smaller image for better fit */
+    }
 }
