@@ -14,7 +14,7 @@
     </div>
     
     <div class="dashboard-buttons mb-4">
-        <a href="{% url 'newmember_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+        <a href="{% url 'newmember_marks_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
     </div>
 
     <div class="profile-card">
@@ -31,10 +31,10 @@
                 <tbody>
                     {% for mark in marks %}
                     <tr {% if forloop.counter|divisibleby:2 %}style="background-color: #f9f9f9;"{% endif %}>
-                        <td>{{ mark.requesting_user.brother_profile.firstName }} {{ mark.requesting_user.brother_profile.lastName }}</td>
-                        <td>{{ mark.mark_event_title }}</td>
-                        <td>{{ mark.mark_value }} </td>
-                        <td style=>{{ mark.mark_event_date|date:"M d, Y" }}</td>
+                        <td data-label="ACTIVE MEMBER">{{ mark.requesting_user.brother_profile.firstName }} {{ mark.requesting_user.brother_profile.lastName }}</td>
+                        <td data-label="RESON">{{ mark.mark_event_title }}</td>
+                        <td data-label="MARKS">{{ mark.mark_value }} </td>
+                        <td data-lavel="DATE">{{ mark.mark_event_date|date:"M d, Y" }}</td>
                     </tr>
                     {% empty %}
                     <tr>
