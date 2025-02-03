@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'PHILANTHROPY/philanthropy_dashboard.css' %}" />
 <div class="profile-container">
     <div class="text-center mb-4">
         <h2 class="homepage-heading">New Member Marks Dashboard</h2>
@@ -59,13 +60,13 @@
                 <tbody>
                     {% for mark in user_submitted_marks %}
                     <tr {% if forloop.counter|divisibleby:2 %}style="background-color: #f9f9f9;"{% endif %}>
-                        <td style="padding: 15px 20px;">{{ mark.target_user.brother_profile.firstName }} {{ mark.target_user.brother_profile.lastName }}</td>
-                        <td style="padding: 15px 20px;">{{ mark.mark_event_title }}</td>
-                        <td style="padding: 15px 20px;" {% if mark.mark_value < 0 %}class="text-danger"{% endif %}>
+                        <td data-label="NEW MEMBER" style="padding: 15px 20px;">{{ mark.target_user.brother_profile.firstName }} {{ mark.target_user.brother_profile.lastName }}</td>
+                        <td data-label="REASON" style="padding: 15px 20px;">{{ mark.mark_event_title }}</td>
+                        <td data-label="MARKS" style="padding: 15px 20px;" {% if mark.mark_value < 0 %}class="text-danger"{% endif %}>
                             {{ mark.mark_value }}
                         </td>
-                        <td style="padding: 15px 20px;">{{ mark.mark_event_date|date:"M d, Y" }}</td>
-                        <td style="padding: 15px 20px;">
+                        <td data-label="DATE" style="padding: 15px 20px;">{{ mark.mark_event_date|date:"M d, Y" }}</td>
+                        <td data-label="STATUS" style="padding: 15px 20px;">
                             <span class="badge {% if mark.mark_approval_status == 'approved' %}bg-success{% elif mark.mark_approval_status == 'denied' %}bg-danger{% else %}bg-warning{% endif %}">
                                 {{ mark.mark_approval_status }}
                             </span>
@@ -82,6 +83,7 @@
     </div>
     {% endif %}
 
+
     <!-- New Member Progress -->
     <div class="profile-card mb-4">
         <h2 class="homepage-subheading">New Member Progress</h2>
@@ -97,17 +99,16 @@
                 <tbody>
                     {% for member in new_members_progress %}
                     <tr>
-                        <td>
+                        <td data-label="New Member">
                             <a href="{% url 'newmember_mark_history' member.user.id %}" 
-                               class="member-link"
-                               style="color: inherit; text-decoration: none; display: block;">
+                               class="brother-link">
                                 {{ member.full_name }}
                             </a>
                         </td>
-                        <td {% if member.is_negative %}class="text-danger"{% endif %}>
+                        <td data-label="Total Marks" {% if member.is_negative %}class="text-danger"{% endif %}>
                             {{ member.total_marks }}
                         </td>
-                        <td>
+                        <td data-label="Status">
                             <span class="badge {% if member.is_negative %}bg-danger{% else %}bg-success{% endif %}">
                                 {% if member.is_negative %}
                                     Negative
