@@ -3,29 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
 from django import forms
 from .models import Brother_Profile, Role, Major
-
-class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name')
-    fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
-        ('Profile', {'fields': ('brother_profile',)}),
-    )
-    readonly_fields = ('brother_profile',)
-    filter_horizontal = ()
-
-    def brother_profile(self, obj):
-        return obj.brother_profile.profileImage
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.prefetch_related('brother_profile')
-        return qs
-
-    def brother_profile(self, obj):
-        return obj.brother_profile.profileImage
-
-    brother_profile.short_description = 'Profile Image'
+from .models import *
 
 class Brother_ProfileForm(forms.ModelForm):
     new_major = forms.CharField(required=False)
@@ -60,8 +38,6 @@ class MajorAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 User  = get_user_model()
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
 admin.site.register(Brother_Profile, Brother_ProfileAdmin)
 admin.site.register(Role)
 admin.site.register(Major, MajorAdmin)

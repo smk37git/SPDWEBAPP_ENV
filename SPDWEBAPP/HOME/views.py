@@ -3,6 +3,8 @@ from AUTHENTICATE.models import * # Import Member from database
 from PARLEYPRO.pp_decorators import requires_role
 from MISC.models import AnnouncementAlert
 
+
+
 # SPD AUTHENTICATE
 def home(request):
   Brother_Profiles = Brother_Profile.objects.all()

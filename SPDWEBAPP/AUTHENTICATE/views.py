@@ -21,6 +21,7 @@ from MISC.models import AnnouncementAlert
 
 
 
+
 @login_required
 def dashboard(request):
     is_new_member = check_user_role(request.user, 'NEW_MEMBER')
@@ -162,7 +163,7 @@ def profile(request):
         'available_majors': available_majors,
         'page': 'profile'
     }
-    return render(request, 'AUTHENTICATE/profile.html', context)
+    return render(request, 'AUTHENTICATE/profile.html', {'brother_profile': brother_profile})
 
 @login_required
 def update_photo(request):

@@ -7,10 +7,10 @@
     <div class="profile-card">
         <!-- Profile Photo Section -->
         <div class="profile-photo">
-            <img src="{% if brother_profile.profileImage and brother_profile.profileImage.url %}{{ brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+            <img src="{% if brother_profile.profileImage %}{{ brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
                  alt="Profile Photo" 
-                class="profile-img"
-                onerror="this.src='{% static 'images/default_profile.png' %}'">
+                 class="profile-img"
+                 onerror="this.src='{% static 'images/default_profile.png' %}'">
             <form id="photoForm" action="{% url 'update_photo' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="profile_photo" id="profile_photo" class="hidden-input" accept="image/*">

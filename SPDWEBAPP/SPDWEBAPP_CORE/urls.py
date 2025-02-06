@@ -14,9 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django import views
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
+from AUTHENTICATE import views
 
 urlpatterns = [
     # Use the custom ADMIN_URL from settings
@@ -29,4 +31,5 @@ urlpatterns = [
     path('poll/',include('PARLEYPRO.urls')),
     path('philanthropy/',include('PHILANTHROPY.urls')),
     path('newmember/',include('NEWMEMBER.urls')),
+    path('profile/', views.profile, name='profile'),
 ]
