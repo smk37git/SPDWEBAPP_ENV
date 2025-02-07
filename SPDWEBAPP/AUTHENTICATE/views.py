@@ -163,7 +163,8 @@ def profile(request):
         'available_majors': available_majors,
         'page': 'profile'
     }
-    return render(request, 'AUTHENTICATE/profile.html', {'brother_profile': brother_profile})
+    return render(request, 'AUTHENTICATE/profile.html', context)
+
 
 @login_required
 def update_photo(request):
