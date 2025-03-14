@@ -1,30 +1,46 @@
 {% extends 'HOME/main.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="{% static 'css/roster.css' %}">
+
+{% endblock %}
 
 {% block content %}
-
 <br>
 <div class="centered-table">
     <div class="row">
-        <h5>Brothers:</h5>
         <div class="card card-body">
-          <table class="table table-sm">
+          <table id="rosterTable" class="table table-striped table-hover">
             <thead>
               <tr>
-                <th></th>
+                <th></th>  <!-- Photo column -->
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Roles</th>
+                <th>Hometown</th>
+                <th>Class</th>
+                <th id="roleHeader" style="position: relative;">
+                  Roles
+                </th>
               </tr>
             </thead>
             <tbody>
               {% for Brother_Profile in Brother_Profiles %}
               <tr>
-                <td></td>
+                <td class="member-photo">
+                  <img src="{% if Brother_Profile.profileImage %}{{ Brother_Profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+                       alt="{{ Brother_Profile.firstName }}'s Photo" 
+                       class="roster-profile-img"
+                       onerror="this.src='{% static "images/default_profile.png" %}'">
+                </td>
                 <td class="member-firstName">{{ Brother_Profile.firstName }}</td>
                 <td class="member-lastName">{{ Brother_Profile.lastName }}</td>
-                <td class="member-role">
+                <td class="member-hometown">{{ Brother_Profile.hometown|default:"" }}</td>
+                <td class="member-class">{{ Brother_Profile.pclass|default:"" }}</td>
+                <td class="member-role" data-roles="{{ Brother_Profile.roles.all|join:"," }}">
                   {{ Brother_Profile.roles.all|join:", " }}
-              </td>
+                </td>
               </tr>
               {% endfor %}
             </tbody>
@@ -32,4 +48,105 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Role information for sorting and display
+    const roleInfo = {
+      'Executive Board': { priority: 1, displayName: 'Executive Board' },
+      'New Member Board': { priority: 2, displayName: 'New Member Board' },
+      'Active Member': { priority: 3, displayName: 'Active Member' },
+      'Social Chair': { priority: 4, displayName: 'Social Chair' }
+    };
+    
+    // Keep track of which role we're sorting by
+    let currentRoleIndex = 0;
+    const roleTypes = Object.keys(roleInfo);
+    
+    // Initialize the DataTable with our custom sorting
+    const dataTable = $('#rosterTable').DataTable({
+      "order": [[ 2, "asc" ]],  // Default sort by last name ascending
+      "columnDefs": [
+        { "orderable": false, "targets": 0 }  // Disable sorting on the photo column
+      ],
+      "language": {
+        "search": "Filter brothers:",
+        "info": "Showing _TOTAL_ brothers",
+        "emptyTable": "No brothers available"
+      },
+      "paging": false,
+      "lengthChange": false
+    });
+    
+    // Add a more subtle role indicator to the header text itself
+    $('#roleHeader').html('Roles <span class="role-sort-indicator"><span class="role-active-dot"></span><span id="roleSortType">Executive Board</span></span>');
+    
+    // Custom click handler for the Roles column header
+    $(document).on('click', '#roleHeader, #rosterTable thead th:eq(5)', function() {
+      // If already sorting by roles, cycle to next role type
+      if (dataTable.order()[0][0] === 5) {
+        // Move to the next role in our list
+        currentRoleIndex = (currentRoleIndex + 1) % roleTypes.length;
+      } else {
+        // First click on roles column, start with first role type
+        currentRoleIndex = 0;
+      }
+      
+      // Update the indicator text
+      $('#roleSortType').text(roleTypes[currentRoleIndex]);
+      
+      // Apply our custom role + lastname sorting
+      applyCustomSorting();
+      
+      // Show the indicator
+      $('.role-sort-indicator').fadeIn(200);
+      
+      // Prevent default DataTables click behavior
+      return false;
+    });
+    
+    // Handle clicks on other column headers
+    $(document).on('click', '#rosterTable thead th', function() {
+      if ($(this).index() !== 5 && $(this).index() !== 0) {
+        // Hide the role indicator when sorting by other columns
+        $('.role-sort-indicator').fadeOut(200);
+      }
+    });
+    
+    // Custom sorting function that sorts by role AND last name
+    function applyCustomSorting() {
+      const currentRole = roleTypes[currentRoleIndex];
+      
+      // Get all rows as DOM elements
+      const rows = $('#rosterTable tbody tr').get();
+      
+      // Custom sorting function
+      rows.sort(function(a, b) {
+        const roleA = $(a).find('.member-role').text().includes(currentRole);
+        const roleB = $(b).find('.member-role').text().includes(currentRole);
+        
+        // First priority: Sort by whether they have the role
+        if (roleA && !roleB) return -1;
+        if (!roleA && roleB) return 1;
+        
+        // If both have or both don't have the role, sort by last name
+        const lastNameA = $(a).find('.member-lastName').text().trim().toLowerCase();
+        const lastNameB = $(b).find('.member-lastName').text().trim().toLowerCase();
+        
+        if (lastNameA < lastNameB) return -1;
+        if (lastNameA > lastNameB) return 1;
+        return 0;
+      });
+      
+      // Reattach sorted rows to the table
+      $.each(rows, function(index, row) {
+        $('#rosterTable tbody').append(row);
+      });
+    }
+  });
+</script>
 {% endblock %}

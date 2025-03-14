@@ -7,10 +7,10 @@
     <div class="profile-card">
         <!-- Profile Photo Section -->
         <div class="profile-photo">
-            <img src="{% if brother_profile.profileImage and brother_profile.profileImage.url %}{{ brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+            <img src="{% if brother_profile.profileImage %}{{ brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
                  alt="Profile Photo" 
-                class="profile-img"
-                onerror="this.src='{% static 'images/default_profile.png' %}'">
+                 class="profile-img"
+                 onerror="this.src={% static 'images/default_profile.png' %}">
             <form id="photoForm" action="{% url 'update_photo' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="profile_photo" id="profile_photo" class="hidden-input" accept="image/*">
@@ -35,6 +35,10 @@
                         <tr>
                             <th>Last Name</th>
                             <td><input type="text" name="lastName" value="{{ brother_profile.lastName }}" class="profile-input" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>Hometown</th>
+                            <td><input type="text" name="hometown" value="{{ brother_profile.hometown|default:'' }}" class="profile-input" readonly></td>
                         </tr>
                         <tr>
                             <th>Email</th>
@@ -288,6 +292,19 @@
                 checkbox.dispatchEvent(event);
             });
         });
+
+        document.getElementById('editToggle').addEventListener('click', function() {
+            const inputs = document.querySelectorAll('.profile-input');
+            const formActions = document.querySelector('.form-actions');
+            
+            inputs.forEach(input => {
+                input.readOnly = false;
+                input.dataset.originalValue = input.value;
+            });
+            
+            formActions.style.display = 'flex';
+            this.style.display = 'none';
+        });
     });
     
     document.getElementById('editToggle').addEventListener('click', function() {
@@ -399,7 +416,6 @@
             body: formData
         })
         .then(response => response.json())
-        // Profile update success handler 
         .then(data => {
             if (data.success) {
                 const formActions = document.querySelector('.form-actions');
@@ -410,8 +426,14 @@
                 formActions.style.display = 'none';
                 editButton.style.display = 'block';
                 showTemporaryAlert('Profile updated successfully!');
-                window.scrollTo({top: 0, behavior: 'smooth'}); // Add this line
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            } else {
+                showTemporaryAlert(data.message || 'An error occurred while updating your profile.', 'danger');
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showTemporaryAlert('An error occurred while updating your profile.', 'danger');
         });
     });
 

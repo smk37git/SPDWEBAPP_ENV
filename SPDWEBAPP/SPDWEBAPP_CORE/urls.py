@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Use the custom ADMIN_URL from settings
@@ -30,3 +31,7 @@ urlpatterns = [
     path('philanthropy/',include('PHILANTHROPY.urls')),
     path('newmember/',include('NEWMEMBER.urls')),
 ]
+
+# Add this to the bottom of your urls.py if not already present
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
