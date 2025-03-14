@@ -19,6 +19,9 @@
             <li class="nav-item {% if request.resolver_match.url_name == 'rush' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'rush' %}">Rush Information</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/executive-board/' %}active{% endif %}" href="{% url 'executive_board' %}">Executive Board</a>
+            </li>
             {% if request.user.is_authenticated %}
             <!-- Mobile separator -->
             <li class="nav-item separator d-lg-none">
