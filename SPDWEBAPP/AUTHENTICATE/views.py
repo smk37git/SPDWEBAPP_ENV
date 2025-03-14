@@ -35,28 +35,32 @@ def dashboard(request):
 
 @login_required
 def roster(request):
-  Brother_Profiles = Brother_Profile.objects.all()
-  return render(request, 'AUTHENTICATE/roster.html', {'Brother_Profiles': Brother_Profiles})
+    # Sort by lastName ascending
+    Brother_Profiles = Brother_Profile.objects.all().order_by('lastName')
+    
+    context = {
+        'Brother_Profiles': Brother_Profiles
+    }
+    return render(request, 'AUTHENTICATE/roster.html', context)
 
 def loginPage(request):
-  if request.method == "POST":
+    if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print('it posted')
-        user = authenticate(request, username = username, password= password)
+        
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            print('it worked')
             next_url = request.GET.get('next')
-            if next_url:
+            if (next_url):
                 return redirect(next_url)  # Redirect to the URL they were trying to access
             return redirect('home')
         else:
+            messages.error(request, 'Invalid username or password.')
             return redirect('login')
   
-  context = {}
-  print(request.user)
-  return render(request, 'AUTHENTICATE/login.html', context)
+    context = {}
+    return render(request, 'AUTHENTICATE/login.html', context)
 
 def logoutUser(request):
     logout(request)
@@ -102,24 +106,15 @@ def update_profile(request):
         username = request.POST.get('username')
         firstname = request.POST.get('firstName') 
         lastname = request.POST.get('lastName')
+        hometown = request.POST.get('hometown')
+        pclass = request.POST.get('pclass')  # New field
         
         # Check all fields for profanity
-        if contains_profanity(username):
+        if contains_profanity(username) or contains_profanity(firstname) or contains_profanity(lastname) or \
+           contains_profanity(hometown) or contains_profanity(pclass):  # Include pclass in check
             return JsonResponse({
                 'success': False,
-                'message': 'Username contains inappropriate language.'
-            })
-            
-        if contains_profanity(firstname):
-            return JsonResponse({
-                'success': False, 
-                'message': 'First name contains inappropriate language.'
-            })
-            
-        if contains_profanity(lastname):
-            return JsonResponse({
-                'success': False,
-                'message': 'Last name contains inappropriate language.'
+                'message': 'Input contains inappropriate language.'
             })
             
         # Update if clean
@@ -132,17 +127,13 @@ def update_profile(request):
         
         brother_profile.firstName = firstname
         brother_profile.lastName = lastname
+        brother_profile.hometown = hometown
+        brother_profile.pclass = pclass  # Save pclass field
         brother_profile.save()
         
-        return JsonResponse({
-            'success': True,
-            'message': 'Profile updated successfully!'
-        })
-        
-    return JsonResponse({
-        'success': False,
-        'message': 'Invalid request method.'
-    })
+        return JsonResponse({'success': True})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request'})
 
 @login_required
 def profile(request):
@@ -172,16 +163,28 @@ def update_photo(request):
             
             # Delete old photo if exists and it's not the default
             if brother_profile.profileImage:
-                old_path = brother_profile.profileImage.path
-                if os.path.exists(old_path) and 'default_profile.png' not in old_path:
-                    brother_profile.profileImage.delete()
+                try:
+                    old_path = brother_profile.profileImage.path
+                    if os.path.exists(old_path):
+                        brother_profile.profileImage.delete(save=False)
+                except Exception as e:
+                    print(f"Error deleting old image: {e}")
             
             brother_profile.profileImage = request.FILES['profile_photo']
             brother_profile.save()
             
+            # Return JSON response for AJAX requests
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True, 
+                    'image_url': brother_profile.profileImage.url
+                })
+            
             return HttpResponseRedirect(reverse('profile'))
             
         except Exception as e:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'message': str(e)})
             messages.error(request, f'Error updating profile photo: {str(e)}')
             
     return HttpResponseRedirect(reverse('profile'))

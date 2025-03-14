@@ -53,7 +53,7 @@
                     <img src="{% if request.user.brother_profile.profileImage %}{{ request.user.brother_profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
                          alt="Profile Photo" 
                          class="navbar-profile-img"
-                         onerror="this.src='{% static 'images/default_profile.png' %}'">
+                         onerror="this.src='{% static "images/default_profile.png" %}'">
                     <span class="username-text">{{ request.user.username }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
