@@ -1,11 +1,8 @@
-from django.urls import path, include
+from django.urls import path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
-from . import views
-
-# TEMPORARY - REMOVE IN PRODUCTION
 from django.views.static import serve
-from django.urls import re_path
+from . import views
 
 urlpatterns = [
     path('login/', views.loginPage, name="login"),
@@ -21,6 +18,7 @@ urlpatterns = [
     path('add-custom-major/', views.add_custom_major, name='add_custom_major'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# For both DEBUG and production
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT,

@@ -161,10 +161,12 @@ def update_photo(request):
         try:
             brother_profile = Brother_Profile.objects.get(user=request.user)
             
-            # Debug logging
+            # More detailed logging
             print(f"Processing photo upload for {request.user.username}")
-            print(f"File size: {request.FILES['profile_photo'].size}")
-            print(f"File content type: {request.FILES['profile_photo'].content_type}")
+            photo = request.FILES['profile_photo']
+            print(f"File name: {photo.name}")
+            print(f"File size: {photo.size}")
+            print(f"File content type: {photo.content_type}")
             
             # Delete old photo if exists and it's not the default
             if brother_profile.profileImage:
@@ -178,6 +180,8 @@ def update_photo(request):
             brother_profile.profileImage = request.FILES['profile_photo']
             brother_profile.save()
             
+            print(f"Photo saved to: {brother_profile.profileImage.path}")
+            
             # Return JSON response for AJAX requests
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({
@@ -189,7 +193,7 @@ def update_photo(request):
             
         except Exception as e:
             # More detailed error logging
-            print(f"Error in update_photo: {type(e).__name__}: {str(e)}")
+            print(f"ERROR in update_photo: {e}")
             import traceback
             traceback.print_exc()
             
