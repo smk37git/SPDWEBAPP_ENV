@@ -10,40 +10,42 @@
 <br>
 <div class="centered-table">
     <div class="row">
-        <div class="card card-body">
-          <table id="rosterTable" class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th></th>  <!-- Photo column -->
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Hometown</th>
-                <th>Class</th>
-                <th id="roleHeader" style="position: relative;">
-                  Roles
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for Brother_Profile in Brother_Profiles %}
-              <tr>
-                <td class="member-photo">
-                  <img src="{% if Brother_Profile.profileImage %}{{ Brother_Profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
-                       alt="{{ Brother_Profile.firstName }}'s Photo" 
-                       class="roster-profile-img"
-                       onerror="this.src='{% static "images/default_profile.png" %}'">
-                </td>
-                <td class="member-firstName">{{ Brother_Profile.firstName }}</td>
-                <td class="member-lastName">{{ Brother_Profile.lastName }}</td>
-                <td class="member-hometown">{{ Brother_Profile.hometown|default:"" }}</td>
-                <td class="member-class">{{ Brother_Profile.pclass|default:"" }}</td>
-                <td class="member-role" data-roles="{{ Brother_Profile.roles.all|join:"," }}">
-                  {{ Brother_Profile.roles.all|join:", " }}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+        <div class="col-12 p-md-3 p-0">
+          <div class="card card-body">
+            <table id="rosterTable" class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th></th>  <!-- Photo column -->
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Hometown</th>
+                  <th>Class</th>
+                  <th id="roleHeader" style="position: relative;">
+                    Roles
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for Brother_Profile in Brother_Profiles %}
+                <tr>
+                  <td class="member-photo" data-label="">
+                    <img src="{% if Brother_Profile.profileImage %}{{ Brother_Profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+                         alt="{{ Brother_Profile.firstName }}'s Photo" 
+                         class="roster-profile-img"
+                         onerror="this.src='{% static "images/default_profile.png" %}'">
+                  </td>
+                  <td class="member-firstName" data-label="First Name">{{ Brother_Profile.firstName }}</td>
+                  <td class="member-lastName" data-label="Last Name">{{ Brother_Profile.lastName }}</td>
+                  <td class="member-hometown" data-label="Hometown">{{ Brother_Profile.hometown|default:"" }}</td>
+                  <td class="member-class" data-label="Class">{{ Brother_Profile.pclass|default:"" }}</td>
+                  <td class="member-role" data-label="Roles" data-roles="{{ Brother_Profile.roles.all|join:"," }}">
+                    {{ Brother_Profile.roles.all|join:", " }}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
     </div>
 </div>
@@ -54,33 +56,54 @@
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
   $(document).ready(function() {
-    // Role information for sorting and display
-    const roleInfo = {
-      'Executive Board': { priority: 1, displayName: 'Executive Board' },
-      'New Member Board': { priority: 2, displayName: 'New Member Board' },
-    };
+    // Check if we're on mobile
+    const isMobile = window.innerWidth < 768;
+    let dataTable;
     
-    // Keep track of which role we're sorting by
-    let currentRoleIndex = 0;
-    const roleTypes = Object.keys(roleInfo);
+    function initializeTable() {
+      // Clear previous DataTable instance if it exists
+      if (dataTable) {
+        dataTable.destroy();
+        $('#rosterTable').removeClass('dataTable');
+      }
+      
+      // Always use table view (not mobile-view)
+      $('#rosterTable').removeClass('mobile-view');
+      
+      // Role information for sorting and display
+      const roleInfo = {
+        'Executive Board': { priority: 1, displayName: 'Executive Board' },
+        'New Member Board': { priority: 2, displayName: 'New Member Board' },
+      };
+      
+      // Keep track of which role we're sorting by
+      let currentRoleIndex = 0;
+      const roleTypes = Object.keys(roleInfo);
+      
+      // Initialize the DataTable with our custom sorting
+      dataTable = $('#rosterTable').DataTable({
+        "order": [[ 2, "asc" ]],  // Default sort by last name ascending
+        "columnDefs": [
+          { "orderable": false, "targets": 0 }  // Disable sorting on the photo column
+        ],
+        "language": {
+          "search": "Filter Brothers:",
+          "info": "Showing _TOTAL_ brothers",
+          "emptyTable": "No brothers available"
+        },
+        "paging": false,
+        "lengthChange": false,
+        "responsive": true, // Always use DataTables responsive
+        "scrollX": isMobile, // Enable horizontal scrolling on mobile
+        "autoWidth": false
+      });
+      
+      // Add a more subtle role indicator to the header text itself
+      $('#roleHeader').html('Roles <span class="role-sort-indicator"><span class="role-active-dot"></span><span id="roleSortType">Executive Board</span></span>');
+    }
     
-    // Initialize the DataTable with our custom sorting
-    const dataTable = $('#rosterTable').DataTable({
-      "order": [[ 2, "asc" ]],  // Default sort by last name ascending
-      "columnDefs": [
-        { "orderable": false, "targets": 0 }  // Disable sorting on the photo column
-      ],
-      "language": {
-        "search": "Filter Brothers:",
-        "info": "Showing _TOTAL_ brothers",
-        "emptyTable": "No brothers available"
-      },
-      "paging": false,
-      "lengthChange": false
-    });
-    
-    // Add a more subtle role indicator to the header text itself
-    $('#roleHeader').html('Roles <span class="role-sort-indicator"><span class="role-active-dot"></span><span id="roleSortType">Executive Board</span></span>');
+    // Initialize the table
+    initializeTable();
     
     // Custom click handler for the Roles column header
     $(document).on('click', '#roleHeader, #rosterTable thead th:eq(5)', function() {
@@ -144,6 +167,15 @@
         $('#rosterTable tbody').append(row);
       });
     }
+    
+    // Handle window resize
+    $(window).on('resize', function() {
+      const newIsMobile = window.innerWidth < 768;
+      if (newIsMobile !== isMobile) {
+        // Reload the page if we've crossed the mobile breakpoint
+        location.reload();
+      }
+    });
   });
 </script>
 {% endblock %}

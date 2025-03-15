@@ -100,22 +100,6 @@ table.dataTable thead th .text {
   color: #666;
 }
 
-/* Responsive adjustments */
-@media (max-width: 767px) {
-  .roster-profile-img {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .member-photo {
-    width: 40px;
-  }
-  
-  #rosterTable th,
-  #rosterTable td {
-    padding: 0.5rem;
-  }
-}
 /* Improved styles for the role sorting indicator */
 .role-sort-indicator {
   display: none; /* Hidden by default until activated by JS */
@@ -157,4 +141,130 @@ table.dataTable thead th .text {
   background-color: #ffffff; /* White dot */
   margin-right: 3px;
   vertical-align: middle;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 767px) {
+  /* Make containers take full width */
+  .centered-table {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+  }
+  
+  .card-body {
+    padding: 0.5rem;
+  }
+  
+  /* Stack the table on mobile */
+  #rosterTable.mobile-view thead {
+    display: none;
+  }
+  
+  #rosterTable.mobile-view, 
+  #rosterTable.mobile-view tbody,
+  #rosterTable.mobile-view tr {
+    display: block;
+    width: 100%;
+  }
+  
+  #rosterTable.mobile-view tr {
+    margin-bottom: 1rem;
+    border: 1px solid rgba(0,0,0,0.125);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  
+  #rosterTable.mobile-view td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  #rosterTable.mobile-view td:last-child {
+    border-bottom: none;
+  }
+  
+  #rosterTable.mobile-view td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 1rem;
+    text-align: left;
+  }
+  
+  /* Special styling for the photo cell */
+  #rosterTable.mobile-view td.member-photo {
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(164, 30, 30, 0.03);
+  }
+  
+  #rosterTable.mobile-view td.member-photo::before {
+    display: none;
+  }
+  
+  /* Make the profile image larger on mobile */
+  #rosterTable.mobile-view .roster-profile-img {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  /* Move search box to be full width */
+  .dataTables_filter {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .dataTables_filter input {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+  
+  /* Toggle button for table view */
+  .view-toggle-btn {
+    margin-bottom: 1rem;
+    background-color: #A41E1E;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+  
+  /* Ensure table width is full when in table view */
+  #rosterTable:not(.mobile-view) {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    margin: 0;
+    table-layout: auto;
+  }
+  
+  /* Standard mobile adjustments */
+  .roster-profile-img {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .member-photo {
+    width: 40px;
+  }
+  
+  #rosterTable th,
+  #rosterTable td {
+    padding: 0.5rem;
+  }
 }
