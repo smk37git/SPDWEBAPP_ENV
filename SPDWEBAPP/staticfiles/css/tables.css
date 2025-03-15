@@ -170,3 +170,15 @@
     background-color: #f59e0b;
     color: white;
 }
+
+.member-photo {
+  width: 60px;
+}
+
+.roster-profile-img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-red);
+}
