@@ -61,6 +61,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <input type="hidden" name="pclass" value="{{ brother_profile.pclass|default:'' }}">
                 <div class="form-actions" style="display: none;">
                     <button type="submit" class="save-btn">Save Changes</button>
                     <button type="button" class="password-btn" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
@@ -428,11 +429,12 @@
                 showTemporaryAlert('Profile updated successfully!');
                 window.scrollTo({top: 0, behavior: 'smooth'});
             } else {
+                console.error('Profile update error:', data);
                 showTemporaryAlert(data.message || 'An error occurred while updating your profile.', 'danger');
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Fetch error:', error);
             showTemporaryAlert('An error occurred while updating your profile.', 'danger');
         });
     });
