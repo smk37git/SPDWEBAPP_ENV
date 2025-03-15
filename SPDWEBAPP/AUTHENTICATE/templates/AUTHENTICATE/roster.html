@@ -18,8 +18,9 @@
                   <th></th>  <!-- Photo column -->
                   <th>First Name</th>
                   <th>Last Name</th>
-                  <th>Hometown</th>
                   <th>Class</th>
+                  <th>Major</th>
+                  <th>Hometown</th>
                   <th id="roleHeader" style="position: relative;">
                     Roles
                   </th>
@@ -36,8 +37,9 @@
                   </td>
                   <td class="member-firstName" data-label="First Name">{{ Brother_Profile.firstName }}</td>
                   <td class="member-lastName" data-label="Last Name">{{ Brother_Profile.lastName }}</td>
-                  <td class="member-hometown" data-label="Hometown">{{ Brother_Profile.hometown|default:"" }}</td>
                   <td class="member-class" data-label="Class">{{ Brother_Profile.pclass|default:"" }}</td>
+                  <td class="member-majors" data-label="Major">{% for major in Brother_Profile.majors.all %}{{ major.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                  <td class="member-hometown" data-label="Hometown">{{ Brother_Profile.hometown|default:"" }}</td>
                   <td class="member-role" data-label="Roles" data-roles="{{ Brother_Profile.roles.all|join:"," }}">
                     {{ Brother_Profile.roles.all|join:", " }}
                   </td>
