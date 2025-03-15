@@ -54,6 +54,22 @@
         left: 50%;
         transform: translateX(-50%);
     }
+    
+    .brother-email {
+        margin-top: 15px;
+        font-size: 0.85rem;
+    }
+    
+    .brother-email a {
+        color: #A41E1E;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .brother-email a:hover {
+        color: #7a1616;
+        text-decoration: underline;
+    }
 </style>
 {% endblock %}
 
@@ -87,6 +103,13 @@
                             </p>
                         {% endif %}
                         
+                        {% if brother.user and brother.user.email %}
+                            <div class="brother-email">
+                                <a href="mailto:{{ brother.user.email }}">
+                                    <i class="fas fa-envelope"></i> {{ brother.user.email }}
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
