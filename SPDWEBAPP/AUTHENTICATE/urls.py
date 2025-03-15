@@ -3,6 +3,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
+# TEMPORARY - REMOVE IN PRODUCTION
+from django.views.static import serve
+from django.urls import re_path
+
 urlpatterns = [
     path('login/', views.loginPage, name="login"),
     path('dashboard/', views.dashboard, name="dashboard"),
@@ -16,3 +20,9 @@ urlpatterns = [
     path('update_majors/', views.update_majors, name='update_majors'),
     path('add-custom-major/', views.add_custom_major, name='add_custom_major'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {
+        'document_root': settings.MEDIA_ROOT,
+    }),
+]
