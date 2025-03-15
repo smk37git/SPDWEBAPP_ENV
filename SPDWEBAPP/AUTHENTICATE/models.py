@@ -43,29 +43,28 @@ class Brother_Profile(models.Model):
         
     def save(self, *args, **kwargs):
         if self.profileImage:
-            # Open the uploaded image
-            img = Image.open(self.profileImage)
-            
-            # Set maximum size
-            output_size = (300, 300)
-            
-            # Resize image while maintaining aspect ratio
-            img.thumbnail(output_size)
-            
-            # Save the resized image
-            output = BytesIO()
-            img_format = 'JPEG' if self.profileImage.name.lower().endswith(('jpg', 'jpeg')) else 'PNG'
-            img.save(output, format=img_format, quality=85)
-            output.seek(0)
-            
-            # Replace the image field with resized image
-            self.profileImage = InMemoryUploadedFile(
-                output, 
-                'ImageField',
-                f"{self.profileImage.name.split('.')[0]}.{img_format.lower()}", 
-                f'image/{img_format.lower()}',
-                sys.getsizeof(output), 
-                None
-            )
-            
+            try:
+                img = Image.open(self.profileImage)
+                output_size = (300, 300)
+                img.thumbnail(output_size)
+                
+                output = BytesIO()
+                # Use original format if possible, default to PNG
+                img_format = getattr(img, 'format', 'PNG')
+                img.save(output, format=img_format, quality=85)
+                output.seek(0)
+                
+                self.profileImage = InMemoryUploadedFile(
+                    output, 
+                    'ImageField',
+                    f"{self.profileImage.name.split('/')[-1].split('.')[0]}.{img_format.lower()}", 
+                    f'image/{img_format.lower()}',
+                    sys.getsizeof(output), 
+                    None
+                )
+            except Exception as e:
+                # Log the error for debugging
+                print(f"Error processing image: {e}")
+                pass
+                
         super().save(*args, **kwargs)

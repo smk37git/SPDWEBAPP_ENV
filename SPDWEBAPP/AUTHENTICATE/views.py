@@ -24,7 +24,7 @@ from MISC.models import AnnouncementAlert
 @login_required
 def dashboard(request):
     is_new_member = check_user_role(request.user, 'NEW_MEMBER')
-    if is_new_member:
+    if (is_new_member):
         return redirect('/newmember/')
 
     announcements = AnnouncementAlert.objects.filter(is_active=True)
@@ -161,6 +161,11 @@ def update_photo(request):
         try:
             brother_profile = Brother_Profile.objects.get(user=request.user)
             
+            # Debug logging
+            print(f"Processing photo upload for {request.user.username}")
+            print(f"File size: {request.FILES['profile_photo'].size}")
+            print(f"File content type: {request.FILES['profile_photo'].content_type}")
+            
             # Delete old photo if exists and it's not the default
             if brother_profile.profileImage:
                 try:
@@ -183,9 +188,13 @@ def update_photo(request):
             return HttpResponseRedirect(reverse('profile'))
             
         except Exception as e:
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': False, 'message': str(e)})
-            messages.error(request, f'Error updating profile photo: {str(e)}')
+            # More detailed error logging
+            print(f"Error in update_photo: {type(e).__name__}: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            
+            # Return more detailed error to frontend
+            return JsonResponse({'success': False, 'message': f"{type(e).__name__}: {str(e)}"})
             
     return HttpResponseRedirect(reverse('profile'))
 
