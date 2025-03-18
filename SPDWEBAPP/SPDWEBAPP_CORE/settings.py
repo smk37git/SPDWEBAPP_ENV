@@ -29,16 +29,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 ############## The secret key is now imported from a python file in the same directory as the new database location
 # Get the path to two directories above the current file (BASE_DIR)
-KEY_DIR = Path(BASE_DIR).parent.parent
+STORAGE_DIR = Path(BASE_DIR).parent.parent
 
 # Add the directory containing secret_config.py to sys.path
-sys.path.append(str(KEY_DIR))
+sys.path.append(str(STORAGE_DIR))
 
 # Now import the SECRET_KEY from secret_config.py
 try:
     from secret_config import SECRET_KEY
 except ImportError:
-    raise ValueError(f"No SECRET_KEY found! Make sure the secret_config.py exists in {KEY_DIR}")
+    raise ValueError(f"No SECRET_KEY found! Make sure the secret_config.py exists in {STORAGE_DIR}")
 
 
 # Imports the admin page url from the same file as the secret key
@@ -46,7 +46,7 @@ except ImportError:
 try:
     from secret_config import ADMIN_URL
 except ImportError:
-    raise ValueError(f"No ADMIN_URL found! Make sure the secret_config.py exists in {KEY_DIR}")
+    raise ValueError(f"No ADMIN_URL found! Make sure the secret_config.py exists in {STORAGE_DIR}")
 
 # Use the ADMIN_URL value to define the admin path
 ADMIN_URL = ADMIN_URL  # or set a default value in case it's not found
@@ -55,7 +55,7 @@ ADMIN_URL = ADMIN_URL  # or set a default value in case it's not found
 try:
     from secret_config import ENVIRONMENT
 except ImportError:
-    raise ValueError(f"No ENVIRONMENT found! Make sure the secret_config.py exists in {KEY_DIR}")
+    raise ValueError(f"No ENVIRONMENT found! Make sure the secret_config.py exists in {STORAGE_DIR}")
 
 
 
@@ -170,7 +170,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = STORAGE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
@@ -178,7 +178,7 @@ STATICFILES_DIRS = [
 
 # Media files (User uploads)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = STORAGE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
