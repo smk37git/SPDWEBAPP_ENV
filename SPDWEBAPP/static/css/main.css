@@ -16,6 +16,7 @@
     padding: 0;
     box-sizing: border-box;
     transition: all var(--transition-speed) ease;
+    text-align: center !important;
 }
 
 body {
