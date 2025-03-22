@@ -62,6 +62,94 @@
     const isMobile = window.innerWidth < 768;
     let dataTable;
     
+    // Define Greek alphabet order for sorting
+    $.fn.dataTable.ext.type.order['greek-alpha-pre'] = function(data) {
+
+      const greekOrder = {
+        'alpha': 1, 'Alpha': 1,
+        'beta': 2, 'Beta': 2,
+        'gamma': 3, 'Gamma': 3,
+        'delta': 4, 'Delta': 4,
+        'epsilon': 5, 'Epsilon': 5,
+        'zeta': 6, 'Zeta': 6,
+        'eta': 7, 'Eta': 7,
+        'theta': 8, 'Theta': 8,
+        'iota': 9, 'Iota': 9,
+        'kappa': 10, 'Kappa': 10,
+        'lambda': 11, 'Lambda': 11,
+        'mu': 12, 'Mu': 12,
+        'nu': 13, 'Nu': 13,
+        'xi': 14, 'Xi': 14,
+        'omicron': 15, 'Omicron': 15,
+        'pi': 16, 'Pi': 16,
+        'rho': 17, 'Rho': 17,
+        'sigma': 18, 'Sigma': 18,
+        'tau': 19, 'Tau': 19,
+        'upsilon': 20, 'Upsilon': 20,
+        'phi': 21, 'Phi': 21,
+        'chi': 22, 'Chi': 22,
+        'psi': 23, 'Psi': 23,
+        'omega': 24, 'Omega': 24
+      };
+      
+      // Handle hyphenated class names (e.g., Beta-Alpha)
+      if (data.includes('-')) {
+        // Split by hyphen to get the parts
+        const parts = data.split('-');
+        let primaryValue = 500; // Default for first part if not recognized
+        let secondaryValue = 0;  // Default for second part if not recognized
+        
+        // Look for Greek letter in first part
+        for (const letter in greekOrder) {
+          if (parts[0].includes(letter)) {
+            // Add 100 to push hyphenated classes after regular Greek letters
+            // Then multiply by 100 to make room for secondary part
+            primaryValue = (greekOrder[letter] + 100) * 100;
+            break;
+          }
+        }
+        
+        // Look for Greek letter in second part
+        if (parts.length > 1) {
+          for (const letter in greekOrder) {
+            if (parts[1].includes(letter)) {
+              secondaryValue = greekOrder[letter]; // Now use full value for second part
+              break;
+            }
+          }
+        }
+        
+        // Combine values: primary + secondary
+        return primaryValue + secondaryValue;
+      }
+      
+      // For single Greek letters (non-hyphenated)
+      for (const letter in greekOrder) {
+        if (data.includes(letter)) {
+          return greekOrder[letter];
+        }
+      }
+      
+      // If not a recognized Greek class but not empty, return a middle value
+      return 500;
+    };
+    
+    // Add custom sorting plug-in for handling empty values at the bottom
+    // This forces empty values to ALWAYS be at the bottom regardless of sort direction
+    $.fn.dataTable.ext.order['greek-alpha'] = function(settings, col) {
+      return this.api().column(col, {order: 'index'}).nodes().map(function(td, i) {
+        const text = $(td).text().trim();
+        
+        // For empty values, we need special handling based on sort direction
+        if (!text || text === '') {
+          return settings.aaSorting[0][1] === 'asc' ? 999999 : -999999;
+        }
+        
+        // Otherwise use our normal greek-alpha sorting
+        return $.fn.dataTable.ext.type.order['greek-alpha-pre'](text);
+      });
+    };
+
     function initializeTable() {
       // Clear previous DataTable instance if it exists
       if (dataTable) {
@@ -86,7 +174,14 @@
       dataTable = $('#rosterTable').DataTable({
         "order": [[ 2, "asc" ]],  // Default sort by last name ascending
         "columnDefs": [
-          { "orderable": false, "targets": 0 }  // Disable sorting on the photo column
+          { "orderable": false, "targets": 0 },  // Disable sorting on the photo column
+          { 
+            "targets": 3, // Class column (0-indexed)
+            "type": "greek-alpha",
+            "orderMethod": "greek-alpha", // Use our custom order method
+            "orderSequence": ["asc", "desc"],
+            "orderData": [3]  // Use only this column's data for ordering
+          }
         ],
         "language": {
           "search": "Filter Brothers:",
@@ -95,15 +190,32 @@
         },
         "paging": false,
         "lengthChange": false,
-        "responsive": true, // Always use DataTables responsive
-        "scrollX": isMobile, // Enable horizontal scrolling on mobile
-        "autoWidth": false
+        "responsive": true,
+        "scrollX": isMobile,
+        "autoWidth": false,
+        "drawCallback": function(settings) {
+          // Move empty class rows to the bottom after each draw
+          moveEmptyClassesToBottom();
+        }
       });
       
       // Add a more subtle role indicator to the header text itself
       $('#roleHeader').html('Roles <span class="role-sort-indicator"><span class="role-active-dot"></span><span id="roleSortType">Executive Board</span></span>');
     }
     
+    // Add this function after the DataTable initialization
+    function moveEmptyClassesToBottom() {
+      // Get all rows with empty class values
+      const emptyClassRows = $('#rosterTable tbody tr').filter(function() {
+        return $(this).find('.member-class').text().trim() === '';
+      }).detach();
+      
+      // If we found any empty class rows, append them to the bottom
+      if (emptyClassRows.length > 0) {
+        $('#rosterTable tbody').append(emptyClassRows);
+      }
+    }
+
     // Initialize the table
     initializeTable();
     
@@ -170,6 +282,11 @@
       });
     }
     
+    // Also handle the sort event directly
+    dataTable.on('order.dt', function() {
+      moveEmptyClassesToBottom();
+    });
+
     // Handle window resize
     $(window).on('resize', function() {
       const newIsMobile = window.innerWidth < 768;
