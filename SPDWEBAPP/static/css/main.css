@@ -16,7 +16,6 @@
     padding: 0;
     box-sizing: border-box;
     transition: all var(--transition-speed) ease;
-    text-align: center !important;
 }
 
 body {
@@ -79,7 +78,6 @@ body {
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 1s forwards 0.5s;
-    text-align: center !important;
 }
 
 /* Homepage Content */
@@ -129,12 +127,10 @@ body {
     color: #333;
     font-size: 1rem;
     font-family: Arial, sans-serif;
-    text-align: center !important;
 }
 
 .text-container p {
     margin-bottom: 1.5rem;
-    text-align: center !important;
 }
 
 .text-container img {
@@ -320,38 +316,4 @@ body {
     .instagram-posts {
         width: 90%; /* Slightly smaller image for better fit */
     }
-}
-
-/* Center text in all buttons site-wide */
-button, 
-.btn,
-.btn-primary,
-.btn-secondary,
-input[type="button"],
-input[type="submit"] {
-    text-align: center !important;
-    justify-content: center !important;
-}
-
-/* Center text inside button container links */
-.button-container a,
-.dashboard-buttons a {
-    text-align: center !important;
-    display: flex;
-    justify-content: center;
-}
-
-/* Ensure icons inside buttons don't disrupt centering */
-button i, 
-.btn i,
-button svg,
-.btn svg {
-    margin-right: 0.5rem;
-}
-
-/* Ensure span elements in buttons are centered */
-button span,
-.btn span {
-    display: inline-block;
-    text-align: center;
 }
