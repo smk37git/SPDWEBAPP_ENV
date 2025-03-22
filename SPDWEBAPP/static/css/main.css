@@ -131,6 +131,7 @@ body {
 
 .text-container p {
     margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 .text-container img {

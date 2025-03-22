@@ -177,5 +177,4 @@
 /* Also target the anchor tags inside dashboard buttons for completeness */
 .dashboard-buttons a {
     text-align: center;
-    width: 100%;
 }
