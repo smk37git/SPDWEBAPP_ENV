@@ -25,18 +25,11 @@
     overflow: hidden;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
     box-shadow: 0 4px 15px rgba(196, 0, 0, 0.2);
-    
-    /* Enhanced centering properties */
+    /* Add these text centering properties */
     text-align: center !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-}
-
-/* Target text inside buttons for additional centering */
-.dashboard-buttons .btn > * {
-    text-align: center;
-    width: 100%;
 }
 
 /* Hover Effects */
@@ -179,4 +172,10 @@
     --shadow-color: rgba(0, 0, 0, 0.2);
     --transition-speed: 0.3s;
     --border-radius: 10px;
+}
+
+/* Also target the anchor tags inside dashboard buttons for completeness */
+.dashboard-buttons a {
+    text-align: center;
+    width: 100%;
 }
