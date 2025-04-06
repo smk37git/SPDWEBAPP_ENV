@@ -30,10 +30,10 @@
                 {% for Brother_Profile in Brother_Profiles %}
                 <tr>
                   <td class="member-photo" data-label="">
-                    <img src="{% if Brother_Profile.profileImage %}{{ Brother_Profile.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+                    <img src="{% if Brother_Profile.profileImage %}{{ Brother_Profile.profileImage.url }}{% else %}{% static 'images/default_profile.webp' %}{% endif %}" 
                          alt="{{ Brother_Profile.firstName }}'s Photo" 
                          class="roster-profile-img"
-                         onerror="this.src='{% static "images/default_profile.png" %}'">
+                         onerror="this.src='{% static "images/default_profile.webp" %}'">
                   </td>
                   <td class="member-firstName" data-label="First Name">{{ Brother_Profile.firstName }}</td>
                   <td class="member-lastName" data-label="Last Name">{{ Brother_Profile.lastName }}</td>
