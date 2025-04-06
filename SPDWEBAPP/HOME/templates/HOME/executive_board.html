@@ -83,10 +83,10 @@
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card exec-card shadow">
                 <div class="card-body text-center">
-                    <img src="{% if brother.profileImage %}{{ brother.profileImage.url }}{% else %}{% static 'images/default_profile.webp' %}{% endif %}" 
+                    <img src="{% if brother.profileImage %}{{ brother.profileImage.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
                          alt="{{ brother.firstName }} {{ brother.lastName }}" 
                          class="exec-profile-img"
-                         onerror="this.src='{% static "images/default_profile.webp" %}'">
+                         onerror="this.src='{% static "images/default_profile.png" %}'">
                     
                     <h4 class="card-title">{{ brother.firstName }} {{ brother.lastName }}</h4>
                     
