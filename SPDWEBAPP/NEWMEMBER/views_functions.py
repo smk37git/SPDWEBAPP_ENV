@@ -97,8 +97,9 @@ def get_active_member_analytics(new_members_progress):
     }
 
 def create_mark_requests(requesting_user, target_users, mark_value, mark_reason, mark_date):
-    """Create multiple mark requests"""
+    """Create multiple mark requests, auto-approve if NM_BOARD"""
     try:
+        is_board_member = check_user_role(requesting_user, 'NM_BOARD')
         created_marks = []
         for user_id in target_users:
             new_mark = NewMember_Mark_Event_and_Request(
@@ -107,7 +108,9 @@ def create_mark_requests(requesting_user, target_users, mark_value, mark_reason,
                 mark_event_title=mark_reason,
                 mark_value=mark_value,
                 mark_event_date=mark_date,
-                mark_approval_status='requested'
+                mark_approval_status='approved' if is_board_member else 'requested',
+                mark_submission_approval_date=timezone.now() if is_board_member else None,
+                mark_approver_name=f"{requesting_user.brother_profile.firstName} {requesting_user.brother_profile.lastName}" if is_board_member else None,
             )
             created_marks.append(new_mark)
         
@@ -115,6 +118,7 @@ def create_mark_requests(requesting_user, target_users, mark_value, mark_reason,
         return True, f'Marks submitted successfully for {len(target_users)} new member(s)!'
     except Exception as e:
         return False, f'Error submitting marks: {str(e)}'
+
 
 def process_mark_approval(request, mark_id, action):
     """Process mark approval/denial"""
