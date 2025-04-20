@@ -144,6 +144,7 @@ def export_approved_newmember_marks(request):
         requester_name = name_map.get(m.requesting_user.id, m.requesting_user.username)
         target_name    = name_map.get(m.target_user.id,    m.target_user.username)
         by_user[target_name].append({
+            'Date': m.mark_event_date.strftime('%Y-%m-%d'),
             'Requesting Member': requester_name,
             'Reason'      : m.mark_event_title,
             'Mark Value'       : m.mark_value,
@@ -166,12 +167,17 @@ def export_approved_newmember_marks(request):
     DATA_START = 4
 
     # 7. Define sub‑columns in desired order
-    subheaders = ['Requesting Member','Reason','Mark Value']
+    subheaders = ['Date','Requesting Member','Reason','Mark Value']
+
+
+
+
+    block_size = len(subheaders) + 1    # 4 data cols + 1 spacer
 
     # 8. Write each member’s block
     for idx, member_name in enumerate(sorted(by_user)):
-        col0 = idx * 4 + 1
-        cols = [col0 + i for i in range(3)]
+        col0 = idx * block_size + 1
+        cols = [col0 + i for i in range(4)]
         spacer = col0 + 3
         fill    = PatternFill('solid', fgColor=palette[idx % len(palette)])
 
@@ -204,7 +210,6 @@ def export_approved_newmember_marks(request):
         # leave the 5th column blank
 
     # 9. Auto‑size & wrap
-    block_size = len(subheaders) + 1    # 3 data cols + 1 spacer = 4
     for idx, member_name in enumerate(by_user):
         base = idx * block_size + 1
 
@@ -213,18 +218,17 @@ def export_approved_newmember_marks(request):
             col_idx = base + j
             letter  = get_column_letter(col_idx)
 
+            # Set fixed widths
             if hdr == 'Reason':
-                # wrap text
+                ws.column_dimensions[letter].width = 30
                 for row in range(SUBHDR_ROW, DATA_START + max_rows):
                     ws.cell(row=row, column=col_idx).alignment = Alignment(wrap_text=True)
-                ws.column_dimensions[letter].width = 30
-            else:
-                # auto‑fit width
-                maxlen = max(
-                    len(str(ws.cell(row=r, column=col_idx).value or ''))
-                    for r in range(HEADER_ROW, DATA_START + max_rows)
-                )
-                ws.column_dimensions[letter].width = maxlen + 2
+            elif hdr == 'Requesting Member':
+                ws.column_dimensions[letter].width = 20
+            elif hdr == 'Date':
+                ws.column_dimensions[letter].width = 12
+            elif hdr == 'Mark Value':
+                ws.column_dimensions[letter].width = 10
 
         # spacer column
         spacer_col = base + len(subheaders)
