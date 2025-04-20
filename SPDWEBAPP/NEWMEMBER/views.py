@@ -104,3 +104,139 @@ def newmember_mark_history(request, user_id):
     except Brother_Profile.DoesNotExist:
         messages.error(request, 'New Member not found.')
         return redirect('newmember_dashboard')
+
+
+
+# Code for exporting the new member marks into a spreadsheet
+import io
+from collections import defaultdict
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill, Alignment
+from openpyxl.utils import get_column_letter
+from .models import NewMember_Mark_Event_and_Request
+from AUTHENTICATE.models import Brother_Profile
+
+@login_required
+def export_approved_newmember_marks(request):
+    # 1. Find current new‑member IDs
+    new_member_ids = Brother_Profile.objects.filter(
+        roles__name='NEW_MEMBER'
+    ).values_list('user_id', flat=True)
+
+    # 2. Load full names for all profiles
+    profiles = Brother_Profile.objects.select_related('user')
+    name_map = {bp.user_id: f"{bp.firstName} {bp.lastName}" for bp in profiles}
+
+    # 3. Gather approved marks by target full name
+    marks = (NewMember_Mark_Event_and_Request.objects
+        .filter(
+            mark_approval_status='approved',
+            target_user__id__in=new_member_ids
+        )
+        .select_related('target_user', 'requesting_user')
+        .order_by('mark_event_date')      # ← oldest first
+    )
+
+
+    by_user = defaultdict(list)
+    for m in marks:
+        requester_name = name_map.get(m.requesting_user.id, m.requesting_user.username)
+        target_name    = name_map.get(m.target_user.id,    m.target_user.username)
+        by_user[target_name].append({
+            'Requesting Member': requester_name,
+            'Reason'      : m.mark_event_title,
+            'Mark Value'       : m.mark_value,
+        })
+
+    max_rows = max((len(events) for events in by_user.values()), default=0)
+
+    # 4. Create workbook & sheet
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'New Member Marks'
+
+    # 5. Color palette for each member block
+    palette = ['FFC7CE','C6EFCE','FFEB9C','9BC2E6','D9D9D9']
+
+    # 6. Layout rows
+    HEADER_ROW = 1
+    TOTAL_ROW  = 2
+    SUBHDR_ROW = 3
+    DATA_START = 4
+
+    # 7. Define sub‑columns in desired order
+    subheaders = ['Requesting Member','Reason','Mark Value']
+
+    # 8. Write each member’s block
+    for idx, member_name in enumerate(sorted(by_user)):
+        col0 = idx * 4 + 1
+        cols = [col0 + i for i in range(3)]
+        spacer = col0 + 3
+        fill    = PatternFill('solid', fgColor=palette[idx % len(palette)])
+
+        # Member name header
+        ws.merge_cells(start_row=HEADER_ROW, start_column=col0,
+                       end_row=HEADER_ROW,   end_column=cols[-1])
+        hcell = ws.cell(row=HEADER_ROW, column=col0, value=member_name)
+        hcell.fill = fill
+        hcell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Total row
+        total_points = sum(item['Mark Value'] for item in by_user[member_name])
+        ws.merge_cells(start_row=TOTAL_ROW, start_column=col0,
+                       end_row=TOTAL_ROW,   end_column=cols[-1])
+        tcell = ws.cell(row=TOTAL_ROW, column=col0, value=f"Total: {total_points}")
+        tcell.fill = fill
+        tcell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Sub‑headers
+        for j, hdr in enumerate(subheaders):
+            cell = ws.cell(row=SUBHDR_ROW, column=cols[j], value=hdr)
+            cell.fill = fill
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Data rows
+        for r, event in enumerate(by_user[member_name]):
+            for j, key in enumerate(subheaders):
+                ws.cell(row=DATA_START + r, column=cols[j], value=event[key])
+
+        # leave the 5th column blank
+
+    # 9. Auto‑size & wrap
+    block_size = len(subheaders) + 1    # 3 data cols + 1 spacer = 4
+    for idx, member_name in enumerate(by_user):
+        base = idx * block_size + 1
+
+        # size each data column
+        for j, hdr in enumerate(subheaders):
+            col_idx = base + j
+            letter  = get_column_letter(col_idx)
+
+            if hdr == 'Reason':
+                # wrap text
+                for row in range(SUBHDR_ROW, DATA_START + max_rows):
+                    ws.cell(row=row, column=col_idx).alignment = Alignment(wrap_text=True)
+                ws.column_dimensions[letter].width = 30
+            else:
+                # auto‑fit width
+                maxlen = max(
+                    len(str(ws.cell(row=r, column=col_idx).value or ''))
+                    for r in range(HEADER_ROW, DATA_START + max_rows)
+                )
+                ws.column_dimensions[letter].width = maxlen + 2
+
+        # spacer column
+        spacer_col = base + len(subheaders)
+        ws.column_dimensions[get_column_letter(spacer_col)].width = 2
+
+    # 10. Output
+    buffer = io.BytesIO()
+    wb.save(buffer)
+    buffer.seek(0)
+    response = HttpResponse(
+        buffer.getvalue(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=approved_newmember_marks.xlsx'
+    return response

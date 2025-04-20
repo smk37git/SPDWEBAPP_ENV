@@ -6,5 +6,6 @@ urlpatterns = [
     path('marks/', views.newmember_marks_dashboard, name="newmember_marks_dashboard"),
     path('request/', views.newmember_request, name="newmember_request"),
     path('approve/', views.newmember_approve, name="newmember_approve"),
-     path('history/<int:user_id>/', views.newmember_mark_history, name='newmember_mark_history'),
+    path('history/<int:user_id>/', views.newmember_mark_history, name='newmember_mark_history'),
+    path('export-newmember-marks/', views.export_approved_newmember_marks, name='export_newmember_marks'),
 ]
