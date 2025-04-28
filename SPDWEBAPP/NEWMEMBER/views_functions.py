@@ -38,11 +38,24 @@ def calculate_member_marks(new_members, start_date=None, end_date=None):
     
     return sorted(new_members_progress, key=lambda x: x['total_marks'])
 
+
+from django.db.models import Q
+
 def get_user_submitted_marks(user, start_date=None, end_date=None):
     """Get marks submitted by a specific user within date range, excluding approved marks"""
+    # Get the date one month ago
+    one_month_ago = timezone.now() - timedelta(days=14)
+
     marks_query = NewMember_Mark_Event_and_Request.objects.filter(
         requesting_user=user,
         mark_approval_status__in=['requested', 'denied']
+    )
+    
+    # Filter out denied marks older than one month
+    marks_query = marks_query.filter(
+        ~(
+            Q(mark_approval_status='denied') & Q(mark_event_date__lt=one_month_ago)
+        )
     )
     
     if start_date and end_date:
