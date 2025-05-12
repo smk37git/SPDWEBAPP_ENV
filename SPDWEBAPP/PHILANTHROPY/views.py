@@ -15,15 +15,15 @@ import calendar
 @requires_role('ACTIVE')
 def philanthropy_dashboard(request):
     #import functions to collect context
-    from .views_functions import get_semester_dates, get_available_semesters
+    from .views_functions import get_academic_year_dates, get_available_academic_years
     from .views_functions import get_user_events_and_total_hours, collect_philanthropy_statistics
-    # Get selected semester from query params or default to current
-    selected_year = int(request.GET.get('year', timezone.now().year))
-    is_spring = request.GET.get('is_spring', str(timezone.now().month <= 6)).lower() == 'true'
-    
-    # Get date range for selected semester
-    start_date, end_date = get_semester_dates(selected_year, is_spring)
-    
+
+    # Get selected academic year start (e.g. “2024” for 2024-2025 AY)
+    selected_year = int(request.GET.get('year', 
+        (timezone.now().year - 1) if timezone.now().month <= 6 else timezone.now().year
+    ))
+    start_date, end_date = get_academic_year_dates(selected_year)
+
     # Get all brothers with the 'Active Member' role
     active_brothers = Brother_Profile.objects.filter(
         roles__name='ACTIVE'
@@ -40,9 +40,6 @@ def philanthropy_dashboard(request):
     user_total_hours = 0
     
     user_events, user_total_hours = get_user_events_and_total_hours(request,start_date, end_date)  
-    # Get available semesters for selection
-    available_semesters = get_available_semesters()
-
     context = {
         'brothers_progress': sorted(brothers_progress, key=lambda x: x['total_hours'], reverse=True),
         'total_chapter_hours': total_chapter_hours,
@@ -52,10 +49,9 @@ def philanthropy_dashboard(request):
         'user_events': user_events,
         'user_total_hours': user_total_hours,
         'is_philanthropy_chair': is_philanthropy_chair,
-        'available_semesters': available_semesters,
+        'available_years': get_available_academic_years(),
         'selected_year': selected_year,
-        'is_spring': is_spring,
-        'semester_label': f"{'Spring' if is_spring else 'Fall'} {selected_year}"
+        'year_label': f"{selected_year}–{selected_year+1} Academic Year"
     }
     
     return render(request, 'philanthropy_dashboard.html', context)
@@ -103,14 +99,13 @@ def brother_philanthropy_history(request, user_id):
         brother = Brother_Profile.objects.select_related('user').get(user_id=user_id)
         
         #grabs and sorts all of the brothers philanthropy history, outputs the total approved hours per semester
-        semester_event_totals, lifetime_event_total = retrieve_individual_brother_history(brother, user_id)
-        
-        
+        academic_year_totals, lifetime_event_total = retrieve_individual_brother_history(brother, user_id)
         context = {
             'brother': brother,
-            'semester_totals': semester_event_totals,
+            'academic_year_totals': academic_year_totals,
             'lifetime_total': lifetime_event_total
         }
+
         
         return render(request, 'philanthropy_brother_history.html', context)
         

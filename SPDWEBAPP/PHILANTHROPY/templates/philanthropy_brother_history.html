@@ -13,16 +13,16 @@
         <a href="{% url 'philanthropy_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
     </div>
 
-    {% for semester in semester_totals %}
+    {% for ay in academic_year_totals %}
     <div class="profile-card mb-4">
-        <h3 class="homepage-subheading">{{ semester.semester }}</h3>
+        <h3 class="homepage-subheading">{{ ay.start }}–{{ ay.start|add:1 }} Academic Year</h3>
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="text-muted mb-0">Total Hours: {{ semester.total_hours }}</h4>
+            <h4 class="text-muted mb-0">Total Hours: {{ ay.total_hours }}</h4>
             <span class="badge {% if semester.total_hours >= 5 %}bg-success{% else %}bg-warning{% endif %}">
-                {% if semester.total_hours >= 5 %}
+                {% if ay.total_hours >= 5 %}
                     Requirement Met
                 {% else %}
-                    {{ 5|hours_remaining:semester.total_hours }} hours needed
+                    {{ 5|hours_remaining:ay.total_hours }} hours needed
                 {% endif %}
             </span>
         </div>
@@ -37,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for event in semester.events %}
+                    {% for event in ay.events %}
                     <tr {% if forloop.counter|divisibleby:2 %}style="background-color: #f9f9f9;"{% endif %}>
                         <td style="padding: 15px 20px;">{{ event.philanthropy_event_title }}</td>
                         <td style="padding: 15px 20px;">{{ event.philanthropy_event_hours }}</td>

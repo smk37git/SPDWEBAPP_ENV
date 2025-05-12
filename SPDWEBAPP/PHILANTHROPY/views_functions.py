@@ -5,37 +5,19 @@ from django.utils import timezone
 from django.db.models import Sum
 
 #views def philanthropy_dashboard(request):
-def get_semester_dates(year, is_spring):
-    """Helper function to get semester date range"""
-    if is_spring:
-        start_date = date(year, 1, 1)
-        end_date = date(year, 6, 30)
-    else:
-        start_date = date(year, 7, 1)
-        end_date = date(year, 12, 31)
-    return start_date, end_date
+def get_academic_year_dates(start_year):
+    """Academic year runs Jul 1 of start_year through Jun 30 of start_year+1."""
+    start = date(start_year, 7, 1)
+    end   = date(start_year + 1, 6, 30)
+    return start, end
 
-def get_available_semesters():
-    """Get list of available semesters (3 years back)"""
-    current_date = timezone.now().date()
-    current_year = current_date.year
-    is_spring = current_date.month <= 6
-    
-    semesters = []
-    for year in range(current_year, current_year - 3, -1):
-        semesters.append({'year': year, 'semester': 'Spring', 'is_spring': True})
-        semesters.append({'year': year, 'semester': 'Fall', 'is_spring': False})
-    
-    # Sort so most recent is first and mark current semester
-    semesters.sort(key=lambda x: (x['year'], not x['is_spring']), reverse=True)
-    
-    # Mark current semester
-    for semester in semesters:
-        if semester['year'] == current_year and semester['is_spring'] == is_spring:
-            semester['current'] = True
-            break
-    
-    return semesters
+def get_available_academic_years(past=3):
+    """Last `past` academic years, most recent first."""
+    today = timezone.now().date()
+    # if before July, current academic year started last year
+    curr_start = today.year - 1 if today.month <= 6 else today.year
+    years = [curr_start - i for i in range(past)]
+    return years  # e.g. [2024, 2023, 2022]
 
 def get_user_events_and_total_hours(request,start_date, end_date):
         user_events = Philanthropy_Hours_Event_and_Request.objects.filter(
@@ -103,47 +85,37 @@ def philanthropy_approval_POST(request):
 
 # view def brother_philanthropy_history(request, user_id):
 def retrieve_individual_brother_history(brother, user_id):
-    '''
-    view def brother_philanthropy_history(request, user_id):
+    """
+    Grabs all approved events for a brother, groups them by academic year
+    (Jul 1–Jun 30), and returns a list plus lifetime total.
+    """
+    from .models import Philanthropy_Hours_Event_and_Request
 
-    Basically, this goes and grabs all of the events a brother has ever submitted, 
-    looks for the events that have been approved, groups them by semester, 
-    and pushes it out to be used as context.
-    
-    '''
     events = Philanthropy_Hours_Event_and_Request.objects.filter(
-            user_id=user_id,
-            philanthropy_approval_status='approved'
+        user_id=user_id,
+        philanthropy_approval_status='approved'
     ).order_by('-philanthropy_event_date')
-    
-    # Calculate semester totals
-    semester_totals = {}
-    
-    for event in events:
-        year = event.philanthropy_event_date.year
-        is_spring = event.philanthropy_event_date.month <= 6
-        semester_key = f"{'Spring' if is_spring else 'Fall'} {year}"
-        
-        if semester_key not in semester_totals:
-            semester_totals[semester_key] = {
-                'total_hours': 0,
-                'events': []
-            }
-        
-        semester_totals[semester_key]['total_hours'] += event.philanthropy_event_hours
-        semester_totals[semester_key]['events'].append(event)
-    
-    # Convert to list and sort by most recent semester
-    semester_totals = [
-        {'semester': k, **v} 
-        for k, v in semester_totals.items()
-    ]
-    semester_totals.sort(key=lambda x: (
-        int(x['semester'].split()[-1]), 
-        'Spring' in x['semester']
-    ), reverse=True)
-    
-    # Calculate lifetime total
-    lifetime_total = sum(item['total_hours'] for item in semester_totals)
 
-    return semester_totals, lifetime_total
+    # bucket by academic year start
+    ay_totals = {}
+    for ev in events:
+        dt = ev.philanthropy_event_date
+        # if month ≤ 6, it belongs to the previous academic year
+        start_year = dt.year - 1 if dt.month <= 6 else dt.year
+        key = f"{start_year}-{start_year+1}"
+        if key not in ay_totals:
+            ay_totals[key] = {'start': start_year, 'total_hours': 0, 'events': []}
+        ay_totals[key]['total_hours'] += ev.philanthropy_event_hours
+        ay_totals[key]['events'].append(ev)
+
+    # convert to list and sort descending by start_year
+    academic_year_totals = sorted(
+        ay_totals.values(),
+        key=lambda x: x['start'],
+        reverse=True
+    )
+
+    # lifetime total
+    lifetime_total = sum(item['total_hours'] for item in academic_year_totals)
+
+    return academic_year_totals, lifetime_total
