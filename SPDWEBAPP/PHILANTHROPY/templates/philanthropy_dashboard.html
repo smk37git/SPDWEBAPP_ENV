@@ -14,16 +14,14 @@
         <h2 class="homepage-heading">Philanthropy Dashboard</h2>
         
         <div class="semester-selector mb-3">
-            <h3 class="homepage-subheading">{{ semester_label }}</h3>
+            <h3 class="homepage-subheading">{{ year_label }}</h3>
             <div class="semester-dropdown">
                 <select class="form-select semester-select" onchange="window.location.href=this.value">
-                    {% for semester in available_semesters %}
-                        <option 
-                            value="?year={{ semester.year }}&is_spring={{ semester.is_spring|lower }}"
-                            {% if semester.year == selected_year and semester.is_spring == is_spring %}selected{% endif %}
-                        >
-                            {{ semester.semester }} {{ semester.year }}
-                            {% if semester.current %}(Current){% endif %}
+                    {% for y in available_years %}
+                        <option value="?year={{ y }}"
+                            {% if y == selected_year %}selected{% endif %}>
+                            {{ y }}–{{ y|add:1 }} Academic Year
+                            {% if y == selected_year %}(Current){% endif %}
                         </option>
                     {% endfor %}
                 </select>
@@ -89,7 +87,7 @@
                                         </tr>
                                         {% empty %}
                                         <tr>
-                                            <td colspan="4" class="text-center">No events submitted for this semester</td>
+                                            <td colspan="4" class="text-center">No events submitted for this academic year.</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
