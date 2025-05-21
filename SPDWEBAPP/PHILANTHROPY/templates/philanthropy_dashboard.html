@@ -45,7 +45,7 @@
                 <strong>YOUR TOTAL HOURS</strong>
             </div>
             <div class="progress-value ms-4" style="font-size: 24px; color: #c40000; font-weight: bold; width: 60%;">
-                {{ user_total_hours|floatformat:1 }} / 5.0 hours
+                {{ user_total_hours|floatformat:1 }} / 10.0 hours
             </div>
         </div>
 
@@ -102,17 +102,17 @@
 
     <!-- Chapter Progress Overview -->
     <div class="profile-card mb-4">
-        <h2 class="homepage-subheading">Chapter Progress - {{ semester_label }}</h2>
+        <h2 class="homepage-subheading">Chapter Progress - {{ year_label }}</h2>
         <div class="centered-table">
             <table class="table keep-structure">
                 <tbody>
                     <tr>
-                        <th>Brothers Meeting 5 Hour Goal</th>
+                        <th>Brothers Meeting 10 Hour Goal</th>
                         <td data-label="Brothers Meeting Goal">{{ members_meeting_goal }} / {{ total_active_members }}</td>
                     </tr>
                     <tr>
                         <th>Average Hours per Brother</th>
-                        <td data-label="Average Hours">{{ avg_hours_per_brother|floatformat:1 }} / 5.0 hours</td>
+                        <td data-label="Average Hours">{{ avg_hours_per_brother|floatformat:1 }} / 10.0 hours</td>
                     </tr>
                     <tr>
                         <th>Total Chapter Hours</th>
@@ -146,11 +146,11 @@
                         </td>
                         <td data-label="Total Hours">{{ brother.total_hours|floatformat:1 }}</td>
                         <td data-label="Status">
-                            <span class="badge {% if brother.total_hours >= 5 %}bg-success{% else %}bg-warning{% endif %}">
-                                {% if brother.total_hours >= 5 %}
+                            <span class="badge {% if brother.total_hours >= 10 %}bg-success{% elif brother.total_hours >= 5 %}bg-warning{% else %}bg-critical{% endif %}">
+                                {% if brother.total_hours >= 10 %}
                                     Complete
                                 {% else %}
-                                    {{ 5|hours_remaining:brother.total_hours|floatformat:1 }} hours remaining
+                                    {{ 10|hours_remaining:brother.total_hours|floatformat:1 }} hours remaining
                                 {% endif %}
                             </span>
                         </td>

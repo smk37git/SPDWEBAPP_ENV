@@ -18,11 +18,11 @@
         <h3 class="homepage-subheading">{{ ay.start }}–{{ ay.start|add:1 }} Academic Year</h3>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="text-muted mb-0">Total Hours: {{ ay.total_hours }}</h4>
-            <span class="badge {% if semester.total_hours >= 5 %}bg-success{% else %}bg-warning{% endif %}">
-                {% if ay.total_hours >= 5 %}
+            <span class="badge badge {% if ay.total_hours >= 10 %}bg-success{% elif ay.total_hours >= 5 %}bg-warning{% else %}bg-critical{% endif %}">
+                {% if ay.total_hours >= 10 %}
                     Requirement Met
                 {% else %}
-                    {{ 5|hours_remaining:ay.total_hours }} hours needed
+                    {{ 10|hours_remaining:ay.total_hours }} hours needed
                 {% endif %}
             </span>
         </div>

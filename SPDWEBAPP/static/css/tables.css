@@ -171,6 +171,11 @@
     color: white;
 }
 
+.bg-critical {
+    background-color: #dc2626;
+    color: white;
+}
+
 .member-photo {
   width: 60px;
 }
