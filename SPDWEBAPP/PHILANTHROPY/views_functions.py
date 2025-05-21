@@ -55,7 +55,7 @@ def collect_philanthropy_statistics(active_brothers, start_date, end_date):
             })
             
             total_chapter_hours += approved_hours
-            if approved_hours >= 5:
+            if approved_hours >= 10:
                 members_meeting_goal += 1
         
         return brothers_progress, total_chapter_hours, members_meeting_goal
