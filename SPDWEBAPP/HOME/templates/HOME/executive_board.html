@@ -79,7 +79,7 @@
     
     {% if exec_board_brothers %}
     <div class="row">
-        {% for brother in exec_board_brothers %}
+        {% for position, brother in exec_board_brothers %}
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card exec-card shadow">
                 <div class="card-body text-center">
@@ -90,9 +90,7 @@
                     
                     <h4 class="card-title">{{ brother.firstName }} {{ brother.lastName }}</h4>
                     
-                    {% if brother.position %}
-                        <h5 class="position-title">{{ brother.position }}</h5>
-                    {% endif %}
+                    <h5 class="position-title">{{ position }}</h5>
                     
                     <div class="bio-info">
                         {% if brother.majors.all %}
