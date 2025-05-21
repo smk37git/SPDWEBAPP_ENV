@@ -24,39 +24,31 @@ def rush(request):
   return render(request, 'HOME/rush.html')
 
 def executive_board(request):
-    # Check if the role exists and get its exact name
-    exec_role = Role.objects.filter(name__iexact='EXEC').first()
-    
-    # Get all brothers with the Executive Board role using the correct role object
-    exec_board_brothers = Brother_Profile.objects.filter(roles=exec_role).order_by('lastName')
-    
-    # Create a mapping of specific executive board positions with their order
-    exec_positions = {
-        'Hunter Wilson': {'title': 'President', 'order': 1},
-        'Mitchell Allen': {'title': 'Internal Vice President', 'order': 2},
-        'Sebastian Main': {'title': 'External Vice President', 'order': 3},
-        'Ryaan Biddle': {'title': 'Director of Chapter Affairs', 'order': 4},
-        'Cole Herman': {'title': 'Director of Business', 'order': 5},
-        'Ryan Sanner': {'title': 'Director of Recruitment', 'order': 6},
-        'Jonas Nazario': {'title': 'Director of Philanthropy', 'order': 7},
-        'Spencer Hermann': {'title': 'Director of Risk Management', 'order': 8},
-        'Pano Tsiftilis': {'title': 'Director of Social Affairs', 'order': 9}
-    }
-    
-    # Add position and order attributes to each brother
-    brothers_list = []
-    for brother in exec_board_brothers:
-        full_name = f"{brother.firstName} {brother.lastName}"
-        position_info = exec_positions.get(full_name, {'title': 'Executive Member', 'order': 999})
-        brother.position = position_info['title']
-        brother.position_order = position_info['order']
-        brothers_list.append(brother)
-    
-    # Sort the brothers list by position order
-    brothers_list.sort(key=lambda x: x.position_order)
-    
+    # Define a desired display order for executive roles
+    exec_role_order = [
+        ('PRESIDENT', 'President'),
+        ('INT_VP', 'Internal Vice President'),
+        ('EXT_VP', 'External Vice President'),
+        ('AFFAIRS_DIRECTOR', 'Director of Chapter Affairs'),
+        ('BUSINESS_MGR', 'Director of Business'),
+        ('RECRUITMENT_CHAIR', 'Director of Recruitment'),
+        ('PHIL_CHAIR', 'Director of Philanthropy'),
+        ('RISK_MGR', 'Director of Risk Management'),
+        ('SOCIAL_CHAIR', 'Director of Social Affairs'),
+    ]
+
+    brothers_by_position = []
+
+    for role_code, role_display in exec_role_order:
+        role = Role.objects.filter(name=role_code).first()
+        if role:
+            brothers = Brother_Profile.objects.filter(roles=role)
+            for brother in brothers:
+                brother.position = role_display
+                brothers_by_position.append((role_display, brother))
+
     context = {
-        'exec_board_brothers': brothers_list,
-        'page_title': 'Executive Board'
+        'exec_board_brothers': brothers_by_position,
+        'page_title': 'Executive Board',
     }
     return render(request, 'HOME/executive_board.html', context)
