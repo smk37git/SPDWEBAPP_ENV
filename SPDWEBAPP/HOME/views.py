@@ -35,12 +35,12 @@ def executive_board(request):
         'Hunter Wilson': {'title': 'President', 'order': 1},
         'Mitchell Allen': {'title': 'Internal Vice President', 'order': 2},
         'Sebastian Main': {'title': 'External Vice President', 'order': 3},
-        'Ryaan Biddle': {'title': 'Secretary', 'order': 4},
-        'Cole Herman': {'title': 'Business Manager', 'order': 5},
-        'Ryan Sanner': {'title': 'Rush Chair', 'order': 6},
-        'Lucas Brown': {'title': 'Philanthropy Chair', 'order': 7},
-        'Barrett Keegan': {'title': 'Risk Manager', 'order': 8},
-        'Matthew Schupp': {'title': 'Social Chair', 'order': 9}
+        'Ryaan Biddle': {'title': 'Director of Chapter Affairs', 'order': 4},
+        'Cole Herman': {'title': 'Director of Business', 'order': 5},
+        'Ryan Sanner': {'title': 'Director of Recruitment', 'order': 6},
+        'Jonas Nazario': {'title': 'Director of Philanthropy', 'order': 7},
+        'Spencer Hermann': {'title': 'Director of Risk Management', 'order': 8},
+        'Pano Tsiftilis': {'title': 'Director of Social Affairs', 'order': 9}
     }
     
     # Add position and order attributes to each brother
