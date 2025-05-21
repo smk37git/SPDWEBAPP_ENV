@@ -13,8 +13,14 @@ class Role(models.Model):
         ('ALUMNI', 'Alumni'),
         ('NEW_MEMBER', 'New Member'),
         ('SOCIAL_CHAIR', 'Social Chair'),
-        ('RUSH_CHAIR', 'Rush Chair'),
+        ('RECRUITMENT_CHAIR', 'Recruitment Chair'),
         ('PHIL_CHAIR', 'Philanthropy Chair'),
+        ('RISK_MGR', 'Risk Manager'),
+        ('PRESIDENT', 'President'),
+        ('INT_VP', 'Internal VP'),
+        ('EXT_VP', 'External VP'),
+        ('BUSINESS_MGR', 'Business Manager'),
+        ('AFFAIRS_DIRECTOR', 'Director of Chapter Affairs'),
     ]
 
     name = models.CharField(max_length=50, choices=ROLE_CHOICES, unique=True)
