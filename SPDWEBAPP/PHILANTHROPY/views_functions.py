@@ -78,7 +78,7 @@ def philanthropy_approval_POST(request):
                     event.philanthropy_event_submission_approval_date = timezone.now()
                 
                 event.save()
-                messages.success(request, f'Event successfully {action}d!')
+                messages.success(request, f"Event successfully {'approved' if action == 'approve' else 'denied'}!")
                 
             except Philanthropy_Hours_Event_and_Request.DoesNotExist:
                 messages.error(request, 'Event not found')
