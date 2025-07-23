@@ -147,7 +147,7 @@ def process_mark_approval(request, mark_id, action):
             mark.mark_submission_approval_date = timezone.now()
         
         mark.save()
-        return True, f'Mark successfully {action}d!'
+        return True, f"Mark(s) successfully {'approved' if action == 'approve' else 'denied'}!"
     except NewMember_Mark_Event_and_Request.DoesNotExist:
         return False, 'Mark not found'
     except Exception as e:

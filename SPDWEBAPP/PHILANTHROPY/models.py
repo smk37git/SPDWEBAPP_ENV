@@ -11,29 +11,29 @@ class Philanthropy_Hours_Event_and_Request(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    philanthropy_event_title = models.CharField(max_length=100, help_text="short title of the event")
+    philanthropy_event_title = models.CharField(max_length=100, help_text="Short description of the event")
     philanthropy_approval_status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='requested',
-        help_text="choice between approved, requested, and denied"
+        help_text="Event status: approved, requested, or denied"
     )
     philanthropy_event_hours = models.IntegerField()
     philanthropy_event_date = models.DateField(help_text="The date the event occurred")
     philanthropy_event_submission_request_date = models.DateTimeField(
         auto_now_add=True,
-        help_text="When the event is submitted this updates"
+        help_text="The date the event was submitted"
     )
     philanthropy_event_submission_approval_date = models.DateTimeField(
         null=True,
         blank=True,
-        help_text="When the event is approved this updates"
+        help_text="The date the event was approved/denied"
     )
     philanthropy_event_approver_name = models.CharField(
         max_length=100,
         null=True,
         blank=True,
-        help_text="This is the name of the person who approved the event"
+        help_text="The name of the person who approved/denied the event"
     )
 
     def __str__(self):
