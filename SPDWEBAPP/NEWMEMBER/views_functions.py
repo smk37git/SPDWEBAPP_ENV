@@ -143,6 +143,8 @@ def process_mark_approval(request, mark_id, action):
             mark.mark_submission_approval_date = timezone.now()
         elif action == 'deny':
             mark.mark_approval_status = 'denied'
+            mark.mark_approver_name = f"{request.user.brother_profile.firstName} {request.user.brother_profile.lastName}"
+            mark.mark_submission_approval_date = timezone.now()
         
         mark.save()
         return True, f'Mark successfully {action}d!'
