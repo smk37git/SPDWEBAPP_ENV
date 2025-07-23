@@ -74,6 +74,8 @@ def philanthropy_approval_POST(request):
                     event.philanthropy_event_submission_approval_date = timezone.now()
                 elif action == 'deny':
                     event.philanthropy_approval_status = 'denied'
+                    event.philanthropy_event_approver_name = f"{request.user.brother_profile.firstName} {request.user.brother_profile.lastName}"
+                    event.philanthropy_event_submission_approval_date = timezone.now()
                 
                 event.save()
                 messages.success(request, f'Event successfully {action}d!')
