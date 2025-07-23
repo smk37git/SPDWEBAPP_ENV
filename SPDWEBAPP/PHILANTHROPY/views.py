@@ -61,10 +61,14 @@ def philanthropy_dashboard(request):
 def philanthropy_request(request):
     if request.method == 'POST':
         try:
+            hours = float(request.POST['hours'])
+            if hours < 0.5:
+                raise ValueError("Must request at least 0.5 hours.")
+            
             new_event = Philanthropy_Hours_Event_and_Request(
                 user=request.user,
                 philanthropy_event_title=request.POST['event_title'],
-                philanthropy_event_hours=float(request.POST['hours']),
+                philanthropy_event_hours=hours,
                 philanthropy_event_date=request.POST['event_date'],
                 philanthropy_approval_status='requested'
             )
