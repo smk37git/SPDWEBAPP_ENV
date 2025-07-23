@@ -25,24 +25,24 @@ class NewMember_Mark_Event_and_Request(models.Model):
         max_length=20,
         choices=STATUS_CHOICES,
         default='requested',
-        help_text="choice between approved, requested, and denied"
+        help_text="Mark Status: approved, requested, or denied"
     )
     mark_value = models.IntegerField(help_text="Can be positive or negative")
     mark_event_date = models.DateField(help_text="The date the mark was issued")
     mark_submission_request_date = models.DateTimeField(
         auto_now_add=True,
-        help_text="When the mark is submitted this updates"
+        help_text="The date the mark was submitted"
     )
     mark_submission_approval_date = models.DateTimeField(
         null=True,
         blank=True,
-        help_text="When the mark is approved this updates"
+        help_text="The date the mark was approved/denied"
     )
     mark_approver_name = models.CharField(
         max_length=100,
         null=True,
         blank=True,
-        help_text="This is the name of the person who approved the mark"
+        help_text="The name of the person who approved/denied the mark"
     )
 
     def __str__(self):
