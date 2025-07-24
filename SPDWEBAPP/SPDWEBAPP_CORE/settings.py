@@ -194,7 +194,7 @@ if ENVIRONMENT == 'production':
   SECURE_CONTENT_TYPE_NOSNIFF = True
   SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
   # This setting will FORCE the browser to use HTTPS, should the ssl certificate fail, this must be disabled
-  SECURE_HSTS_SECONDS = 30  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!*, recommended is 259200
+  SECURE_HSTS_SECONDS = 259200  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!*, recommended is 259200
   SECURE_HSTS_PRELOAD = True
   SECURE_HSTS_INCLUDE_SUBDOMAINS = True
   SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
