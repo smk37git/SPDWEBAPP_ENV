@@ -46,6 +46,19 @@ def roster(request):
     }
     return render(request, "AUTHENTICATE/roster.html", context)
 
+@login_required
+def alumni_roster(request):
+    Brother_Profiles = (
+        Brother_Profile.objects
+        .filter(roles__name="ALUMNI")
+        .order_by("lastName")
+        .distinct()
+    )
+    context = {
+        "Brother_Profiles": Brother_Profiles
+    }
+    return render(request, "AUTHENTICATE/roster.html", context)
+
 def loginPage(request):
     if request.method == "POST":
         username = request.POST.get('username')
