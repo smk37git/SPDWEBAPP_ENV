@@ -35,13 +35,16 @@ def dashboard(request):
 
 @login_required
 def roster(request):
-    # Sort by lastName ascending
-    Brother_Profiles = Brother_Profile.objects.all().order_by('lastName')
-    
+    Brother_Profiles = (
+        Brother_Profile.objects
+        .exclude(roles__name="ALUMNI")
+        .order_by("lastName")
+        .distinct()
+    )
     context = {
-        'Brother_Profiles': Brother_Profiles
+        "Brother_Profiles": Brother_Profiles
     }
-    return render(request, 'AUTHENTICATE/roster.html', context)
+    return render(request, "AUTHENTICATE/roster.html", context)
 
 def loginPage(request):
     if request.method == "POST":
