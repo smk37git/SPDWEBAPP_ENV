@@ -7,10 +7,14 @@ from django.contrib import messages
 from django.shortcuts import redirect
 
 def get_new_members():
-    """Get all users with NEW_MEMBER role"""
-    return Brother_Profile.objects.filter(
-        roles__name='NEW_MEMBER'
-    ).select_related('user')
+    """Get all users with NEW_MEMBER role, ordered by last name"""
+    return (
+        Brother_Profile.objects
+        .filter(roles__name="NEW_MEMBER")
+        .select_related("user")
+        .order_by("lastName")
+        .distinct()
+    )
 
 def calculate_member_marks(new_members, start_date=None, end_date=None):
     """Calculate marks for each new member within date range"""
