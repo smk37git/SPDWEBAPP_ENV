@@ -1,32 +1,28 @@
 {% load static %}
 
 {% if show_alert %}
-<!-- Clock button -->
 <button id="clockButton" onclick="toggleAlert()" 
-    style="border-radius: 100%; background: none; padding: 0; display: inline-block;">
-    <img src="{% static 'images/clock.webp' %}" alt="Clock" style="width: 90px; height: 90px; display: block; aspect-ratio: 1/1; margin: 0;">
+    style="border-radius: 50%; background: none; border: none; padding: 0; cursor: pointer;">
+    <img src="{% static 'images/clock.webp' %}" alt="DST Alert" 
+         style="width: 90px; height: 90px; display: block; aspect-ratio: 1/1;">
 </button>
 
-<!-- Background overlay -->
 <div id="overlay"></div>
 
-<!-- Animated Popup -->
 <div id="alert" class="alert-popup">
-    <p class="text-sm text-yellow-700">
-        {{ message }}
-    </p>
+    <p class="text-sm text-yellow-700">{{ message|safe }}</p>
     <button onclick="toggleAlert()" class="mt-2 p-2 bg-yellow-500 text-black rounded-lg">Close</button>
 </div>
 
-<!-- Link the CSS file -->
 <link rel="stylesheet" type="text/css" href="{% static 'css/dls_button.css' %}">
 
 <script>
 function toggleAlert() {
-    var alert = document.getElementById('alert');
-    var overlay = document.getElementById('overlay');
+    const alert = document.getElementById('alert');
+    const overlay = document.getElementById('overlay');
+    const isShowing = alert.classList.contains('show');
 
-    if (alert.classList.contains('show')) {
+    if (isShowing) {
         alert.classList.remove('show');
         overlay.classList.remove('show');
         setTimeout(() => {
@@ -36,10 +32,10 @@ function toggleAlert() {
     } else {
         alert.style.display = 'block';
         overlay.style.display = 'block';
-        setTimeout(() => {
+        requestAnimationFrame(() => {
             alert.classList.add('show');
             overlay.classList.add('show');
-        }, 10);
+        });
     }
 }
 </script>
