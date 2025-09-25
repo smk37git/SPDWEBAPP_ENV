@@ -1,18 +1,20 @@
 from django.shortcuts import render
+from .utils import get_next_dst_change
 
-# Create your views here.
-
-# Format the message so that there are linebreaks
-message = f"Daylight savings Time is on {next_change.strftime('%B %d, %Y')}. Clocks will move {direction} one hour\n\nClock will move forward an hour"
-
-# Replace newlines with <br> tags to 'copy' a linebreak
-message_with_linebreaks = message.replace('\n', '<br>')
-
-# send it back to the message
-context = {
-    'message': message_with_linebreaks,
-    'show_alert': True,
-}
-
-return render(request, 'dls_alert.html', context)
-
+def daylight_savings_alert(request):
+    """View for DST alert functionality."""
+    next_change = get_next_dst_change()
+    
+    if not next_change:
+        message = 'No upcoming Daylight Saving Time changes found.'
+    else:
+        action = ("forward" if next_change.month == 3 else "back")
+        message = (f"Daylight Saving Time is on {next_change.strftime('%B %d, %Y')}. "
+                  f"Clocks will move {action} one hour!")
+    
+    context = {
+        'message': message.replace('\n', '<br>'),
+        'show_alert': True,
+    }
+    
+    return render(request, 'dls_alert.html', context)
