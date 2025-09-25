@@ -1,32 +1,29 @@
 from django import template
 from datetime import datetime, timedelta
-from ..utils import get_next_DLS_change
-from django import template
-from datetime import datetime, timedelta
-from ..utils import get_next_DLS_change
+from ..utils import get_next_dst_change
 from ..models import DayLightSavingsAlert
 
 register = template.Library()
 
 @register.inclusion_tag('MISC/dls_alert.html')
 def dls_alert():
-    next_change = get_next_DLS_change()
-    show_alert = False
+    """Template tag for DST alert - always shows."""
+    next_change = get_next_dst_change()
+    show_alert = True  # Always show
     message = ""
-
+    
     if next_change:
-        time_until = next_change - datetime.now(next_change.tzinfo)
-        if time_until <= timedelta(days=365):
-            show_alert = True
-            is_spring = next_change.month == 3
-            direction = "forward" if is_spring else "back"
-            message = f"Daylight savings Time is on {next_change.strftime('%B %d, %Y')}.\nClocks will move {direction} one hour."
-
-    # Validate if alert is enabled in admin
+        direction = "forward" if next_change.month == 3 else "back"
+        message = (f"Next Daylight Saving Time: {next_change.strftime('%B %d, %Y')}. "
+                  f"Clocks will move {direction} one hour!")
+    else:
+        message = "Daylight Saving Time information unavailable."
+    
+    # Check admin settings for override
     try:
         alert_settings = DayLightSavingsAlert.objects.first()
         if alert_settings:
-            show_alert = show_alert and alert_settings.is_active
+            show_alert = alert_settings.is_active
             if alert_settings.name:
                 message = alert_settings.name
     except DayLightSavingsAlert.DoesNotExist:
@@ -34,6 +31,6 @@ def dls_alert():
     
     return {
         'show_alert': show_alert,
-        'message': message,
+        'message': message.replace('\n', '<br>'),
         'next_change': next_change
     }
