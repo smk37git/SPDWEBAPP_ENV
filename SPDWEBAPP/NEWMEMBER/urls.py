@@ -8,4 +8,5 @@ urlpatterns = [
     path('approve/', views.newmember_approve, name="newmember_approve"),
     path('history/<int:user_id>/', views.newmember_mark_history, name='newmember_mark_history'),
     path('export-newmember-marks/', views.export_approved_newmember_marks, name='export_newmember_marks'),
+    path('edit/<int:mark_id>/', views.newmember_edit_mark, name='newmember_edit_mark'),
 ]

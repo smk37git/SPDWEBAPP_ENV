@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 from .views_functions import *
 
 def newmember_dashboard(request):
@@ -91,12 +92,15 @@ def newmember_mark_history(request, user_id):
         )
         
         marks, total_marks = get_member_mark_history(user_id)
+
+        is_nm_board = request.user.brother_profile.roles.filter(name="NM_BOARD").exists()
         
         context = {
             'new_member': new_member,
             'marks': marks,
             'total_marks': total_marks,
-            'is_negative': total_marks < 0
+            'is_negative': total_marks < 0,
+            'is_nm_board': is_nm_board,
         }
         
         return render(request, 'newmember_marks_history.html', context)
@@ -106,6 +110,33 @@ def newmember_mark_history(request, user_id):
         return redirect('newmember_dashboard')
 
 
+
+@login_required
+def newmember_edit_mark(request, mark_id):
+    # Only NM_BOARD can edit
+    if not check_user_role(request.user, 'NM_BOARD'):
+        messages.error(request, 'Only New Member Board members can edit marks.')
+        return redirect('newmember_marks_dashboard')
+
+    mark = get_object_or_404(NewMember_Mark_Event_and_Request, id=mark_id)
+
+    if request.method == 'POST':
+        mark.mark_event_title = request.POST.get('mark_reason')
+        mark.mark_value = int(request.POST.get('mark_value'))
+        mark.mark_event_date = request.POST.get('mark_date')
+        mark.save()
+
+        messages.success(request, 'Mark updated successfully.')
+        return redirect('newmember_mark_history', user_id=mark.target_user.id)
+
+    # Prepopulate form with mark data
+    new_members = get_new_members()
+    context = {
+        'new_members': new_members,
+        'editing': True,
+        'mark': mark
+    }
+    return render(request, 'newmember_marks_request.html', context)
 
 # Code for exporting the new member marks into a spreadsheet
 import io
