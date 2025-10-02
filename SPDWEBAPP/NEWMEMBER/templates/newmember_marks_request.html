@@ -15,12 +15,17 @@
                 <label class="form-label fw-bold mb-3">Select New Members</label>
                 <div class="select-container">
                     <select name="target_users" id="target_users" class="form-select custom-select" {% if editing %} disabled {% endif %} multiple required>
-                        {% for member in new_members %}
-                            <option value="{{ member.user.id }}">
-                                {% if editing and member.user.id == mark.target_user.id %}selected{% endif %}>
-                                {{ member.firstName }} {{ member.lastName }}
+                        {% if editing %}
+                            <option value="{{ mark.target_user.id }}" selected>
+                                {{ mark.target_user.brother_profile.firstName }} {{ mark.target_user.brother_profile.lastName }}
                             </option>
-                        {% endfor %}
+                        {% else %}
+                            {% for member in new_members %}
+                                <option value="{{ member.user.id }}">
+                                    {{ member.firstName }} {{ member.lastName }}
+                                </option>
+                            {% endfor %}
+                        {% endif %}
                     </select>
                     <div class="select-help">
                         <i class="fas fa-info-circle text-muted me-2"></i>
