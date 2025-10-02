@@ -124,6 +124,8 @@ def newmember_edit_mark(request, mark_id):
         mark.mark_event_title = request.POST.get('mark_reason')
         mark.mark_value = int(request.POST.get('mark_value'))
         mark.mark_event_date = request.POST.get('mark_date')
+        mark.last_edited_by = request.user
+        mark.last_edited_at = timezone.now()
         mark.save()
 
         messages.success(request, 'Mark updated successfully.')
