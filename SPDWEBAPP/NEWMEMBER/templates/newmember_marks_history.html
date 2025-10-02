@@ -39,7 +39,7 @@
                         <td data-label="MARKS">{{ mark.mark_value }} </td>
                         <td data-lavel="DATE">{{ mark.mark_event_date|date:"M d, Y" }}</td>
                         {% if is_nm_board %}
-                            <td><a href="{% url 'newmember_edit_mark' mark.id %}" class="btn btn-sm btn-warning">Edit</a></td>
+                            <td><a href="{% url 'newmember_edit_mark' mark.id %}" class="btn btn-sm btn-success">Edit</a></td>
                         {% endif %}
                     </tr>
                     {% empty %}
