@@ -44,6 +44,13 @@ class NewMember_Mark_Event_and_Request(models.Model):
         blank=True,
         help_text="The name of the person who approved/denied the mark"
     )
+    last_edited_by = models.ForeignKey(
+        User, related_name="edited_marks", 
+        null=True,
+        blank=True, 
+        on_delete=models.SET_NULL
+    )
+    last_edited_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.mark_event_title} - {self.target_user.username} ({self.mark_value})"

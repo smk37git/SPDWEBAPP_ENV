@@ -26,6 +26,9 @@
                         <th style="color: white; padding: 15px 20px;">REASON</th>
                         <th style="color: white; padding: 15px 20px;">MARKS</th>
                         <th style="color: white; padding: 15px 20px;">DATE</th>
+                        {% if is_nm_board %}
+                            <th>Actions</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -35,6 +38,9 @@
                         <td data-label="REASON">{{ mark.mark_event_title }}</td>
                         <td data-label="MARKS">{{ mark.mark_value }} </td>
                         <td data-lavel="DATE">{{ mark.mark_event_date|date:"M d, Y" }}</td>
+                        {% if is_nm_board %}
+                            <td><a href="{% url 'newmember_edit_mark' mark.id %}" class="btn btn-sm btn-success">Edit</a></td>
+                        {% endif %}
                     </tr>
                     {% empty %}
                     <tr>
