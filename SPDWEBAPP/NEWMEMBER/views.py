@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from .views_functions import *
+from django.contrib.auth.models import User
 
 def newmember_dashboard(request):
     return render(request, 'newmember_dashboard.html')
@@ -124,6 +125,16 @@ def newmember_edit_mark(request, mark_id):
         mark.mark_event_title = request.POST.get('mark_reason')
         mark.mark_value = int(request.POST.get('mark_value'))
         mark.mark_event_date = request.POST.get('mark_date')
+
+        new_target_id = request.POST.get('target_users')
+        if new_target_id and str(mark.target_user.id) != new_target_id:
+            try:
+                new_target_user = User.objects.get(id=new_target_id)
+                mark.target_user = new_target_user
+            except User.DoesNotExist:
+                messages.error(request, "Invalid target user selected.")
+                return redirect('newmember_edit_mark', mark_id=mark.id)
+
         mark.last_edited_by = request.user
         mark.last_edited_at = timezone.now()
         mark.save()
