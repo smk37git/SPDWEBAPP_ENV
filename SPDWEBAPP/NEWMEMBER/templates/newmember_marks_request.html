@@ -14,20 +14,12 @@
             <div class="mb-4">
                 <label class="form-label fw-bold mb-3">Select New Members</label>
                 <div class="select-container">
-                    <select name="target_users" id="target_users" class="form-select custom-select" {% if not editing %} multiple {% endif %} required>
-                        {% if editing %}
-                            {% for member in new_members %}
-                                <option value="{{ member.user.id }}">
-                                    {{ member.firstName }} {{ member.lastName }}
-                                </option>
-                            {% endfor %}
-                        {% else %}
-                            {% for member in new_members %}
-                                <option value="{{ member.user.id }}">
-                                    {{ member.firstName }} {{ member.lastName }}
-                                </option>
-                            {% endfor %}
-                        {% endif %}
+                    <select name="{% if editing %}target_user{% else %}target_users{% endif %}" id="target_users" class="form-select custom-select" {% if not editing %} multiple {% endif %} required>
+                        {% for member in new_members %}
+                            <option value="{{ member.user.id }}" {% if editing and member.user.id == mark.target_user.id %}selected{% endif %}>
+                                {{ member.firstName }} {{ member.lastName }}
+                            </option>
+                        {% endfor %}
                     </select>
                     {% if not editing %}
                         <div class="select-help">
