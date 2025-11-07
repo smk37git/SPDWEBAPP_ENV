@@ -54,6 +54,20 @@
     margin-left: auto;
 }
 
+/* Used to align the login button to the right*/
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+@media (min-width: 768px){
+    .nav-item.login-align-right {
+    margin-left: auto;
+    }
+}
+
+
 
 /* Divider Styling */
 .nav-item.separator {
