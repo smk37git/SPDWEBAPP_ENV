@@ -35,6 +35,13 @@ class Philanthropy_Hours_Event_and_Request(models.Model):
         blank=True,
         help_text="The name of the person who approved/denied the event"
     )
+    last_edited_by = models.ForeignKey(
+        User, related_name="edited_philanthropy_events", 
+        null=True,
+        blank=True, 
+        on_delete=models.SET_NULL
+    )
+    last_edited_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.philanthropy_event_title} - {self.user.username}"

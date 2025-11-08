@@ -101,13 +101,15 @@ def brother_philanthropy_history(request, user_id):
     from .views_functions import retrieve_individual_brother_history
     try:
         brother = Brother_Profile.objects.select_related('user').get(user_id=user_id)
-        
+        is_philanthropy_chair = request.user.brother_profile.roles.filter(name="PHIL_CHAIR").exists()
+
         #grabs and sorts all of the brothers philanthropy history, outputs the total approved hours per semester
         academic_year_totals, lifetime_event_total = retrieve_individual_brother_history(brother, user_id)
         context = {
             'brother': brother,
             'academic_year_totals': academic_year_totals,
-            'lifetime_total': lifetime_event_total
+            'lifetime_total': lifetime_event_total,
+            'is_philanthropy_chair': is_philanthropy_chair
         }
 
         
@@ -235,3 +237,33 @@ def export_approved_philanthropy_hours(request):
     )
     response['Content-Disposition'] = 'attachment; filename=approved_philanthropy_hours.xlsx'
     return response
+
+from django.shortcuts import get_object_or_404
+
+@login_required
+@requires_role('PHIL_CHAIR')
+def philanthropy_edit_event(request, event_id):
+    # Only PHIL_CHAIR can edit
+    #if not check_user_role(request.user, 'PHIL_CHAIR'):
+    #    messages.error(request, 'Only Philanthropy Chair members can edit events.')
+    #    return redirect('philanthropy_dashboard')
+
+    event = get_object_or_404(Philanthropy_Hours_Event_and_Request, id=event_id)
+
+    if request.method == 'POST':
+        event.philanthropy_event_title = request.POST.get('event_title')
+        event.philanthropy_event_hours = float(request.POST.get('hours'))
+        event.philanthropy_event_date = request.POST.get('event_date')
+
+        event.last_edited_by = request.user
+        event.last_edited_at = timezone.now()
+        event.save()
+
+        messages.success(request, 'Event updated successfully.')
+        return redirect('brother_philanthropy_history', user_id=event.user.id)
+
+    context = {
+        'editing': True,
+        'event': event
+    }
+    return render(request, 'philanthropy_request.html', context)
