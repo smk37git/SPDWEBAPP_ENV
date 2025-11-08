@@ -2,11 +2,13 @@ from django.shortcuts import render,redirect
 from AUTHENTICATE.models import * # Import Member from database
 from PARLEYPRO.pp_decorators import requires_role
 from MISC.models import AnnouncementAlert
+from .models import BannerImage
 
 # SPD AUTHENTICATE
 def home(request):
   Brother_Profiles = Brother_Profile.objects.all()
-  return render(request, 'HOME/home.html', {'Brother_Profiles': Brother_Profiles})
+  banner_image = BannerImage.objects.first()
+  return render(request, 'HOME/home.html', {'Brother_Profiles': Brother_Profiles, 'banner_image': banner_image})
 
 # Create your views here.
 def ourHistory(request):
