@@ -43,7 +43,7 @@
                     {% for event in ay.events %}
                     <tr {% if forloop.counter|divisibleby:2 %}style="background-color: #f9f9f9;"{% endif %}>
                         <td style="padding: 15px 20px;">{{ event.philanthropy_event_title }}</td>
-                        <td style="padding: 15px 20px;">{{ event.philanthropy_event_hours }}</td>
+                        <td style="padding: 15px 20px;">{{ event.philanthropy_event_hours }}{% if event.last_edited_at %} <span style="color: grey;">[EDITED]</span>{% endif %}</td>
                         <td style="padding: 15px 20px;">{{ event.philanthropy_event_date|date:"M d, Y" }}</td>
                         {% if is_philanthropy_chair %}
                         <td style="padding: 15px 20px;">
