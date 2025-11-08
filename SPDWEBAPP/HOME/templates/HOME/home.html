@@ -4,7 +4,11 @@
 {% block content %}
 
 <div class="banner">
-    <img src="{% static 'images/banner.webp' %}" alt="Fraternity Banner" class="banner-image">
+    {% if banner_image %}
+        <img src="{{ banner_image.image.url }}" alt="Fraternity Banner" class="banner-image">
+    {% else %}
+        <img src="{% static 'images/banner.webp' %}" alt="Fraternity Banner" class="banner-image">
+    {% endif %}
     <div class="banner-text">
         <h1>Welcome to ΣΦΔ</h1>
         <p>Science, Friendship, Duty</p>
