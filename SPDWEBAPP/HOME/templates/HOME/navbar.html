@@ -22,13 +22,17 @@
             <li class="nav-item">
               <a class="nav-link {% if request.path == '/executive-board/' %}active{% endif %}" href="{% url 'executive_board' %}">Executive Board</a>
             </li>
-            {% if not request.user.is_authenticated %}
-            <li class="nav-item login-align-right {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        </ul>
+        {% if not request.user.is_authenticated %}
+        <ul class="navbar-nav align-right">
+            <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'dashboard' %}">Login</a>
             </li>
-            {% endif %}
-            {% if request.user.is_authenticated %}
-            <!-- Mobile separator -->
+        </ul>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        <!-- Mobile separator -->
+        <ul class="navbar-nav">
             <li class="nav-item separator d-lg-none">
                 <span class="mobile-nav-separator"></span> <!-- Divider for mobile view -->
             </li>
@@ -51,10 +55,8 @@
             <li class="nav-item {% if request.resolver_match.url_name == 'newmember_marks_dashboard' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'newmember_marks_dashboard' %}">New Member Marks</a>
             </li>
-
-            {% endif %}
         </ul>
-        {% if request.user.is_authenticated %}
+
         <ul class="navbar-nav align-right">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle profile-dropdown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
