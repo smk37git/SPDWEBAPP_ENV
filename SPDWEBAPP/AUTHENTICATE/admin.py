@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
 from django import forms
 from .models import Brother_Profile, Role, Major, DashboardLink
+from adminsortable2.admin import SortableAdminMixin
 
 class CustomUserAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_superuser')
@@ -72,10 +73,13 @@ class Brother_ProfileAdmin(admin.ModelAdmin):
 class MajorAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
+class DashboardLinkAdmin(SortableAdminMixin, admin.ModelAdmin):
+    list_display = ('text', 'link')
+
 User  = get_user_model()
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Brother_Profile, Brother_ProfileAdmin)
 admin.site.register(Role)
 admin.site.register(Major, MajorAdmin)
-admin.site.register(DashboardLink)
+admin.site.register(DashboardLink, DashboardLinkAdmin)
