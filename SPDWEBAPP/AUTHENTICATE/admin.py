@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
 from django import forms
-from .models import Brother_Profile, Role, Major
+from .models import Brother_Profile, Role, Major, DashboardLink
 
 class CustomUserAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_superuser')
@@ -78,3 +78,4 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(Brother_Profile, Brother_ProfileAdmin)
 admin.site.register(Role)
 admin.site.register(Major, MajorAdmin)
+admin.site.register(DashboardLink)

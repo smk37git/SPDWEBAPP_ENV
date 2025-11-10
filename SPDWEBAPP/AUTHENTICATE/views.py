@@ -21,14 +21,18 @@ from MISC.models import AnnouncementAlert
 
 
 
+from .models import DashboardLink
+
 @login_required
 def dashboard(request):
     is_new_member = check_user_role(request.user, 'NEW_MEMBER')
     if (is_new_member):
         return redirect('/newmember/')
 
+    dashboard_links = DashboardLink.objects.all()
     announcements = AnnouncementAlert.objects.filter(is_active=True)
     context = {
+        'dashboard_links': dashboard_links,
         'announcements': announcements
     }
     return render(request, 'AUTHENTICATE/dashboard.html', context)
