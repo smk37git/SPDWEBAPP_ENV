@@ -78,6 +78,10 @@ class Brother_Profile(models.Model):
 class DashboardLink(models.Model):
     text = models.CharField(max_length=200, help_text='Text to display on the button')
     link = models.URLField(max_length=200, help_text='URL for the button')
+    order = models.IntegerField(default=0, db_index=True)
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return self.text
