@@ -2,13 +2,14 @@ from django.shortcuts import render,redirect
 from AUTHENTICATE.models import * # Import Member from database
 from PARLEYPRO.pp_decorators import requires_role
 from MISC.models import AnnouncementAlert
-from .models import BannerImage
+from .models import BannerImage, RushFormLink
 
 # SPD AUTHENTICATE
 def home(request):
   Brother_Profiles = Brother_Profile.objects.all()
   banner_image = BannerImage.objects.first()
-  return render(request, 'HOME/home.html', {'Brother_Profiles': Brother_Profiles, 'banner_image': banner_image})
+  rush_form_link = RushFormLink.objects.first()
+  return render(request, 'HOME/home.html', {'Brother_Profiles': Brother_Profiles, 'banner_image': banner_image, 'rush_form_link': rush_form_link})
 
 # Create your views here.
 def ourHistory(request):
@@ -22,8 +23,11 @@ def ourHistory(request):
 def codeOfEthics(request):
   return render(request, 'HOME/codeOfEthics.html')
 
+from .models import RushFormLink
+
 def rush(request):
-  return render(request, 'HOME/rush.html')
+  rush_form_link = RushFormLink.objects.first()
+  return render(request, 'HOME/rush.html', {'rush_form_link': rush_form_link})
 
 def executive_board(request):
     # Define a desired display order for executive roles
