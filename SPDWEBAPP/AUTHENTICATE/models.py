@@ -74,3 +74,10 @@ class Brother_Profile(models.Model):
                 pass
                 
         super().save(*args, **kwargs)
+
+class DashboardLink(models.Model):
+    text = models.CharField(max_length=200, help_text='Text to display on the button')
+    link = models.URLField(max_length=200, help_text='URL for the button')
+
+    def __str__(self):
+        return self.text

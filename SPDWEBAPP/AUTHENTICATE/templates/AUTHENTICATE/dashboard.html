@@ -9,39 +9,41 @@
 {% include 'MISC/announcement_alert.html' %}
 
 <div class="d-grid gap-2 col-3 mx-auto dashboard-buttons">
-
-    <a href="https://mailmissouri-my.sharepoint.com/:p:/g/personal/mtadxf_umsystem_edu/EUr798PpmPNMi5YaICLP7wgBubhQ5rdPSYvMY4e_6XRdHw?e=K06Xgv" target="_blank">
-        <button class="btn btn-primary" type="button">CALENDAR</button>
-
-    <a href="webcal://calendar.google.com/calendar/ical/5adfdaa30413e1d5fd9ccdffc12f952c0939c081cf7715cc8e5efd8afedee075%40group.calendar.google.com/public/basic.ics" target="_blank">
-        <button class="btn btn-primary" type="button">Subscribe To Calendar</button>
-
-    <a href="https://docs.google.com/spreadsheets/d/1SQu9uB0OL94LtHGoJFpglHYcO-SAt2G2XmmRNzPMajA/edit?usp=sharing" target="_blank">
-        <button class="btn btn-primary" type="button">RECRUITMENT</button>
-
-    <a href="https://drive.google.com/drive/u/1/folders/0B_5wRiZJR84sdHJFOGotOTlwREk?resourcekey=0-WA0_BwFE0YiQKc9TYeXZHw" target="_blank">
-        <button class="btn btn-primary" type="button">Google Drive</button>
-    </a>
+    {% if dashboard_links %}
+        {% for link in dashboard_links %}
+            <a href="{{ link.link }}" target="_blank">
+                <button class="btn btn-primary" type="button">{{ link.text }}</button>
+            </a>
+        {% endfor %}
+    {% else %}
+        <a href="https://mailmissouri-my.sharepoint.com/:p:/g/personal/mtadxf_umsystem_edu/EUr798PpmPNMi5YaICLP7wgBubhQ5rdPSYvMY4e_6XRdHw?e=K06Xgv" target="_blank">
+            <button class="btn btn-primary" type="button">CALENDAR</button>
+        </a>
+        <a href="webcal://calendar.google.com/calendar/ical/5adfdaa30413e1d5fd9ccdffc12f952c0939c081cf7715cc8e5efd8afedee075%40group.calendar.google.com/public/basic.ics" target="_blank">
+            <button class="btn btn-primary" type="button">Subscribe To Calendar</button>
+        </a>
+        <a href="https://docs.google.com/spreadsheets/d/1SQu9uB0OL94LtHGoJFpglHYcO-SAt2G2XmmRNzPMajA/edit?usp=sharing" target="_blank">
+            <button class="btn btn-primary" type="button">RECRUITMENT</button>
+        </a>
+        <a href="https://drive.google.com/drive/u/1/folders/0B_5wRiZJR84sdHJFOGotOTlwREk?resourcekey=0-WA0_BwFE0YiQKc9TYeXZHw" target="_blank">
+            <button class="btn btn-primary" type="button">Google Drive</button>
+        </a>
+    {% endif %}
     <a href="{% url 'philanthropy_dashboard' %}">
         <button class="btn btn-primary" type="button">Philanthropy</button>
     </a>
     <a href="{% url 'poll' %}">
         <button class="btn btn-primary" type="button">Parley Pro</button>
     </a>
-    
     <a href="{% url 'roster' %}">
         <button class="btn btn-primary" type="button">Roster</button>
     </a>
     <a href="{% url 'alumni_roster' %}">
         <button class="btn btn-primary" type="button">Alumni Roster</button>
     </a>
-    
     <a href= "{% url 'newmember_marks_dashboard'%}">
-
         <button class="btn btn-primary" type="button">New Member Marks</button>
     </a>
-
     {% dls_alert %}
-
-  </div>
+</div>
 {% endblock %}
