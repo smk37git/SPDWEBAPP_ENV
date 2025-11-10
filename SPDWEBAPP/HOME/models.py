@@ -10,3 +10,13 @@ class BannerImage(models.Model):
 
     def __str__(self):
         return  "Banner Image"
+
+class RushFormLink(models.Model):
+    link = models.URLField(max_length=200, help_text='URL for the Rush Interest Form')
+
+    def save(self, *args, **kwargs):
+        RushFormLink.objects.all().delete()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.link
