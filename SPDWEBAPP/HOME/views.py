@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from AUTHENTICATE.models import * # Import Member from database
 from PARLEYPRO.pp_decorators import requires_role
 from MISC.models import AnnouncementAlert
-from .models import BannerImage, RushFormLink
+from .models import BannerImage, RushFormLink, RushSlide
 
 # SPD AUTHENTICATE
 def home(request):
@@ -27,7 +27,8 @@ from .models import RushFormLink
 
 def rush(request):
   rush_form_link = RushFormLink.objects.first()
-  return render(request, 'HOME/rush.html', {'rush_form_link': rush_form_link})
+  rush_slides = RushSlide.objects.all()
+  return render(request, 'HOME/rush.html', {'rush_form_link': rush_form_link, 'rush_slides': rush_slides})
 
 def executive_board(request):
     # Define a desired display order for executive roles
