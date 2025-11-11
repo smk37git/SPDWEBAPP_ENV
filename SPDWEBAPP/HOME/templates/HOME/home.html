@@ -6,8 +6,6 @@
 <div class="banner">
     {% if banner_image %}
         <img src="{{ banner_image.image.url }}" alt="Fraternity Banner" class="banner-image">
-    {% else %}
-        <img src="{% static 'images/banner.webp' %}" alt="Fraternity Banner" class="banner-image">
     {% endif %}
     <div class="banner-text">
         <h1>Welcome to ΣΦΔ</h1>
@@ -30,15 +28,9 @@
         <a href="{% url 'rush' %}">
             <button class="btn btn-primary" type="button">Rush Information</button>
         </a>
-        {% if rush_form_link %}
-            <a href="{{ rush_form_link.link }}">
-                <button class="btn btn-primary" type="button">Rush Interest Form</button>
-            </a>
-        {% else %}
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQXSQ3DEu0RXphgasbFZLvmActWl01y6gVPS0OgLJzwz8beg/viewform">
-                <button class="btn btn-primary" type="button">Rush Interest Form</button>
-            </a>
-        {% endif %}
+        <a href="{% if rush_form_link %}{{ rush_form_link.link }}{% else %}https://docs.google.com/forms/d/e/1FAIpQLSfQXSQ3DEu0RXphgasbFZLvmActWl01y6gVPS0OgLJzwz8beg/viewform{% endif %}">
+            <button class="btn btn-primary" type="button">Rush Interest Form</button>
+        </a>
     </div>
     <br>
     <div class="instagram-text-container">

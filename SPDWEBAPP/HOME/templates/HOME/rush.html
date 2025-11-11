@@ -10,19 +10,13 @@
         Engineering Is Hard,
         Don't Go Through It Alone
     </h3>
-    {% if rush_form_link %}
-    <a href="{{ rush_form_link.link }}">
+
+    <a href="{% if rush_form_link %}{{ rush_form_link.link }}{% else %}https://docs.google.com/forms/d/e/1FAIpQLSfQXSQ3DEu0RXphgasbFZLvmActWl01y6gVPS0OgLJzwz8beg/viewform{% endif %}">
         <div class="text-center mt-4">
             <button class="btn btn-primary" type="button">Rush Interest Form</button>
         </div>
     </a>
-    {% else %}
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQXSQ3DEu0RXphgasbFZLvmActWl01y6gVPS0OgLJzwz8beg/viewform">
-        <div class="text-center mt-4">
-            <button class="btn btn-primary" type="button">Rush Interest Form</button>
-        </div>
-    </a>
-    {% endif %}
+    
     <br>
     <div class="text-container mx-auto">
         
@@ -81,19 +75,11 @@
             help each other out with homework, and study together, they also know how to have a good time after the hard work is finished!
             Sigma Phi Delta members regularly participate in formals, tailgates, socials, float trips, cook outs, and intramural sports.
         </p>
-        {% if rush_form_link %}
-        <a href="{{ rush_form_link.link }}">
+        <a href="{% if rush_form_link %}{{ rush_form_link.link }}{% else %}https://docs.google.com/forms/d/e/1FAIpQLSfQXSQ3DEu0RXphgasbFZLvmActWl01y6gVPS0OgLJzwz8beg/viewform{% endif %}">
             <div class="text-center mt-4">
                 <button class="btn btn-primary" type="button">Rush Interest Form</button>
             </div>
         </a>
-        {% else %}
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQXSQ3DEu0RXphgasbFZLvmActWl01y6gVPS0OgLJzwz8beg/viewform">
-            <div class="text-center mt-4">
-                <button class="btn btn-primary" type="button">Rush Interest Form</button>
-            </div>
-        </a>
-        {% endif %}
     </div>
 </div>
 
