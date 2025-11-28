@@ -5,6 +5,56 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
 
+class PClass(models.TextChoices):
+    ALPHA = 'Alpha', 'Alpha'
+    BETA = 'Beta', 'Beta'
+    GAMMA = 'Gamma', 'Gamma'
+    DELTA = 'Delta', 'Delta'
+    EPSILON = 'Epsilon', 'Epsilon'
+    ZETA = 'Zeta', 'Zeta'
+    ETA = 'Eta', 'Eta'
+    THETA = 'Theta', 'Theta'
+    IOTA = 'Iota', 'Iota'
+    KAPPA = 'Kappa', 'Kappa'
+    LAMBDA = 'Lambda', 'Lambda'
+    MU = 'Mu', 'Mu'
+    NU = 'Nu', 'Nu'
+    XI = 'Xi', 'Xi'
+    OMICRON = 'Omicron', 'Omicron'
+    PI = 'Pi', 'Pi'
+    RHO = 'Rho', 'Rho'
+    SIGMA = 'Sigma', 'Sigma'
+    TAU = 'Tau', 'Tau'
+    UPSILON = 'Upsilon', 'Upsilon'
+    PHI = 'Phi', 'Phi'
+    CHI = 'Chi', 'Chi'
+    PSI = 'Psi', 'Psi'
+    OMEGA = 'Omega', 'Omega'
+    BETA_ALPHA = 'Beta Alpha', 'Beta Alpha'
+    BETA_BETA = 'Beta Beta', 'Beta Beta'
+    BETA_GAMMA = 'Beta Gamma', 'Beta Gamma'
+    BETA_DELTA = 'Beta Delta', 'Beta Delta'
+    BETA_EPSILON = 'Beta Epsilon', 'Beta Epsilon'
+    BETA_ZETA = 'Beta Zeta', 'Beta Zeta'
+    BETA_ETA = 'Beta Eta', 'Beta Eta'
+    BETA_THETA = 'Beta Theta', 'Beta Theta'
+    BETA_IOTA = 'Beta Iota', 'Beta Iota'
+    BETA_KAPPA = 'Beta Kappa', 'Beta Kappa'
+    BETA_LAMBDA = 'Beta Lambda', 'Beta Lambda'
+    BETA_MU = 'Beta Mu', 'Beta Mu'
+    BETA_NU = 'Beta Nu', 'Beta Nu'
+    BETA_XI = 'Beta Xi', 'Beta Xi'
+    BETA_OMICRON = 'Beta Omicron', 'Beta Omicron'
+    BETA_PI = 'Beta Pi', 'Beta Pi'
+    BETA_RHO = 'Beta Rho', 'Beta Rho'
+    BETA_SIGMA = 'Beta Sigma', 'Beta Sigma'
+    BETA_TAU = 'Beta Tau', 'Beta Tau'
+    BETA_UPSILON = 'Beta Upsilon', 'Beta Upsilon'
+    BETA_PHI = 'Beta Phi', 'Beta Phi'
+    BETA_CHI = 'Beta Chi', 'Beta Chi'
+    BETA_PSI = 'Beta Psi', 'Beta Psi'
+    BETA_OMEGA = 'Beta Omega', 'Beta Omega'
+
 class Role(models.Model):
     ROLE_CHOICES = [
         ('EXEC', 'Executive Board'),
@@ -40,7 +90,7 @@ class Brother_Profile(models.Model):
     lastName = models.CharField(max_length=200, null=True)
     profileImage = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     hometown = models.CharField(max_length=200, null=True, blank=True)
-    pclass = models.CharField(max_length=50, null=True, blank=True)
+    pclass = models.CharField(max_length=50, choices=PClass.choices, null=True, blank=True)
     roles = models.ManyToManyField(Role)
     majors = models.ManyToManyField(Major, blank=True)
     
