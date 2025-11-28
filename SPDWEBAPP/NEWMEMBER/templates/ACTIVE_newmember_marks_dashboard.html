@@ -125,7 +125,15 @@
     </div>
 
     <div class="dashboard-buttons d-flex justify-content-center gap-3 mb-4">
-        <a href="{% url 'export_newmember_marks' %}" class="btn btn-primary">Export Marks</a>
+        <form method="get" action="{% url 'export_newmember_marks' %}" style="width:100%">
+            <select name="pclass" class="form-select custom-select">
+                <option value="Current">Current Class</option>
+                {% for pclass in pclasses %}
+                    <option value="{{ pclass }}">{{ pclass }} Class</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Export Marks</button>
+        </form>
     </div>
 
 </div>
