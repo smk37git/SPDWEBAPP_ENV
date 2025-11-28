@@ -126,7 +126,7 @@
 
     <div class="dashboard-buttons d-flex justify-content-center gap-3 mb-4">
         <form method="get" action="{% url 'export_newmember_marks' %}" style="width:100%">
-            <select name="pclass" class="form-select custom-select">
+            <select name="pclass" class="form-select semester-select mb-1">
                 <option value="Current">Current Class</option>
                 {% for pclass in pclasses %}
                     <option value="{{ pclass }}">{{ pclass }} Class</option>
