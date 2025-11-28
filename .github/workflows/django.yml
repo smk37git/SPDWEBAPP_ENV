@@ -27,4 +27,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run Django tests
       run: python manage.py test
-      working-directory: SPDWEBAPP_ENV
+      working-directory: SPDWEBAPP
