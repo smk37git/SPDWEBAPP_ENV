@@ -177,4 +177,5 @@
 /* Also target the anchor tags inside dashboard buttons for completeness */
 .dashboard-buttons a {
     text-align: center;
+    text-decoration: none !important; /* prevents annoying blue underline */
 }
