@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from .views_functions import *
 from django.contrib.auth.models import User
+from AUTHENTICATE.models import PClass
 
 def newmember_dashboard(request):
     return render(request, 'newmember_dashboard.html')
@@ -25,16 +26,21 @@ def newmember_marks_dashboard(request):
         analytics = get_active_member_analytics(new_members_progress)
         personal_stats = None
     
+    pclasses = Brother_Profile.objects.values_list('pclass', flat=True).distinct() # returns all unique classes in the database
+    pclass_choices = [c[0] for c in PClass.choices]
+    sorted_pclasses = sorted([pc for pc in pclasses if pc != 'Current'], key=lambda x: pclass_choices.index(x) if x in pclass_choices else float('inf'), reverse=True)
     context = {
         'new_members_progress': new_members_progress,
         'user_submitted_marks': user_submitted_marks,
         'is_active': is_active,
         'is_new_member_board': check_user_role(request.user, 'NM_BOARD'),
         'analytics': analytics,
-        'personal_stats': personal_stats
+        'personal_stats': personal_stats,
+        'pclasses': sorted_pclasses
     }
     
     template_name = 'ACTIVE_newmember_marks_dashboard.html' if is_active else 'newmember_marks_dashboard.html'
+
     return render(request, template_name, context)
 
 @login_required
@@ -163,35 +169,40 @@ from AUTHENTICATE.models import Brother_Profile
 
 @login_required
 def export_approved_newmember_marks(request):
-    # 1. Find current new‑member IDs
-    new_member_ids = Brother_Profile.objects.filter(
-        roles__name='NEW_MEMBER'
-    ).values_list('user_id', flat=True)
+    pclass = request.GET.get('pclass')
+
+    # 1. Find member IDs based on the pclass
+    if pclass == 'Current':
+        # Export only current new members
+        member_ids = Brother_Profile.objects.filter(roles__name='NEW_MEMBER').values_list('user_id', flat=True)
+    else:
+        # Export all members of the specified class, regardless of role
+        member_ids = Brother_Profile.objects.filter(pclass=pclass).values_list('user_id', flat=True)
 
     # 2. Load full names for all profiles
     profiles = Brother_Profile.objects.select_related('user')
     name_map = {bp.user_id: f"{bp.firstName} {bp.lastName}" for bp in profiles}
 
     # 3. Gather approved marks by target full name
-    marks = (NewMember_Mark_Event_and_Request.objects
+    marks = (
+        NewMember_Mark_Event_and_Request.objects
         .filter(
             mark_approval_status='approved',
-            target_user__id__in=new_member_ids
+            target_user__id__in=member_ids
         )
         .select_related('target_user', 'requesting_user')
-        .order_by('mark_event_date')      # ← oldest first
+        .order_by('mark_event_date')  # ← oldest first
     )
-
 
     by_user = defaultdict(list)
     for m in marks:
         requester_name = name_map.get(m.requesting_user.id, m.requesting_user.username)
-        target_name    = name_map.get(m.target_user.id,    m.target_user.username)
+        target_name = name_map.get(m.target_user.id, m.target_user.username)
         by_user[target_name].append({
             'Date': m.mark_event_date.strftime('%Y-%m-%d'),
             'Requesting Member': requester_name,
-            'Reason'      : m.mark_event_title,
-            'Mark Value'       : m.mark_value,
+            'Reason': m.mark_event_title,
+            'Mark Value': m.mark_value,
         })
 
     max_rows = max((len(events) for events in by_user.values()), default=0)
@@ -286,5 +297,11 @@ def export_approved_newmember_marks(request):
         buffer.getvalue(),
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
-    response['Content-Disposition'] = 'attachment; filename=approved_newmember_marks.xlsx'
+
+    if pclass:
+        filename = f'Approved_{pclass}_Class_Newmember_Marks.xlsx'
+    else:
+        filename = 'Approved_Newmember_Marks.xlsx'
+
+    response['Content-Disposition'] = f'attachment; filename={filename}'
     return response
