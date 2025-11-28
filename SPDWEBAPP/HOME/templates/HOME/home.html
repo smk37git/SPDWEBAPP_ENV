@@ -28,7 +28,7 @@
         <a href="{% url 'rush' %}">
             <button class="btn btn-primary" type="button">Rush Information</button>
         </a>
-        <a href="{% if rush_form_link %}{{ rush_form_link.link }}{% else %}https://docs.google.com/forms/d/e/1FAIpQLSfQXSQ3DEu0RXphgasbFZLvmActWl01y6gVPS0OgLJzwz8beg/viewform{% endif %}">
+        <a href="{% if rush_form_link %}{{ rush_form_link.link }}{% else %}No Link Uploaded{% endif %}">
             <button class="btn btn-primary" type="button">Rush Interest Form</button>
         </a>
     </div>

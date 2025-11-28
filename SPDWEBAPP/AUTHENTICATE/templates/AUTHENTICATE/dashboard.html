@@ -15,19 +15,6 @@
                 <button class="btn btn-primary" type="button">{{ link.text }}</button>
             </a>
         {% endfor %}
-    {% else %}
-        <a href="https://mailmissouri-my.sharepoint.com/:p:/g/personal/mtadxf_umsystem_edu/EUr798PpmPNMi5YaICLP7wgBubhQ5rdPSYvMY4e_6XRdHw?e=K06Xgv" target="_blank">
-            <button class="btn btn-primary" type="button">CALENDAR</button>
-        </a>
-        <a href="webcal://calendar.google.com/calendar/ical/5adfdaa30413e1d5fd9ccdffc12f952c0939c081cf7715cc8e5efd8afedee075%40group.calendar.google.com/public/basic.ics" target="_blank">
-            <button class="btn btn-primary" type="button">Subscribe To Calendar</button>
-        </a>
-        <a href="https://docs.google.com/spreadsheets/d/1SQu9uB0OL94LtHGoJFpglHYcO-SAt2G2XmmRNzPMajA/edit?usp=sharing" target="_blank">
-            <button class="btn btn-primary" type="button">RECRUITMENT</button>
-        </a>
-        <a href="https://drive.google.com/drive/u/1/folders/0B_5wRiZJR84sdHJFOGotOTlwREk?resourcekey=0-WA0_BwFE0YiQKc9TYeXZHw" target="_blank">
-            <button class="btn btn-primary" type="button">Google Drive</button>
-        </a>
     {% endif %}
     <a href="{% url 'philanthropy_dashboard' %}">
         <button class="btn btn-primary" type="button">Philanthropy</button>
