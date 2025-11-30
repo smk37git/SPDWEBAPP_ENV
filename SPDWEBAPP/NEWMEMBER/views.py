@@ -169,7 +169,13 @@ from AUTHENTICATE.models import Brother_Profile
 
 @login_required
 def export_approved_newmember_marks(request):
+
     pclass = request.GET.get('pclass')
+
+
+    if check_user_role(request.user, 'NEW_MEMBER') and pclass != 'Current':
+        messages.error(request, 'You do not have permission to export marks for previous classes.')
+        return redirect('newmember_marks_dashboard')
 
     # 1. Find member IDs based on the pclass
     if pclass == 'Current':
