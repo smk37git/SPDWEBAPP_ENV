@@ -128,6 +128,23 @@ def newmember_edit_mark(request, mark_id):
     mark = get_object_or_404(NewMember_Mark_Event_and_Request, id=mark_id)
 
     if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'deny':  # Handle the deny action
+            if not check_user_role(request.user, 'NME'):
+                messages.error(request, 'Only New Member Educators can deny marks.')
+                return redirect('newmember_marks_dashboard')
+            mark.mark_approval_status = 'denied'
+            mark.mark_approver_name = f"{request.user.brother_profile.firstName} {request.user.brother_profile.lastName}"
+            mark.mark_submission_approval_date = timezone.now()
+            mark.last_edited_by = request.user
+            mark.last_edited_at = timezone.now()
+            mark.save()
+
+            messages.success(request, 'Mark successfully denied.')
+            return redirect('newmember_marks_dashboard')
+
+        # Handle regular mark editing
         mark.mark_event_title = request.POST.get('mark_reason')
         mark.mark_value = int(request.POST.get('mark_value'))
         mark.mark_event_date = request.POST.get('mark_date')

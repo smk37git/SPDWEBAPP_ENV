@@ -60,9 +60,14 @@
             </div>
             
             <div class="text-center mt-5">
-                <button type="submit" class="btn btn-submit me-3">{% if editing %} Update Mark {% else %} Submit Marks {% endif %}</button>
-                <a href="{% url 'dashboard' %}" class="btn btn-cancel">Cancel</a>
-            </div>
+                    <button type="submit" class="btn btn-submit me-3" name="action" value="{% if editing %}update{% else %}submit{% endif %}">
+                        {% if editing %} Update Mark {% else %} Submit Marks {% endif %}
+                    </button>
+                    {% if editing %}
+                        <button type="submit" class="btn btn-deny" name="action" value="deny" id="deny-button">Deny</button>
+                    {% endif %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-cancel">Cancel</a>
+                </div>
         </form>
     </div>
 </div>
@@ -215,6 +220,18 @@ document.addEventListener('DOMContentLoaded', function() {
             previewList.innerHTML = '';
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const denyButton = document.getElementById('deny-button');
+    if (denyButton) {
+        denyButton.addEventListener('click', function(event) {
+            const confirmDeny = confirm("Are you sure you want to deny this mark? This action cannot be undone and will overwrite the decision of another user.");
+            if (!confirmDeny) {
+              event.preventDefault(); // Prevent the default form submission
+            }
+        });
+    }
 });
 </script>
 {% endblock %}
