@@ -71,6 +71,7 @@ class Role(models.Model):
         ('EXT_VP', 'External VP'),
         ('BUSINESS_MGR', 'Business Manager'),
         ('AFFAIRS_DIRECTOR', 'Director of Chapter Affairs'),
+        ('NME', 'New Member Educator'),
     ]
 
     name = models.CharField(max_length=50, choices=ROLE_CHOICES, unique=True)
