@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'PARLEYPRO',
     'MISC',
     'PHILANTHROPY',
+    'SOBERSHEET',
     'NEWMEMBER',
     'HOME',
 ]

@@ -1,0 +1,168 @@
+{% extends 'HOME/main.html' %}
+{% load static %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="{% static 'PHILANTHROPY/philanthropy_dashboard.css' %}" />
+
+<div class="profile-container">
+    <div class="text-center mb-4">
+        <h2 class="homepage-heading">Sober Sheet Dashboard</h2>
+
+        <div class="semester-selector mb-3">
+            <h3 class="homepage-subheading">{{ year_label }}</h3>
+            <div class="semester-dropdown">
+                <select class="form-select semester-select" onchange="window.location.href=this.value">
+                    {% for y in available_years %}
+                        <option value="?year={{ y }}" {% if y == selected_year %}selected{% endif %}>
+                            {{ y }}–{{ y|add:1 }} Academic Year
+                            {% if y == selected_year %}(Current){% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-buttons mb-4">
+        <a href="{% url 'sober_sheet_request' %}" class="btn btn-primary">Submit Sober Time</a>
+        <a href="{% url 'sober_sheet_approve' %}" class="btn btn-primary">Review Pending Submissions</a>
+    </div>
+
+    <div class="profile-card mb-4">
+        <div class="text-center mb-3">
+            <h2 class="homepage-heading">Your Progress</h2>
+        </div>
+
+        <div class="progress-container d-flex align-items-center p-3" style="background: #f8f9fa; border-radius: 8px;">
+            <div class="progress-label text-white text-center p-3" style="background: #1a1a1a; border-radius: 8px; width: 150px;">
+                <strong>YOUR TOTAL TIMES</strong>
+            </div>
+            <div class="progress-value ms-4" style="font-size: 24px; font-weight: bold; width: 60%;">
+                {% if is_prev_risk_manager %}
+                    <span style="color: #198754;">Requirements Fulfilled</span>
+                {% else %}
+                    <span style="color: #c40000;">{{ user_total_times }}/{{ required_sober_times }} times</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="accordion" id="eventsAccordion">
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header" id="eventsHeading">
+                        <button class="accordion-button collapsed custom-accordion-btn" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#eventsCollapse"
+                                aria-expanded="false" aria-controls="eventsCollapse">
+                            <span class="text-center">Your Submitted Events</span>
+                        </button>
+                    </h2>
+                    <div id="eventsCollapse" class="accordion-collapse collapse"
+                         aria-labelledby="eventsHeading" data-bs-parent="#eventsAccordion">
+                        <div class="accordion-body p-0 mt-3">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for submission in user_submissions %}
+                                        <tr>
+                                            <td data-label="Title">{{ submission.sober_time_title }}</td>
+                                            <td data-label="Date">{{ submission.sober_time_date|date:"M d, Y" }}</td>
+                                            <td data-label="Status">
+                                                <span class="badge {% if submission.sober_time_approval_status == 'approved' %}bg-success{% elif submission.sober_time_approval_status == 'denied' %}bg-danger{% else %}bg-warning{% endif %}">
+                                                    {{ submission.sober_time_approval_status }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="3" class="text-center">No events submitted for this academic year.</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if is_risk_manager %}
+    <div class="profile-card mb-4">
+        <h2 class="homepage-subheading">Chapter Progress</h2>
+        <div class="centered-table">
+            <table class="table keep-structure">
+                <tbody>
+                    <tr>
+                        <th>Brothers Meeting {{ required_sober_times }} Time Goal</th>
+                        <td data-label="Brothers Meeting Goal">{{ members_meeting_goal }} / {{ total_active_members }}</td>
+                    </tr>
+                    <tr>
+                        <th>Average Times per Brother</th>
+                        <td data-label="Average Times">{{ avg_times_per_brother|floatformat:1 }} / {{ required_sober_times }} times</td>
+                    </tr>
+                    <tr>
+                        <th>Total Chapter Times</th>
+                        <td data-label="Total Chapter Times">{{ total_approved_times|default:"0" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Pending Submissions</th>
+                        <td data-label="Pending Submissions">{{ pending_count }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="profile-card mb-4">
+        <h2 class="homepage-subheading">Brotherhood Progress</h2>
+        <div class="centered-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Brother</th>
+                        <th>Most Recent Approved Sober</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brother in brother_sober_totals %}
+                    <tr>
+                        <td data-label="Brother">{{ brother.firstName }} {{ brother.lastName }}</td>
+                        <td data-label="Most Recent Approved Sober">
+                            {% if brother.most_recent_approved_sober_date %}
+                                {{ brother.most_recent_approved_sober_date|date:"M d, Y" }}
+                            {% else %}
+                                Never
+                            {% endif %}
+                        </td>
+                        <td data-label="Status">
+                            {% if brother.has_prev_risk_mgr %}
+                                <span class="badge bg-success">Requirements Fulfilled</span>
+                            {% elif brother.most_recent_approved_sober_date %}
+                                <span class="badge bg-success">Recent on {{ brother.most_recent_approved_sober_date|date:"M d" }}</span>
+                            {% else %}
+                                <span class="badge bg-warning">No approved sobers this year</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No active members found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

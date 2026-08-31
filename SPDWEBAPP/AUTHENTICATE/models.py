@@ -66,6 +66,7 @@ class Role(models.Model):
         ('RECRUITMENT_CHAIR', 'Recruitment Chair'),
         ('PHIL_CHAIR', 'Philanthropy Chair'),
         ('RISK_MGR', 'Risk Manager'),
+        ('PREV_RISK_MGR', 'Previous Risk Manager'),
         ('PRESIDENT', 'President'),
         ('INT_VP', 'Internal VP'),
         ('EXT_VP', 'External VP'),
@@ -94,36 +95,36 @@ class Brother_Profile(models.Model):
     pclass = models.CharField(max_length=50, choices=PClass.choices, null=True, blank=True)
     roles = models.ManyToManyField(Role)
     majors = models.ManyToManyField(Major, blank=True)
-    
+
     def __str__(self):
         return f"{self.firstName} {self.lastName}"
-        
+
     def save(self, *args, **kwargs):
         if self.profileImage:
             try:
                 img = Image.open(self.profileImage)
                 output_size = (300, 300)
                 img.thumbnail(output_size)
-                
+
                 output = BytesIO()
                 # Use original format if possible, default to PNG
                 img_format = getattr(img, 'format', 'PNG')
                 img.save(output, format=img_format, quality=85)
                 output.seek(0)
-                
+
                 self.profileImage = InMemoryUploadedFile(
-                    output, 
+                    output,
                     'ImageField',
-                    f"{self.profileImage.name.split('/')[-1].split('.')[0]}.{img_format.lower()}", 
+                    f"{self.profileImage.name.split('/')[-1].split('.')[0]}.{img_format.lower()}",
                     f'image/{img_format.lower()}',
-                    sys.getsizeof(output), 
+                    sys.getsizeof(output),
                     None
                 )
             except Exception as e:
                 # Log the error for debugging
                 print(f"Error processing image: {e}")
                 pass
-                
+
         super().save(*args, **kwargs)
 
 class DashboardLink(models.Model):

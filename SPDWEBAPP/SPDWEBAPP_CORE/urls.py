@@ -30,6 +30,7 @@ urlpatterns = [
     path('auth/', include('AUTHENTICATE.urls')),
     path('poll/',include('PARLEYPRO.urls')),
     path('philanthropy/',include('PHILANTHROPY.urls')),
+    path('sober-sheet/',include('SOBERSHEET.urls')),
     path('newmember/',include('NEWMEMBER.urls')),
 ]
 

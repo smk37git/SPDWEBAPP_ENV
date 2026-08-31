@@ -1,0 +1,29 @@
+{% extends 'HOME/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container">
+    <h1 class="homepage-heading">Submit Sober Time</h1>
+
+    <div class="profile-card">
+        <form method="POST" class="form">
+            {% csrf_token %}
+
+            <div class="form-group mb-3">
+                <label for="sober_time_title">Sober Time Title/Description</label>
+                <input type="text" class="form-control" id="sober_time_title" name="sober_time_title" required>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="sober_time_date">Sober Time Date</label>
+                <input type="date" class="form-control" id="sober_time_date" name="sober_time_date" required>
+            </div>
+
+            <div class="dashboard-buttons">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="{% url 'sober_sheet_dashboard' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
