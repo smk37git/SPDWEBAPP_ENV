@@ -1,3 +1,4 @@
+import random
 from datetime import date
 from django.db.models import Max, Count
 from AUTHENTICATE.models import Brother_Profile
@@ -114,3 +115,28 @@ def build_exempt_list():
                                m['profile'].lastName or '',
                                m['profile'].firstName or ''))
     return result
+
+
+def pick_next_sobers(count, method):
+    """
+    Walk the queue from the oldest group forward. Take whole groups while they fit,
+    then fill the remainder from the next group by 'random' or 'earliest'.
+    """
+    picked = []
+    for group in build_sobersheet_queue():
+        need = count - len(picked)
+        if need <= 0:
+            break
+        members = group['brothers']
+        if len(members) <= need:
+            chosen = list(members)
+        elif method == 'random':
+            chosen = random.sample(members, need)
+        else:
+            chosen = sorted(
+                members,
+                key=lambda m: (m['last_date'] or date.min, random.random())
+            )[:need]
+        for m in chosen:
+            picked.append({**m, 'group_label': group['label']})
+    return picked
