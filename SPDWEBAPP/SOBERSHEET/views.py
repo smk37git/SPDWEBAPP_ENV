@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from AUTHENTICATE.models import Brother_Profile
 from PARLEYPRO.pp_decorators import requires_role
 from .models import Sober_Duty
-from .views_functions import build_sobersheet_queue, group_history_by_event, retrieve_individual_sobersheet_history, build_exempt_list
+from .views_functions import build_sobersheet_queue, group_history_by_event, retrieve_individual_sobersheet_history, build_exempt_list, pick_next_sobers
 
 
 def _is_risk_manager(user):
@@ -92,6 +92,7 @@ def sobersheet_log(request):
     return render(request, 'sobersheet_log.html', {
         'brothers': active,
         'duty_choices': Sober_Duty.DUTY_CHOICES,
+        'preselected': set(request.GET.getlist('brothers')),
     })
 
 
@@ -134,3 +135,27 @@ def sobersheet_delete(request, duty_id):
     duty.delete()
     messages.success(request, 'Sober duty deleted.')
     return redirect('sobersheet_history')
+
+
+@login_required
+@requires_role('RISK_MGR')
+def sobersheet_picker(request):
+    context = {'count': 2, 'method': 'earliest'}
+
+    if request.method == 'POST':
+        try:
+            count = int(request.POST['count'])
+            method = request.POST['method']
+            if not 1 <= count <= 50:
+                raise ValueError("Enter a number between 1 and 50.")
+            if method not in ('random', 'earliest'):
+                raise ValueError("Invalid selection method.")
+
+            picks = pick_next_sobers(count, method)
+            context.update({'count': count, 'method': method, 'picks': picks})
+            if len(picks) < count:
+                messages.warning(request, f'Only {len(picks)} eligible brothers exist, so fewer than {count} were returned.')
+        except (ValueError, KeyError) as e:
+            messages.error(request, f'Error: {str(e)}')
+
+    return render(request, 'sobersheet_picker.html', context)
