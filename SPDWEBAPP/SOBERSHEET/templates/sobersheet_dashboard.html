@@ -12,6 +12,7 @@
         <a href="{% url 'sobersheet_history' %}" class="btn btn-primary me-2">History By Events</a>
         <a href="{% url 'brother_sobersheet_history' request.user.id %}" class="btn btn-primary me-2">My Sober History</a>
         {% if is_risk_manager %}
+        <a href="{% url 'sobersheet_picker' %}" class="btn btn-primary me-2">Pick Sobers</a>
         <a href="{% url 'sobersheet_log' %}" class="btn btn-primary">Log Sober Duty</a>
         {% endif %}
     </div>

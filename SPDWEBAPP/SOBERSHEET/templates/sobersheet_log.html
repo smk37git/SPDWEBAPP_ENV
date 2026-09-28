@@ -38,7 +38,7 @@
                 <label for="brothers">Brothers (hold Ctrl or Cmd to select several)</label>
                 <select multiple size="12" class="form-select" id="brothers" name="brothers" required>
                     {% for b in brothers %}
-                    <option value="{{ b.user_id }}">{{ b.firstName }} {{ b.lastName }}</option>
+                    <option value="{{ b.user_id }}" {% if b.user_id|stringformat:"s" in preselected %}selected{% endif %}>{{ b.firstName }} {{ b.lastName }}</option>
                     {% endfor %}
                 </select>
             </div>
